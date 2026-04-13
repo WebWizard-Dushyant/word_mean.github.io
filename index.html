@@ -96,7 +96,7 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .create-book-section { display: flex; gap: 10px; margin-bottom: 2.5rem; }
-        .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2rem; }
+        .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 2rem; }
         
         .book-card {
             background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 12px;
@@ -105,8 +105,9 @@
         .book-card:hover { border-color: var(--accent-color); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
         
         .book-cover { 
-            height: 220px; width: 100%; background: var(--default-cover); background-size: cover; 
+            height: 240px; width: 100%; background: var(--default-cover); background-size: cover; 
             background-position: center; border-radius: 4px; position: relative; margin-bottom: 12px; border: 1px solid rgba(0,0,0,0.05);
+            overflow: hidden;
         }
         
         .book-info { text-align: center; padding: 4px; }
@@ -115,24 +116,42 @@
         
         .delete-book-btn {
             position: absolute; top: 8px; right: 8px; background: var(--container-bg); color: var(--text-secondary);
-            border: 1px solid var(--border-color); border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 12px; transition: all 0.2s ease; z-index: 10; opacity: 0; box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color); border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 14px; transition: all 0.2s ease; z-index: 10; opacity: 0; box-shadow: var(--shadow-sm);
         }
         .book-card:hover .delete-book-btn { opacity: 1; }
         .delete-book-btn:hover { color: var(--danger-color); border-color: var(--danger-color); }
 
+        /* REVISED COVER OVERLAY FOR MOBILE RELIABILITY */
         .cover-overlay {
-            position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px 8px 8px;
-            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); display: flex; justify-content: space-between; gap: 6px; box-sizing: border-box;
-            border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; opacity: 0; transition: opacity 0.2s;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.65); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px;
+            opacity: 0; transition: opacity 0.2s; backdrop-filter: blur(2px);
         }
         .book-card:hover .cover-overlay { opacity: 1; }
         
-        .add-cover-btn {
-            background: rgba(255, 255, 255, 0.9); border: none; color: #2B2B2B;
-            border-radius: 4px; padding: 6px 0; font-size: 0.75rem; font-weight: 500; cursor: pointer; flex: 1; transition: all 0.2s;
+        /* Mobile Specific behavior for touch devices */
+        @media (hover: none) {
+            /* On touch devices, we need a way to show the overlay. 
+               We'll use a class that gets toggled via JS */
+            .book-card.show-options .cover-overlay { opacity: 1; }
+            .book-card.show-options .delete-book-btn { opacity: 1; }
         }
-        .add-cover-btn:hover { background: #FFFFFF; }
+
+        .add-cover-btn {
+            background: var(--container-bg); border: none; color: var(--text-primary);
+            border-radius: 6px; padding: 10px 16px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s;
+            width: 70%; text-align: center; box-shadow: var(--shadow-sm); font-family: var(--font-sans);
+        }
+        .add-cover-btn:hover { background: #FFFFFF; transform: scale(1.05);}
+        
+        /* The button to actually open the book when the overlay is active */
+        .open-book-btn {
+            background: var(--accent-color); color: white; border: none;
+            border-radius: 6px; padding: 10px 16px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s;
+            width: 70%; text-align: center; box-shadow: var(--shadow-sm); font-family: var(--font-sans); margin-top: 10px;
+        }
+        .open-book-btn:hover { background: var(--accent-hover); }
 
         .playlist-header { display: flex; align-items: flex-end; gap: 30px; margin-bottom: 3rem; }
         .playlist-cover {
@@ -206,7 +225,11 @@
             .playlist-info h1 { font-size: 2.2rem; }
             .controls-row { flex-direction: column; }
             input[type="text"], button.action-btn { width: 100%; }
-            .book-card:hover .delete-book-btn, .book-card:hover .cover-overlay, tr.word-row .delete-row-btn { opacity: 1; } 
+            tr.word-row .delete-row-btn { opacity: 1; } 
+            
+            /* Smaller book grid for phones */
+            .book-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.5rem; }
+            .book-cover { height: 180px; }
         }
     </style>
 </head>
@@ -296,6 +319,13 @@
         setupPWA(); testStorage(); loadTheme(); loadData(); renderDashboard();
     });
 
+    // Handle clicking outside the cards to close menus on mobile
+    document.addEventListener('click', (e) => {
+        if(!e.target.closest('.book-card')) {
+            document.querySelectorAll('.book-card.show-options').forEach(card => card.classList.remove('show-options'));
+        }
+    });
+
     function testStorage() {
         try { localStorage.setItem('test', '1'); localStorage.removeItem('test'); storageAvailable = true; } 
         catch (e) { storageAvailable = false; document.getElementById('storageWarning').style.display = 'block'; }
@@ -360,6 +390,20 @@
     }
     function installPWA() { if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then((c) => { if (c.outcome === 'accepted') document.getElementById('installBtn').style.display = 'none'; deferredPrompt = null; }); } }
 
+    function toggleCardMenu(event, cardElement) {
+        // Only toggle if we are on a touch device (desktop uses hover)
+        if (window.matchMedia("(hover: none)").matches) {
+            // Close other open menus
+            document.querySelectorAll('.book-card.show-options').forEach(card => {
+                if(card !== cardElement) card.classList.remove('show-options');
+            });
+            cardElement.classList.toggle('show-options');
+        } else {
+            // On desktop, clicking the card directly opens the book
+            openBook(cardElement.dataset.bookname);
+        }
+    }
+
     function renderDashboard() {
         const grid = document.getElementById('bookGrid'); grid.innerHTML = '';
         const books = Object.keys(libraryData);
@@ -369,14 +413,18 @@
             const wordCount = libraryData[bookName].length;
             const coverImage = libraryCovers[bookName] ? `url(${libraryCovers[bookName]})` : 'var(--default-cover)';
             const card = document.createElement('div'); card.className = 'book-card';
-            card.onclick = () => openBook(bookName);
+            card.dataset.bookname = bookName;
+            
+            // Toggle menu on mobile click
+            card.onclick = (e) => toggleCardMenu(e, card);
             
             card.innerHTML = `
                 <div class="book-cover" style="background-image: ${coverImage};">
                     <button class="delete-book-btn" onclick="deleteBook(event, '${bookName}')" title="Delete">✕</button>
                     <div class="cover-overlay">
-                        <button class="add-cover-btn" onclick="triggerImageUpload(event, '${bookName}')">📁 File</button>
-                        <button class="add-cover-btn" onclick="searchWebCover(event, '${bookName}')">🌐 Web</button>
+                        <button class="open-book-btn" onclick="openBookFromBtn(event, '${bookName}')">📖 Open Notebook</button>
+                        <button class="add-cover-btn" onclick="triggerImageUpload(event, '${bookName}')">📁 Custom Cover</button>
+                        <button class="add-cover-btn" onclick="searchWebCover(event, '${bookName}')">🌐 Random Web Cover</button>
                     </div>
                 </div>
                 <div class="book-info"><h3>${bookName}</h3><p>${wordCount} word${wordCount !== 1 ? 's' : ''}</p></div>
@@ -385,15 +433,34 @@
         });
     }
 
+    function openBookFromBtn(event, bookName) {
+        event.stopPropagation();
+        openBook(bookName);
+    }
+
     async function searchWebCover(event, bookName) {
         event.stopPropagation(); const btn = event.target; const oTxt = btn.innerHTML;
-        btn.innerHTML = "⏳..."; btn.disabled = true;
+        btn.innerHTML = "⏳ Searching..."; btn.disabled = true;
         try {
-            const res = await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(bookName)}&limit=5`);
+            const res = await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(bookName)}&limit=15`);
             const data = await res.json();
-            let coverId = data.docs.find(d => d.cover_i)?.cover_i;
-            if(!coverId) alert(`No cover found.`); else { libraryCovers[bookName] = `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`; saveData(); renderDashboard(); }
-        } catch(e) { alert("Network error."); } finally { btn.innerHTML = oTxt; btn.disabled = false; }
+            
+            // Find all results that actually have cover images
+            const resultsWithCovers = data.docs.filter(d => d.cover_i);
+            
+            if(resultsWithCovers.length === 0) {
+                alert(`No cover found online for this book title.`); 
+            } else { 
+                // Pick a random cover from the available results
+                const randomIndex = Math.floor(Math.random() * resultsWithCovers.length);
+                const randomCoverId = resultsWithCovers[randomIndex].cover_i;
+                
+                libraryCovers[bookName] = `https://covers.openlibrary.org/b/id/${randomCoverId}-L.jpg`; 
+                saveData(); 
+                renderDashboard(); 
+            }
+        } catch(e) { alert("Network error while searching for a cover."); } 
+        finally { btn.innerHTML = oTxt; btn.disabled = false; }
     }
 
     function triggerImageUpload(event, bookName) {
@@ -442,7 +509,6 @@
     document.getElementById("wordInput").addEventListener("keypress", (e) => { if (e.key === "Enter") fetchWordDetails(); });
     document.getElementById("newBookInput").addEventListener("keypress", (e) => { if (e.key === "Enter") createNewBook(); });
 
-    // --- TRIPLE API SEARCH (Dictionary + Synonyms + Hindi) ---
     async function fetchWordDetails() {
         const inputElement = document.getElementById('wordInput'); const btn = document.getElementById('searchBtn');
         const word = inputElement.value.trim().toLowerCase(); const err = document.getElementById('errorMsg');
@@ -479,7 +545,7 @@
                 }
             } catch (synError) { console.log("Datamuse failed."); }
 
-            // 3. Hindi Translation (MyMemory API)
+            // 3. Hindi Translation
             let hindiString = "-";
             try {
                 const hiRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|hi`);
