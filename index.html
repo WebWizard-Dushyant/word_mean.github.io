@@ -86,7 +86,7 @@
         .view.active { display: block; }
 
         .create-book-section { display: flex; gap: 10px; margin-bottom: 2rem; }
-        .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
         .book-card {
             background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px;
             cursor: pointer; text-align: center; transition: transform 0.2s, box-shadow 0.2s;
@@ -100,8 +100,8 @@
         
         .delete-book-btn {
             position: absolute; top: 8px; right: 8px; background: rgba(0, 0, 0, 0.35); color: rgba(255, 255, 255, 0.8);
-            border: none; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 12px; font-weight: bold; line-height: 1; backdrop-filter: blur(2px); transition: all 0.2s ease; z-index: 10;
+            border: none; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 14px; font-weight: bold; line-height: 1; backdrop-filter: blur(2px); transition: all 0.2s ease; z-index: 10;
         }
         .delete-book-btn:hover { transform: scale(1.1); background: var(--danger-btn); color: white; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4); }
 
@@ -120,10 +120,10 @@
         .back-btn { background-color: transparent; color: var(--muted-text); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 6px; cursor: pointer;}
         .back-btn:hover { background-color: var(--border-color); color: var(--text-color); }
         
-        input[type="text"] { flex: 1; padding: 12px 16px; font-size: 16px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); color: var(--text-color); outline: none; }
+        input[type="text"] { flex: 1; padding: 12px 16px; font-size: 16px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); color: var(--text-color); outline: none; box-sizing: border-box;}
         input[type="text"]:focus { border-color: var(--primary-btn); }
         
-        button.action-btn { padding: 12px 20px; font-size: 0.95rem; font-weight: 600; background-color: var(--primary-btn); color: white; border: none; border-radius: 8px; cursor: pointer; transition: opacity 0.2s, transform 0.1s; }
+        button.action-btn { padding: 12px 20px; font-size: 0.95rem; font-weight: 600; background-color: var(--primary-btn); color: white; border: none; border-radius: 8px; cursor: pointer; transition: opacity 0.2s, transform 0.1s; white-space: nowrap; box-sizing: border-box;}
         button.action-btn:hover { opacity: 0.9; }
         button.action-btn:active { transform: scale(0.98); }
         button.action-btn:disabled { background-color: var(--muted-text); cursor: not-allowed; transform: none; }
@@ -132,7 +132,7 @@
         .export-btn:hover { background-color: var(--success-hover); }
         
         .error-message { color: var(--danger-btn); font-size: 0.9rem; margin-bottom: 15px; display: none; }
-        .table-wrapper { overflow-x: auto; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid var(--table-border); }
+        .table-wrapper { overflow-x: auto; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid var(--table-border); -webkit-overflow-scrolling: touch;}
         table { width: 100%; border-collapse: collapse; min-width: 600px; background: var(--container-bg); }
         th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--table-border); line-height: 1.5; }
         th { background: var(--table-head-bg); color: var(--table-head-text); font-weight: 600; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; }
@@ -140,6 +140,53 @@
         tr:nth-child(odd) { background-color: var(--table-row-odd); }
         tr:hover { background-color: var(--table-hover); transition: background-color 0.2s;}
         .flex-row { display: flex; gap: 10px; width: 100%; margin-bottom: 20px; }
+
+        /* =========================================
+           RESPONSIVE DESIGN (MOBILE ADAPTATIONS)
+           ========================================= */
+        @media (max-width: 600px) {
+            body {
+                padding: 0.5rem;
+            }
+            .container {
+                padding: 1rem;
+                border-radius: 12px;
+            }
+            .nav-bar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .nav-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            .create-book-section, .flex-row {
+                flex-direction: column; /* Stack input and button on small screens */
+                gap: 10px;
+            }
+            .create-book-section input, .create-book-section button.action-btn,
+            .flex-row input, .flex-row button.action-btn {
+                width: 100%; /* Make them full width for easy tapping */
+            }
+            .header-container {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+                gap: 12px;
+            }
+            .back-btn, .export-btn {
+                width: 100%;
+                padding: 12px;
+            }
+            .book-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Slightly smaller cards on phones */
+            }
+            th, td {
+                padding: 12px 10px; /* Slightly tighter padding in the table */
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -160,7 +207,7 @@
     <div id="dashboardView" class="view active">
         <p style="color: var(--muted-text); margin-top: -10px; margin-bottom: 20px;">Create a dataframe for the book you are reading.</p>
         <div class="create-book-section">
-            <input type="text" id="newBookInput" placeholder="Enter book name (e.g. Crime and Punishment)...">
+            <input type="text" id="newBookInput" placeholder="Enter book name (e.g. 1984)...">
             <button class="action-btn" onclick="createNewBook()">Create</button>
         </div>
         <div class="book-grid" id="bookGrid">
@@ -192,19 +239,18 @@
     let libraryData = {}; 
     let libraryCovers = {}; 
     let currentBook = null;
-    let storageAvailable = true; // Tracks if the browser allows saving
+    let storageAvailable = true; 
 
     // --- INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', () => {
         setupPWA(); 
-        testStorage(); // Test if the browser allows saving before doing anything
+        testStorage(); 
         loadTheme(); 
         loadData(); 
         renderDashboard();
     });
 
     // --- BULLETPROOF STORAGE FUNCTIONS ---
-    // This checks if your browser blocks saving (e.g. Incognito mode)
     function testStorage() {
         try {
             localStorage.setItem('test_key', 'test_value');
@@ -218,7 +264,7 @@
     }
 
     function loadData() {
-        if (!storageAvailable) return; // Skip loading if blocked to prevent crash
+        if (!storageAvailable) return; 
         try {
             const savedLibrary = localStorage.getItem('multiDictApp_Library');
             if (savedLibrary) { libraryData = JSON.parse(savedLibrary); } 
@@ -228,23 +274,18 @@
             }
             const savedCovers = localStorage.getItem('multiDictApp_Covers');
             if (savedCovers) { libraryCovers = JSON.parse(savedCovers); }
-        } catch (e) {
-            console.error("Error loading data:", e);
-        }
+        } catch (e) { console.error("Error loading data:", e); }
     }
 
     function saveData() {
-        if (!storageAvailable) return; // Skip saving if blocked to prevent crash
+        if (!storageAvailable) return; 
         try {
             localStorage.setItem('multiDictApp_Library', JSON.stringify(libraryData));
             localStorage.setItem('multiDictApp_Covers', JSON.stringify(libraryCovers));
-        } catch (e) {
-            console.error("Error saving data:", e);
-            alert("Could not save to storage. Your device may be out of space.");
-        }
+        } catch (e) { console.error("Error saving data:", e); alert("Could not save to storage. Your device may be out of space."); }
     }
 
-    // --- THEME LOGIC (BULLETPROOF) ---
+    // --- THEME LOGIC ---
     function toggleTheme() {
         const body = document.body; 
         const themeBtn = document.getElementById('themeBtn');
@@ -254,9 +295,7 @@
         themeBtn.innerText = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
         
         if (storageAvailable) {
-            try {
-                localStorage.setItem('themePref', isDark ? 'dark' : 'light');
-            } catch(e) { console.error("Theme save blocked", e); }
+            try { localStorage.setItem('themePref', isDark ? 'dark' : 'light'); } catch(e) { console.error("Theme save blocked", e); }
         }
     }
 
