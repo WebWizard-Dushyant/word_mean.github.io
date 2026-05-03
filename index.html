@@ -18,15 +18,15 @@
             --font-sans: system-ui, -apple-system, sans-serif;
 
             /* Light/Paper Theme */
-            --bg-color: #F9F8F6;          /* Softer, highly readable paper tone */
+            --bg-color: #F9F8F6;          
             --container-bg: #FFFFFF;      
             --surface-hover: #F0EFEB;     
             
-            --text-primary: #222222;      /* Off-black for reduced eye strain */
+            --text-primary: #222222;      
             --text-secondary: #5A5A5A;    
             --border-color: #E6E4DD;      
             
-            --accent-color: #2C573F;      /* Deep Library Green */
+            --accent-color: #2C573F;      
             --accent-hover: #1E3F2D;      
             --danger-color: #C24A4A;      
             
@@ -35,14 +35,11 @@
             --default-cover: linear-gradient(135deg, #DEDCD5, #E6E4DD);
             --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
             --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.08);
-            
-            --dropzone-bg: rgba(44, 87, 63, 0.03);
-            --dropzone-border: rgba(44, 87, 63, 0.3);
         }
 
         .dark-mode {
             /* Dark/Slate Theme */
-            --bg-color: #121417;          /* Cool, deep slate (better than pitch black) */
+            --bg-color: #121417;          
             --container-bg: #1A1D21;
             --surface-hover: #22262B;
             
@@ -50,7 +47,7 @@
             --text-secondary: #90959A;
             --border-color: #2D3136;
             
-            --accent-color: #71A0D4;      /* Steel Blue */
+            --accent-color: #71A0D4;      
             --accent-hover: #96BFF0;      
             --danger-color: #E06C6C;
             
@@ -59,9 +56,6 @@
             --default-cover: linear-gradient(135deg, #2D3136, #1A1D21);
             --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
             --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.4);
-            
-            --dropzone-bg: rgba(113, 160, 212, 0.05);
-            --dropzone-border: rgba(113, 160, 212, 0.3);
         }
 
         body {
@@ -95,47 +89,43 @@
         .view.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Drag & Drop Creation Zone */
-        .creation-area {
-            display: flex; gap: 15px; margin-bottom: 2.5rem; width: 100%;
-        }
-        .input-group {
-            flex: 1; display: flex; gap: 10px;
-        }
-        .drop-zone {
-            flex: 1; border: 2px dashed var(--dropzone-border); border-radius: 8px; background: var(--dropzone-bg);
-            display: flex; align-items: center; justify-content: center; color: var(--text-secondary);
-            font-size: 0.95rem; font-weight: 500; transition: all 0.2s; cursor: pointer; padding: 0 15px; text-align: center;
-        }
-        .drop-zone.drag-over {
-            background: rgba(44, 87, 63, 0.1); border-color: var(--accent-color); color: var(--accent-color);
-        }
-        .dark-mode .drop-zone.drag-over {
-            background: rgba(113, 160, 212, 0.15); border-color: var(--accent-color); color: var(--accent-color);
-        }
-
+        /* Dashboard & Drag/Drop Elements */
+        .create-book-section { display: flex; gap: 10px; margin-bottom: 2.5rem; width: 100%; }
+        
         .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 2.5rem 2rem; }
         
         .book-card {
             background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px;
-            transition: all 0.2s ease; position: relative; display: flex; flex-direction: column; box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.2s ease; 
+            position: relative; display: flex; flex-direction: column; box-shadow: var(--shadow-sm);
+            cursor: grab; /* Indicates it can be moved */
         }
+        .book-card:active { cursor: grabbing; }
         .book-card:hover { border-color: var(--text-secondary); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
         
-        /* The cover acts as the main click target */
+        /* Drag and Drop Visual Feedback */
+        .book-card.dragging {
+            opacity: 0.4; transform: scale(0.95); box-shadow: none; z-index: 100;
+        }
+        .book-card.drag-over-card {
+            border: 2px dashed var(--accent-color);
+            background: var(--surface-hover);
+            transform: scale(1.02);
+        }
+        
         .book-cover { 
             height: 250px; width: 100%; background: var(--default-cover); background-size: cover; 
             background-position: center; border-radius: 6px; margin-bottom: 16px; border: 1px solid rgba(0,0,0,0.05);
-            cursor: pointer;
+            pointer-events: none; /* Let the card handle the click/drag */
         }
         
-        .book-info { text-align: center; padding: 4px; cursor: pointer; }
+        .book-info { text-align: center; padding: 4px; pointer-events: none; }
         .book-info h3 { margin: 0 0 6px 0; color: var(--text-primary); font-size: 1.15rem; font-weight: 600; font-family: var(--font-serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         .book-info p { margin: 0; font-size: 0.85rem; color: var(--text-secondary); }
 
         /* Kebab Menu - Isolated Layering */
         .kebab-container {
-            position: absolute; top: 20px; right: 20px; z-index: 50; /* Ensures it sits above everything */
+            position: absolute; top: 20px; right: 20px; z-index: 50; 
         }
         
         .kebab-btn {
@@ -239,9 +229,7 @@
         @media (max-width: 850px) {
             body { padding: 0.5rem; }
             .container { padding: 1.5rem; border-radius: 12px;}
-            .creation-area { flex-direction: column; }
-            .input-group { flex-direction: column; }
-            .drop-zone { padding: 15px; }
+            .create-book-section { flex-direction: column; }
             .playlist-header { flex-direction: column; align-items: center; text-align: center; gap: 20px;}
             .playlist-info h1 { font-size: 2.5rem; }
             .controls-row { flex-direction: column; }
@@ -257,7 +245,6 @@
 
 <div id="storageWarning">⚠️ Warning: Browser storage blocked. Books will disappear when closed. Please disable Private Browsing.</div>
 
-<!-- Modals -->
 <div id="manualAddModal" class="modal-overlay">
     <div class="modal-content">
         <h2>Record New Word</h2>
@@ -285,20 +272,11 @@
 
     <!-- VIEW 1: Dashboard -->
     <div id="dashboardView" class="view active">
-        
-        <div class="creation-area">
-            <div class="input-group">
-                <input type="text" id="newBookInput" placeholder="New notebook name (e.g. Physics 101)...">
-                <button class="action-btn" onclick="createNewBook()">Create</button>
-            </div>
-            
-            <!-- Drag and Drop Zone -->
-            <div class="drop-zone" id="dropZone" onclick="document.getElementById('csvFileInput').click()">
-                <span>📁 Drag & Drop CSV here to create Database</span>
-                <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleCSVSelect(event)">
-            </div>
+        <div class="create-book-section">
+            <input type="text" id="newBookInput" placeholder="New notebook name (e.g. Physics 101)...">
+            <button class="action-btn" onclick="createNewBook()">Create</button>
         </div>
-
+        
         <div class="book-grid" id="bookGrid"></div>
     </div>
 
@@ -345,16 +323,16 @@
 <script>
     let libraryData = {}; 
     let libraryCovers = {}; 
+    let bookOrder = []; // NEW: Array to track visual order of books
     let currentBook = null;
     let storageAvailable = true; 
 
     // --- INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', () => {
         setupPWA(); testStorage(); loadTheme(); loadData(); renderDashboard();
-        setupDragAndDrop();
     });
 
-    // Handle clicking outside to close kebab menus (CRITICAL FIX FOR MOBILE)
+    // Close kebab menus when clicking outside
     document.addEventListener('click', (e) => {
         const isClickInsideMenu = e.target.closest('.kebab-container');
         if (!isClickInsideMenu) {
@@ -375,9 +353,21 @@
         try {
             const savedLib = localStorage.getItem('academicDict_Library');
             if (savedLib) { libraryData = JSON.parse(savedLib); } 
+            
             const savedCov = localStorage.getItem('academicDict_Covers');
             if (savedCov) { libraryCovers = JSON.parse(savedCov); }
-        } catch (e) { console.error("Error loading", e); }
+            
+            const savedOrder = localStorage.getItem('academicDict_Order');
+            if (savedOrder) { bookOrder = JSON.parse(savedOrder); }
+
+            // Sync: Add any newly created books that aren't in the order array yet
+            Object.keys(libraryData).forEach(b => {
+                if(!bookOrder.includes(b)) bookOrder.push(b);
+            });
+            // Sync: Remove deleted books from order array
+            bookOrder = bookOrder.filter(b => libraryData[b]);
+            
+        } catch (e) { console.error("Error loading data", e); }
     }
 
     function saveData() {
@@ -385,6 +375,7 @@
         try {
             localStorage.setItem('academicDict_Library', JSON.stringify(libraryData));
             localStorage.setItem('academicDict_Covers', JSON.stringify(libraryCovers));
+            localStorage.setItem('academicDict_Order', JSON.stringify(bookOrder));
         } catch (e) { alert("Storage full. Cannot save new data."); }
     }
 
@@ -421,30 +412,24 @@
             const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0);
             const pngUrl = canvas.toDataURL('image/png');
             document.head.insertAdjacentHTML('beforeend', `<link rel="icon" type="image/png" href="${pngUrl}"><link rel="apple-touch-icon" href="${pngUrl}">`);
-            const manifest = { name: "Vocab", short_name: "Vocab", display: "standalone", background_color: "#F9F8F6", theme_color: "#2C573F", icons: [{ src: pngUrl, sizes: "512x512", type: "image/png" }] };
-            document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type: 'application/manifest+json'}))}">`);
         }; img.src = URL.createObjectURL(new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' }));
         window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; document.getElementById('installBtn').style.display = 'inline-block'; });
     }
     function installPWA() { if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then((c) => { if (c.outcome === 'accepted') document.getElementById('installBtn').style.display = 'none'; deferredPrompt = null; }); } }
 
-    // --- MENU LOGIC (Strict click separation) ---
+    // --- MENU LOGIC ---
     function toggleMenu(event, index) {
-        // Absolutely prevent the click from reaching the book card underneath
         event.preventDefault();
         event.stopPropagation(); 
         
         const dropdown = document.getElementById(`dropdown-${index}`);
         const isActive = dropdown.classList.contains('active');
         
-        // Close all
         document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
         
-        // Toggle target
         if (!isActive) dropdown.classList.add('active');
     }
 
-    // Wrap actions to catch event and stop it
     function handleMenuAction(event, actionFunc) {
         event.preventDefault();
         event.stopPropagation();
@@ -452,116 +437,111 @@
         actionFunc();
     }
 
+    // --- DRAG AND DROP REORDERING LOGIC ---
+    let draggedBookName = null;
+
+    function handleDragStart(e) {
+        // Prevent dragging if the user is clicking the kebab menu
+        if(e.target.closest('.kebab-container')) {
+            e.preventDefault();
+            return;
+        }
+        draggedBookName = this.dataset.bookname;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', this.dataset.bookname);
+        setTimeout(() => this.classList.add('dragging'), 0);
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+    }
+
+    function handleDragEnter(e) {
+        e.preventDefault();
+        if (this.dataset.bookname !== draggedBookName) {
+            this.classList.add('drag-over-card');
+        }
+    }
+
+    function handleDragLeave(e) {
+        this.classList.remove('drag-over-card');
+    }
+
+    function handleDrop(e) {
+        e.stopPropagation();
+        this.classList.remove('drag-over-card');
+        
+        const targetBookName = this.dataset.bookname;
+        
+        if (draggedBookName && draggedBookName !== targetBookName) {
+            // Reorder the array
+            const fromIndex = bookOrder.indexOf(draggedBookName);
+            const toIndex = bookOrder.indexOf(targetBookName);
+            
+            bookOrder.splice(fromIndex, 1);
+            bookOrder.splice(toIndex, 0, draggedBookName);
+            
+            saveData();
+            renderDashboard();
+        }
+        return false;
+    }
+
+    function handleDragEnd(e) {
+        this.classList.remove('dragging');
+        document.querySelectorAll('.book-card').forEach(c => c.classList.remove('drag-over-card'));
+    }
+
     // --- DASHBOARD RENDER ---
     function renderDashboard() {
         const grid = document.getElementById('bookGrid'); grid.innerHTML = '';
-        const books = Object.keys(libraryData);
-        if (books.length === 0) { grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center; margin-top: 40px; font-size: 1.1rem;">Your library is empty. Create or drop a CSV to begin.</p>'; return; }
+        if (bookOrder.length === 0) { grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center; margin-top: 40px; font-size: 1.1rem;">Your library is empty. Create a notebook to begin.</p>'; return; }
 
-        books.forEach((bookName, index) => {
+        bookOrder.forEach((bookName, index) => {
             const wordCount = libraryData[bookName].length;
             const coverImage = libraryCovers[bookName] ? `url(${libraryCovers[bookName]})` : 'var(--default-cover)';
-            const card = document.createElement('div'); card.className = 'book-card';
+            const card = document.createElement('div'); 
+            card.className = 'book-card';
+            card.dataset.bookname = bookName;
             
-            // Kebab Menu Layer (Isolated)
+            // Allow dragging
+            card.draggable = true;
+            card.addEventListener('dragstart', handleDragStart);
+            card.addEventListener('dragover', handleDragOver);
+            card.addEventListener('dragenter', handleDragEnter);
+            card.addEventListener('dragleave', handleDragLeave);
+            card.addEventListener('drop', handleDrop);
+            card.addEventListener('dragend', handleDragEnd);
+
+            // Clicking opens the book
+            card.onclick = (e) => {
+                if(!e.target.closest('.kebab-container')) {
+                    openBook(bookName);
+                }
+            };
+            
             const kebabHTML = `
                 <div class="kebab-container">
                     <button class="kebab-btn" onclick="toggleMenu(event, ${index})" ontouchstart="toggleMenu(event, ${index})">&#8942;</button>
                     <div class="dropdown-menu" id="dropdown-${index}">
                         <button class="dropdown-item" onclick="handleMenuAction(event, () => triggerImageUpload('${bookName}'))">📁 Custom Cover</button>
                         <button class="dropdown-item" onclick="handleMenuAction(event, () => searchWebCover('${bookName}'))">🌐 Web Cover</button>
-                        <button class="dropdown-item danger" onclick="handleMenuAction(event, () => deleteBook('${bookName}'))">🗑️ Delete Database</button>
+                        <button class="dropdown-item danger" onclick="handleMenuAction(event, () => deleteBook('${bookName}'))">🗑️ Delete Notebook</button>
                     </div>
                 </div>
             `;
             
             card.innerHTML = `
                 ${kebabHTML}
-                <div class="book-cover" style="background-image: ${coverImage};" onclick="openBook('${bookName}')"></div>
-                <div class="book-info" onclick="openBook('${bookName}')">
+                <div class="book-cover" style="background-image: ${coverImage};"></div>
+                <div class="book-info">
                     <h3>${bookName}</h3><p>${wordCount} word${wordCount !== 1 ? 's' : ''}</p>
                 </div>
             `;
             grid.appendChild(card);
         });
-    }
-
-    // --- CSV DRAG & DROP LOGIC ---
-    function setupDragAndDrop() {
-        const dropZone = document.getElementById('dropZone');
-        
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('drag-over');
-        });
-        
-        dropZone.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('drag-over');
-        });
-        
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('drag-over');
-            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                processCSVFile(e.dataTransfer.files[0]);
-            }
-        });
-    }
-
-    function handleCSVSelect(event) {
-        if (event.target.files && event.target.files.length > 0) {
-            processCSVFile(event.target.files[0]);
-            event.target.value = ''; // Reset input
-        }
-    }
-
-    function processCSVFile(file) {
-        if (!file.name.endsWith('.csv')) { alert("Please upload a valid .csv file."); return; }
-        
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const text = e.target.result;
-            const lines = text.split('\n');
-            if (lines.length < 2) return; // Needs at least header and one row
-
-            // Create book name from filename (remove .csv)
-            let bookName = file.name.replace('.csv', '').replace(/_/g, ' ');
-            // Make unique if exists
-            let originalName = bookName; let counter = 1;
-            while(libraryData[bookName]) { bookName = `${originalName} (${counter})`; counter++; }
-
-            libraryData[bookName] = [];
-
-            // Parse lines (skipping header)
-            // Assumes standard export format: Sr No.,Word,Hindi,Similar Words,Definition,Context
-            for (let i = 1; i < lines.length; i++) {
-                if(!lines[i].trim()) continue;
-                
-                // Regex to handle commas inside quotes (standard CSV format)
-                const regex = /(".*?"|[^",\s]+)(?=\s*,|\s*$)/g;
-                let matches = [];
-                let match;
-                while ((match = regex.exec(lines[i])) !== null) {
-                    matches.push(match[1].replace(/(^"|"$)/g, '').replace(/""/g, '"'));
-                }
-                
-                if (matches.length >= 5) {
-                    libraryData[bookName].push({
-                        word: matches[1] || "-",
-                        hindi: matches[2] || "-",
-                        synonyms: matches[3] || "-",
-                        meaning: matches[4] || "-",
-                        usage: matches[5] || "-"
-                    });
-                }
-            }
-            
-            saveData();
-            renderDashboard();
-            alert(`Successfully imported "${bookName}" with ${libraryData[bookName].length} words!`);
-        };
-        reader.readAsText(file);
     }
 
     // --- COVERS & BOOKS ---
@@ -599,12 +579,18 @@
     function createNewBook() {
         const input = document.getElementById('newBookInput'); const bookName = input.value.trim();
         if (!bookName) return; if (libraryData[bookName]) return alert("A notebook with this name already exists.");
-        libraryData[bookName] = []; saveData(); input.value = ''; renderDashboard();
+        
+        libraryData[bookName] = []; 
+        bookOrder.push(bookName); // Add to order tracking
+        saveData(); input.value = ''; renderDashboard();
     }
 
     function deleteBook(bookName) {
         if (confirm(`Delete the notebook "${bookName}" and all its contents?`)) { 
-            delete libraryData[bookName]; delete libraryCovers[bookName]; saveData(); renderDashboard(); 
+            delete libraryData[bookName]; 
+            delete libraryCovers[bookName]; 
+            bookOrder = bookOrder.filter(b => b !== bookName); // Remove from order
+            saveData(); renderDashboard(); 
         }
     }
 
