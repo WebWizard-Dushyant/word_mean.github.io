@@ -35,6 +35,9 @@
             --default-cover: linear-gradient(135deg, #DEDCD5, #E6E4DD);
             --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
             --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.08);
+            
+            --dropzone-bg: rgba(44, 87, 63, 0.03);
+            --dropzone-border: rgba(44, 87, 63, 0.3);
         }
 
         .dark-mode {
@@ -56,6 +59,9 @@
             --default-cover: linear-gradient(135deg, #2D3136, #1A1D21);
             --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
             --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.4);
+            
+            --dropzone-bg: rgba(113, 160, 212, 0.05);
+            --dropzone-border: rgba(113, 160, 212, 0.3);
         }
 
         body {
@@ -69,6 +75,8 @@
             width: 100%; max-width: 1200px; background: var(--container-bg); padding: 2.5rem 3rem;
             border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);
             box-sizing: border-box; transition: background-color 0.3s, border-color 0.3s;
+            position: relative; /* For footer positioning */
+            min-height: 85vh; display: flex; flex-direction: column;
         }
         
         .nav-bar { 
@@ -85,38 +93,47 @@
         }
         .focus-btn:hover { border-color: var(--text-secondary); background: var(--surface-hover); }
 
-        .view { display: none; }
+        .view { display: none; flex: 1;}
         .view.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Dashboard & Drag/Drop Elements */
-        .create-book-section { display: flex; gap: 10px; margin-bottom: 2.5rem; width: 100%; }
-        
+        .creation-area {
+            display: flex; gap: 15px; margin-bottom: 2.5rem; width: 100%;
+        }
+        .input-group {
+            flex: 1; display: flex; gap: 10px;
+        }
+        .drop-zone {
+            flex: 1; border: 2px dashed var(--dropzone-border); border-radius: 8px; background: var(--dropzone-bg);
+            display: flex; align-items: center; justify-content: center; color: var(--text-secondary);
+            font-size: 0.95rem; font-weight: 500; transition: all 0.2s; cursor: pointer; padding: 0 15px; text-align: center;
+        }
+        .drop-zone.drag-over {
+            background: rgba(44, 87, 63, 0.1); border-color: var(--accent-color); color: var(--accent-color);
+        }
+        .dark-mode .drop-zone.drag-over {
+            background: rgba(113, 160, 212, 0.15); border-color: var(--accent-color); color: var(--accent-color);
+        }
+
         .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 2.5rem 2rem; }
         
         .book-card {
             background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px;
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.2s ease; 
             position: relative; display: flex; flex-direction: column; box-shadow: var(--shadow-sm);
-            cursor: grab; /* Indicates it can be moved */
+            cursor: grab; 
         }
         .book-card:active { cursor: grabbing; }
         .book-card:hover { border-color: var(--text-secondary); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
         
-        /* Drag and Drop Visual Feedback */
-        .book-card.dragging {
-            opacity: 0.4; transform: scale(0.95); box-shadow: none; z-index: 100;
-        }
-        .book-card.drag-over-card {
-            border: 2px dashed var(--accent-color);
-            background: var(--surface-hover);
-            transform: scale(1.02);
-        }
+        .book-card.dragging { opacity: 0.4; transform: scale(0.95); box-shadow: none; z-index: 100; }
+        .book-card.drag-over-card { border: 2px dashed var(--accent-color); background: var(--surface-hover); transform: scale(1.02); }
         
         .book-cover { 
             height: 250px; width: 100%; background: var(--default-cover); background-size: cover; 
             background-position: center; border-radius: 6px; margin-bottom: 16px; border: 1px solid rgba(0,0,0,0.05);
-            pointer-events: none; /* Let the card handle the click/drag */
+            pointer-events: none; 
         }
         
         .book-info { text-align: center; padding: 4px; pointer-events: none; }
@@ -225,11 +242,27 @@
         .modal-content input { width: 100%; margin-bottom: 16px; }
         .modal-actions { display: flex; gap: 12px; margin-top: 1rem; justify-content: flex-end;}
 
+        /* Changelog Footer */
+        .app-footer {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: var(--text-secondary); font-size: 0.85rem;
+        }
+        .version-badge {
+            background: var(--accent-color); color: #FFF; padding: 2px 8px; border-radius: 4px;
+            font-weight: 600; font-size: 0.75rem; margin-bottom: 8px;
+        }
+        .changelog-text { text-align: center; }
+
         /* Responsive Breakpoints */
         @media (max-width: 850px) {
             body { padding: 0.5rem; }
             .container { padding: 1.5rem; border-radius: 12px;}
-            .create-book-section { flex-direction: column; }
+            .creation-area { flex-direction: column; }
+            .input-group { flex-direction: column; }
+            .drop-zone { padding: 15px; }
             .playlist-header { flex-direction: column; align-items: center; text-align: center; gap: 20px;}
             .playlist-info h1 { font-size: 2.5rem; }
             .controls-row { flex-direction: column; }
@@ -242,8 +275,6 @@
     </style>
 </head>
 <body>
-
-
 
 <div id="manualAddModal" class="modal-overlay">
     <div class="modal-content">
@@ -272,11 +303,19 @@
 
     <!-- VIEW 1: Dashboard -->
     <div id="dashboardView" class="view active">
-        <div class="create-book-section">
-            <input type="text" id="newBookInput" placeholder="New notebook name (e.g. Physics 101)...">
-            <button class="action-btn" onclick="createNewBook()">Create</button>
+        <div class="creation-area">
+            <div class="input-group">
+                <input type="text" id="newBookInput" placeholder="New notebook name (e.g. Physics 101)...">
+                <button class="action-btn" onclick="createNewBook()">Create</button>
+            </div>
+            
+            <!-- Drag and Drop Zone -->
+            <div class="drop-zone" id="dropZone" onclick="document.getElementById('csvFileInput').click()">
+                <span>📁 Drag & Drop CSV here to create Database</span>
+                <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleCSVSelect(event)">
+            </div>
         </div>
-        
+
         <div class="book-grid" id="bookGrid"></div>
     </div>
 
@@ -318,38 +357,61 @@
             </table>
         </div>
     </div>
+
+    <!-- Changelog Footer -->
+    <div class="app-footer">
+        <span class="version-badge">v2.5</span>
+        <span class="changelog-text">Update: Fixed mobile touch menus, introduced Drag & Drop CSV imports, and removed storage warnings.</span>
+    </div>
 </div>
 
 <script>
     let libraryData = {}; 
     let libraryCovers = {}; 
-    let bookOrder = []; // NEW: Array to track visual order of books
+    let bookOrder = []; 
     let currentBook = null;
-    let storageAvailable = true; 
 
     // --- INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', () => {
-        setupPWA(); testStorage(); loadTheme(); loadData(); renderDashboard();
+        setupPWA(); loadTheme(); loadData(); renderDashboard();
+        setupDragAndDrop();
     });
 
-    // Close kebab menus when clicking outside
+    // --- STRICT MENU EVENT HANDLING (Mobile Fix) ---
+    function closeAllMenus() {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
+    }
+
     document.addEventListener('click', (e) => {
-        const isClickInsideMenu = e.target.closest('.kebab-container');
-        if (!isClickInsideMenu) {
-            document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
-                menu.classList.remove('active');
-            });
+        if (!e.target.closest('.kebab-container')) {
+            closeAllMenus();
         }
     });
 
-    // --- STORAGE ---
-    function testStorage() {
-        try { localStorage.setItem('test', '1'); localStorage.removeItem('test'); storageAvailable = true; } 
-        catch (e) { storageAvailable = false; document.getElementById('storageWarning').style.display = 'block'; }
-    }
+    // Global function attached directly to the window for inline HTML calls
+    window.toggleMenu = function(event, index) {
+        event.preventDefault();
+        event.stopPropagation(); 
+        
+        const dropdown = document.getElementById(`dropdown-${index}`);
+        const isActive = dropdown.classList.contains('active');
+        
+        closeAllMenus();
+        if (!isActive) dropdown.classList.add('active');
+    };
 
+    window.menuAction = function(event, actionType, bookName) {
+        event.preventDefault();
+        event.stopPropagation();
+        closeAllMenus();
+        
+        if (actionType === 'upload') triggerImageUpload(bookName);
+        if (actionType === 'web') searchWebCover(bookName);
+        if (actionType === 'delete') deleteBook(bookName);
+    };
+
+    // --- STORAGE ---
     function loadData() {
-        if (!storageAvailable) return; 
         try {
             const savedLib = localStorage.getItem('academicDict_Library');
             if (savedLib) { libraryData = JSON.parse(savedLib); } 
@@ -360,18 +422,15 @@
             const savedOrder = localStorage.getItem('academicDict_Order');
             if (savedOrder) { bookOrder = JSON.parse(savedOrder); }
 
-            // Sync: Add any newly created books that aren't in the order array yet
             Object.keys(libraryData).forEach(b => {
                 if(!bookOrder.includes(b)) bookOrder.push(b);
             });
-            // Sync: Remove deleted books from order array
             bookOrder = bookOrder.filter(b => libraryData[b]);
             
         } catch (e) { console.error("Error loading data", e); }
     }
 
     function saveData() {
-        if (!storageAvailable) return; 
         try {
             localStorage.setItem('academicDict_Library', JSON.stringify(libraryData));
             localStorage.setItem('academicDict_Covers', JSON.stringify(libraryCovers));
@@ -388,11 +447,10 @@
         themeBtn.innerText = isDark ? 'Focus: Paper' : 'Focus: Night';
         document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#121417' : '#F9F8F6');
         
-        if (storageAvailable) { try { localStorage.setItem('themePref_academic', isDark ? 'dark' : 'light'); } catch(e) { } }
+        try { localStorage.setItem('themePref_academic', isDark ? 'dark' : 'light'); } catch(e) { }
     }
 
     function loadTheme() {
-        if (!storageAvailable) return;
         try {
             const pref = localStorage.getItem('themePref_academic');
             if (pref === 'dark') { 
@@ -417,31 +475,10 @@
     }
     function installPWA() { if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then((c) => { if (c.outcome === 'accepted') document.getElementById('installBtn').style.display = 'none'; deferredPrompt = null; }); } }
 
-    // --- MENU LOGIC ---
-    function toggleMenu(event, index) {
-        event.preventDefault();
-        event.stopPropagation(); 
-        
-        const dropdown = document.getElementById(`dropdown-${index}`);
-        const isActive = dropdown.classList.contains('active');
-        
-        document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
-        
-        if (!isActive) dropdown.classList.add('active');
-    }
-
-    function handleMenuAction(event, actionFunc) {
-        event.preventDefault();
-        event.stopPropagation();
-        document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
-        actionFunc();
-    }
-
-    // --- DRAG AND DROP REORDERING LOGIC ---
+    // --- DRAG AND DROP REORDERING ---
     let draggedBookName = null;
 
     function handleDragStart(e) {
-        // Prevent dragging if the user is clicking the kebab menu
         if(e.target.closest('.kebab-container')) {
             e.preventDefault();
             return;
@@ -476,7 +513,6 @@
         const targetBookName = this.dataset.bookname;
         
         if (draggedBookName && draggedBookName !== targetBookName) {
-            // Reorder the array
             const fromIndex = bookOrder.indexOf(draggedBookName);
             const toIndex = bookOrder.indexOf(targetBookName);
             
@@ -497,7 +533,7 @@
     // --- DASHBOARD RENDER ---
     function renderDashboard() {
         const grid = document.getElementById('bookGrid'); grid.innerHTML = '';
-        if (bookOrder.length === 0) { grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center; margin-top: 40px; font-size: 1.1rem;">Your library is empty. Create a notebook to begin.</p>'; return; }
+        if (bookOrder.length === 0) { grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center; margin-top: 40px; font-size: 1.1rem;">Your library is empty. Create or drop a CSV to begin.</p>'; return; }
 
         bookOrder.forEach((bookName, index) => {
             const wordCount = libraryData[bookName].length;
@@ -515,20 +551,23 @@
             card.addEventListener('drop', handleDrop);
             card.addEventListener('dragend', handleDragEnd);
 
-            // Clicking opens the book
+            // Open book click area (isolated from the menu)
             card.onclick = (e) => {
                 if(!e.target.closest('.kebab-container')) {
                     openBook(bookName);
                 }
             };
             
+            // We use simple replacing for strings passed in HTML attributes to avoid breakage
+            const safeBookName = bookName.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            
             const kebabHTML = `
                 <div class="kebab-container">
-                    <button class="kebab-btn" onclick="toggleMenu(event, ${index})" ontouchstart="toggleMenu(event, ${index})">&#8942;</button>
+                    <button class="kebab-btn" onclick="toggleMenu(event, ${index})">&#8942;</button>
                     <div class="dropdown-menu" id="dropdown-${index}">
-                        <button class="dropdown-item" onclick="handleMenuAction(event, () => triggerImageUpload('${bookName}'))">📁 Custom Cover</button>
-                        <button class="dropdown-item" onclick="handleMenuAction(event, () => searchWebCover('${bookName}'))">🌐 Web Cover</button>
-                        <button class="dropdown-item danger" onclick="handleMenuAction(event, () => deleteBook('${bookName}'))">🗑️ Delete Notebook</button>
+                        <button class="dropdown-item" onclick="menuAction(event, 'upload', '${safeBookName}')">📁 Custom Cover</button>
+                        <button class="dropdown-item" onclick="menuAction(event, 'web', '${safeBookName}')">🌐 Web Cover</button>
+                        <button class="dropdown-item danger" onclick="menuAction(event, 'delete', '${safeBookName}')">🗑️ Delete Notebook</button>
                     </div>
                 </div>
             `;
@@ -542,6 +581,81 @@
             `;
             grid.appendChild(card);
         });
+    }
+
+    // --- CSV DRAG & DROP LOGIC ---
+    function setupDragAndDrop() {
+        const dropZone = document.getElementById('dropZone');
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+        
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                processCSVFile(e.dataTransfer.files[0]);
+            }
+        });
+    }
+
+    // Added to the window to handle the invisible input triggering
+    window.handleCSVSelect = function(event) {
+        if (event.target.files && event.target.files.length > 0) {
+            processCSVFile(event.target.files[0]);
+            event.target.value = ''; 
+        }
+    };
+
+    function processCSVFile(file) {
+        if (!file.name.endsWith('.csv')) { alert("Please upload a valid .csv file."); return; }
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const text = e.target.result;
+            const lines = text.split('\n');
+            if (lines.length < 2) return; 
+
+            let bookName = file.name.replace('.csv', '').replace(/_/g, ' ');
+            let originalName = bookName; let counter = 1;
+            while(libraryData[bookName]) { bookName = `${originalName} (${counter})`; counter++; }
+
+            libraryData[bookName] = [];
+            bookOrder.push(bookName);
+
+            for (let i = 1; i < lines.length; i++) {
+                if(!lines[i].trim()) continue;
+                
+                const regex = /(".*?"|[^",\s]+)(?=\s*,|\s*$)/g;
+                let matches = [];
+                let match;
+                while ((match = regex.exec(lines[i])) !== null) {
+                    matches.push(match[1].replace(/(^"|"$)/g, '').replace(/""/g, '"'));
+                }
+                
+                if (matches.length >= 5) {
+                    libraryData[bookName].push({
+                        word: matches[1] || "-",
+                        hindi: matches[2] || "-",
+                        synonyms: matches[3] || "-",
+                        meaning: matches[4] || "-",
+                        usage: matches[5] || "-"
+                    });
+                }
+            }
+            
+            saveData();
+            renderDashboard();
+            alert(`Successfully imported "${bookName}" with ${libraryData[bookName].length} words!`);
+        };
+        reader.readAsText(file);
     }
 
     // --- COVERS & BOOKS ---
@@ -581,7 +695,7 @@
         if (!bookName) return; if (libraryData[bookName]) return alert("A notebook with this name already exists.");
         
         libraryData[bookName] = []; 
-        bookOrder.push(bookName); // Add to order tracking
+        bookOrder.push(bookName); 
         saveData(); input.value = ''; renderDashboard();
     }
 
@@ -589,7 +703,7 @@
         if (confirm(`Delete the notebook "${bookName}" and all its contents?`)) { 
             delete libraryData[bookName]; 
             delete libraryCovers[bookName]; 
-            bookOrder = bookOrder.filter(b => b !== bookName); // Remove from order
+            bookOrder = bookOrder.filter(b => b !== bookName); 
             saveData(); renderDashboard(); 
         }
     }
@@ -686,11 +800,11 @@
         saveData(); renderTable(); closeManualModal();
     }
 
-    function deleteRow(index) {
+    window.deleteRow = function(index) {
         if(confirm("Remove this word from your notebook?")) {
             libraryData[currentBook].splice(index, 1); saveData(); renderTable();
         }
-    }
+    };
 
     function renderTable() {
         const tBody = document.getElementById('tableBody'); tBody.innerHTML = ''; 
