@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#F4F1EA">
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#F9F8F6">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -11,50 +12,56 @@
     <title>Vocab</title>
     
     <style>
-        /* Visual Theory Variables: Paper & Slate Focus Theme */
+        /* Visual Theory: Cognitive Ergonomics Theme */
         :root {
             --font-serif: 'Georgia', 'Times New Roman', serif;
             --font-sans: system-ui, -apple-system, sans-serif;
 
             /* Light/Paper Theme */
-            --bg-color: #F4F1EA;          
+            --bg-color: #F9F8F6;          /* Softer, highly readable paper tone */
             --container-bg: #FFFFFF;      
-            --surface-hover: #FAF9F6;     
+            --surface-hover: #F0EFEB;     
             
-            --text-primary: #2B2B2B;      
-            --text-secondary: #5C5C5C;    
-            --border-color: #E2DDD3;      
+            --text-primary: #222222;      /* Off-black for reduced eye strain */
+            --text-secondary: #5A5A5A;    
+            --border-color: #E6E4DD;      
             
-            --accent-color: #2F5C43;      
+            --accent-color: #2C573F;      /* Deep Library Green */
             --accent-hover: #1E3F2D;      
-            --danger-color: #B54646;      
+            --danger-color: #C24A4A;      
             
             --card-bg: #FFFFFF;
-            --card-border: #E2DDD3;
-            --default-cover: linear-gradient(135deg, #D4CEBE, #E2DDD3);
-            --shadow-sm: 0 2px 8px rgba(43, 43, 43, 0.04);
-            --shadow-lg: 0 12px 24px rgba(43, 43, 43, 0.06);
+            --card-border: #E6E4DD;
+            --default-cover: linear-gradient(135deg, #DEDCD5, #E6E4DD);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
+            --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.08);
+            
+            --dropzone-bg: rgba(44, 87, 63, 0.03);
+            --dropzone-border: rgba(44, 87, 63, 0.3);
         }
 
         .dark-mode {
             /* Dark/Slate Theme */
-            --bg-color: #17181A;          
-            --container-bg: #1F2124;
-            --surface-hover: #26282B;
+            --bg-color: #121417;          /* Cool, deep slate (better than pitch black) */
+            --container-bg: #1A1D21;
+            --surface-hover: #22262B;
             
-            --text-primary: #E0E2E5;      
-            --text-secondary: #9BA1A6;
-            --border-color: #31353A;
+            --text-primary: #EAECEE;      
+            --text-secondary: #90959A;
+            --border-color: #2D3136;
             
-            --accent-color: #6B9AC4;      
-            --accent-hover: #8AB4F8;      
-            --danger-color: #D65C5C;
+            --accent-color: #71A0D4;      /* Steel Blue */
+            --accent-hover: #96BFF0;      
+            --danger-color: #E06C6C;
             
-            --card-bg: #1F2124;
-            --card-border: #31353A;
-            --default-cover: linear-gradient(135deg, #31353A, #1F2124);
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.4);
+            --card-bg: #1A1D21;
+            --card-border: #2D3136;
+            --default-cover: linear-gradient(135deg, #2D3136, #1A1D21);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.4);
+            
+            --dropzone-bg: rgba(113, 160, 212, 0.05);
+            --dropzone-border: rgba(113, 160, 212, 0.3);
         }
 
         body {
@@ -63,163 +70,186 @@
             display: flex; flex-direction: column; align-items: center;
             overscroll-behavior-y: none; -webkit-font-smoothing: antialiased; line-height: 1.6;
         }
-        
-        #storageWarning {
-            display: none; width: 100%; max-width: 1000px; background-color: var(--danger-color); color: white;
-            padding: 12px 15px; border-radius: 6px; margin-bottom: 1.5rem; font-size: 0.9rem; text-align: center; box-sizing: border-box;
-        }
 
         .container {
             width: 100%; max-width: 1200px; background: var(--container-bg); padding: 2.5rem 3rem;
-            border-radius: 12px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);
+            border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);
             box-sizing: border-box; transition: background-color 0.3s, border-color 0.3s;
         }
         
         .nav-bar { 
             display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 2px solid var(--border-color); flex-wrap: wrap; gap: 15px; 
+            margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 15px; 
         }
-        .nav-title { margin: 0; font-size: 2rem; font-weight: 400; font-family: var(--font-serif); color: var(--text-primary);}
+        .nav-title { margin: 0; font-size: 2rem; font-weight: 500; font-family: var(--font-serif); color: var(--text-primary); letter-spacing: -0.5px;}
         .nav-actions { display: flex; gap: 10px; }
         
         .focus-btn {
             background: transparent; border: 1px solid var(--border-color); color: var(--text-primary);
-            padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 0.9rem; 
+            padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 0.9rem; 
             transition: all 0.2s ease; font-family: var(--font-sans);
         }
         .focus-btn:hover { border-color: var(--text-secondary); background: var(--surface-hover); }
-        .install-btn { background: var(--text-primary); color: var(--bg-color); border: none; }
-        .install-btn:hover { opacity: 0.9; transform: translateY(-1px);}
 
         .view { display: none; }
-        .view.active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .view.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        .create-book-section { display: flex; gap: 10px; margin-bottom: 2.5rem; }
-        .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2rem; }
+        /* Drag & Drop Creation Zone */
+        .creation-area {
+            display: flex; gap: 15px; margin-bottom: 2.5rem; width: 100%;
+        }
+        .input-group {
+            flex: 1; display: flex; gap: 10px;
+        }
+        .drop-zone {
+            flex: 1; border: 2px dashed var(--dropzone-border); border-radius: 8px; background: var(--dropzone-bg);
+            display: flex; align-items: center; justify-content: center; color: var(--text-secondary);
+            font-size: 0.95rem; font-weight: 500; transition: all 0.2s; cursor: pointer; padding: 0 15px; text-align: center;
+        }
+        .drop-zone.drag-over {
+            background: rgba(44, 87, 63, 0.1); border-color: var(--accent-color); color: var(--accent-color);
+        }
+        .dark-mode .drop-zone.drag-over {
+            background: rgba(113, 160, 212, 0.15); border-color: var(--accent-color); color: var(--accent-color);
+        }
+
+        .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 2.5rem 2rem; }
         
         .book-card {
-            background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 12px;
-            cursor: pointer; transition: all 0.2s ease; position: relative; display: flex; flex-direction: column; box-shadow: var(--shadow-sm);
+            background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px;
+            transition: all 0.2s ease; position: relative; display: flex; flex-direction: column; box-shadow: var(--shadow-sm);
         }
-        .book-card:hover { border-color: var(--accent-color); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .book-card:hover { border-color: var(--text-secondary); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
         
+        /* The cover acts as the main click target */
         .book-cover { 
-            height: 240px; width: 100%; background: var(--default-cover); background-size: cover; 
-            background-position: center; border-radius: 4px; margin-bottom: 12px; border: 1px solid rgba(0,0,0,0.05);
+            height: 250px; width: 100%; background: var(--default-cover); background-size: cover; 
+            background-position: center; border-radius: 6px; margin-bottom: 16px; border: 1px solid rgba(0,0,0,0.05);
+            cursor: pointer;
         }
         
-        .book-info { text-align: center; padding: 4px; }
-        .book-info h3 { margin: 0 0 4px 0; color: var(--text-primary); font-size: 1.1rem; font-weight: 600; font-family: var(--font-serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .book-info { text-align: center; padding: 4px; cursor: pointer; }
+        .book-info h3 { margin: 0 0 6px 0; color: var(--text-primary); font-size: 1.15rem; font-weight: 600; font-family: var(--font-serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         .book-info p { margin: 0; font-size: 0.85rem; color: var(--text-secondary); }
 
+        /* Kebab Menu - Isolated Layering */
+        .kebab-container {
+            position: absolute; top: 20px; right: 20px; z-index: 50; /* Ensures it sits above everything */
+        }
+        
         .kebab-btn {
-            position: absolute; top: 20px; right: 20px; 
-            background: rgba(0, 0, 0, 0.5); color: #FFFFFF;
+            background: rgba(0, 0, 0, 0.55); color: #FFFFFF;
             border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; 
-            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 18px; font-weight: bold; transition: all 0.2s ease; z-index: 10;
+            width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 20px; font-weight: bold; transition: all 0.2s ease;
             backdrop-filter: blur(4px); padding-bottom: 4px; 
         }
-        .kebab-btn:hover { background: rgba(0, 0, 0, 0.8); transform: scale(1.05); }
+        .kebab-btn:hover { background: rgba(0, 0, 0, 0.9); transform: scale(1.05); }
 
         .dropdown-menu {
-            position: absolute; top: 60px; right: 20px;
+            position: absolute; top: 40px; right: 0;
             background: var(--container-bg); border: 1px solid var(--border-color);
-            border-radius: 8px; box-shadow: var(--shadow-lg);
+            border-radius: 10px; box-shadow: var(--shadow-lg);
             display: flex; flex-direction: column; padding: 8px 0;
-            z-index: 20; opacity: 0; pointer-events: none; transform: translateY(-10px);
-            transition: all 0.2s ease; width: 170px;
+            opacity: 0; pointer-events: none; transform: translateY(-10px);
+            transition: all 0.2s ease; width: 180px; overflow: hidden;
         }
         .dropdown-menu.active {
             opacity: 1; pointer-events: auto; transform: translateY(0);
         }
         .dropdown-item {
             padding: 12px 16px; background: transparent; border: none; color: var(--text-primary);
-            text-align: left; cursor: pointer; font-size: 0.85rem; font-family: var(--font-sans);
+            text-align: left; cursor: pointer; font-size: 0.9rem; font-family: var(--font-sans);
             transition: background 0.2s; width: 100%; font-weight: 500;
         }
-        .dropdown-item:hover { background: var(--surface-hover); }
+        .dropdown-item:hover { background: var(--surface-hover); color: var(--accent-color); }
         .dropdown-item.danger { color: var(--danger-color); border-top: 1px solid var(--border-color); margin-top: 4px; }
+        .dropdown-item.danger:hover { color: #FFFFFF; background: var(--danger-color); }
 
+        /* Dictionary View Header */
         .playlist-header { display: flex; align-items: flex-end; gap: 30px; margin-bottom: 3rem; }
         .playlist-cover {
-            width: 180px; height: 180px; border-radius: 4px; background-size: cover; background-position: center;
+            width: 180px; height: 180px; border-radius: 6px; background-size: cover; background-position: center;
             box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);
         }
-        .playlist-info p { margin: 0 0 8px 0; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1.5px;}
-        .playlist-info h1 { margin: 0 0 12px 0; font-size: 3rem; font-weight: 400; font-family: var(--font-serif); line-height: 1.1; color: var(--text-primary);}
-        .playlist-info .stats { color: var(--accent-color); font-size: 0.95rem; font-weight: 500;}
+        .playlist-info p { margin: 0 0 8px 0; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1.5px;}
+        .playlist-info h1 { margin: 0 0 12px 0; font-size: 3.2rem; font-weight: 400; font-family: var(--font-serif); line-height: 1.1; color: var(--text-primary); letter-spacing: -1px;}
+        .playlist-info .stats { color: var(--accent-color); font-size: 0.95rem; font-weight: 600;}
 
-        .controls-row { display: flex; gap: 10px; width: 100%; margin-bottom: 2rem; align-items: center; flex-wrap: wrap;}
+        /* Controls */
+        .controls-row { display: flex; gap: 12px; width: 100%; margin-bottom: 2rem; align-items: center; flex-wrap: wrap;}
         
         input[type="text"] { 
-            flex: 1; padding: 12px 16px; font-size: 15px; border: 1px solid var(--border-color); border-radius: 6px; 
-            background: var(--container-bg); color: var(--text-primary); outline: none; box-sizing: border-box; transition: border-color 0.2s; font-family: var(--font-sans);
+            flex: 1; padding: 14px 18px; font-size: 15px; border: 1px solid var(--border-color); border-radius: 8px; 
+            background: var(--bg-color); color: var(--text-primary); outline: none; box-sizing: border-box; transition: all 0.2s; font-family: var(--font-sans);
         }
-        input[type="text"]:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(47, 92, 67, 0.1); }
-        .dark-mode input[type="text"]:focus { box-shadow: 0 0 0 3px rgba(107, 154, 196, 0.2); }
+        input[type="text"]:focus { border-color: var(--accent-color); background: var(--container-bg); box-shadow: 0 0 0 3px rgba(44, 87, 63, 0.1); }
+        .dark-mode input[type="text"]:focus { box-shadow: 0 0 0 3px rgba(113, 160, 212, 0.15); }
         
         button.action-btn { 
-            padding: 12px 24px; font-size: 0.95rem; font-weight: 500; background-color: var(--accent-color); color: #FFF; 
-            border: 1px solid var(--accent-color); border-radius: 6px; cursor: pointer; transition: all 0.2s; white-space: nowrap; box-sizing: border-box; font-family: var(--font-sans);
+            padding: 14px 28px; font-size: 0.95rem; font-weight: 600; background-color: var(--accent-color); color: #FFF; 
+            border: 1px solid var(--accent-color); border-radius: 8px; cursor: pointer; transition: all 0.2s; white-space: nowrap; box-sizing: border-box; font-family: var(--font-sans);
         }
-        button.action-btn:hover { background-color: var(--accent-hover); border-color: var(--accent-hover); }
+        button.action-btn:hover { background-color: var(--accent-hover); border-color: var(--accent-hover); transform: translateY(-1px);}
         button.action-btn:active { transform: translateY(1px); }
-        button.action-btn:disabled { background-color: var(--surface-hover); border-color: var(--border-color); color: var(--text-secondary); cursor: not-allowed; }
+        button.action-btn:disabled { background-color: var(--surface-hover); border-color: var(--border-color); color: var(--text-secondary); cursor: not-allowed; transform: none;}
         
         .manual-btn { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-primary); }
-        .manual-btn:hover { border-color: var(--text-secondary); background-color: var(--surface-hover); }
+        .manual-btn:hover { border-color: var(--text-secondary); background-color: var(--surface-hover); color: var(--text-primary);}
 
-        .error-message { color: var(--danger-color); font-size: 0.9rem; margin-bottom: 15px; display: none; font-weight: 500; background: rgba(181, 70, 70, 0.1); padding: 10px; border-radius: 6px;}
+        .error-message { color: var(--danger-color); font-size: 0.9rem; margin-bottom: 15px; display: none; font-weight: 500; background: rgba(194, 74, 74, 0.1); padding: 12px; border-radius: 8px;}
         
-        .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 10px; }
-        table { width: 100%; border-collapse: collapse; min-width: 900px; }
-        th, td { padding: 20px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border-color);}
+        /* Table Layout */
+        .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 10px; border-radius: 8px; border: 1px solid var(--border-color);}
+        table { width: 100%; border-collapse: collapse; min-width: 900px; background: var(--container-bg);}
+        th, td { padding: 20px 18px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border-color);}
         
-        th { color: var(--text-secondary); font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--border-color);}
+        th { color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--border-color); background: var(--bg-color);}
         
         tr.word-row { transition: background-color 0.2s; }
         tr.word-row:hover { background-color: var(--surface-hover); }
         
-        .td-word { font-weight: 600; color: var(--text-primary); font-size: 1.2rem; font-family: var(--font-serif); }
+        .td-word { font-weight: 600; color: var(--text-primary); font-size: 1.25rem; font-family: var(--font-serif); }
         .td-hindi { font-weight: 500; color: var(--text-primary); font-size: 1.05rem; }
-        .td-synonyms { color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px; display: block;}
+        .td-synonyms { color: var(--text-secondary); font-size: 0.9rem; margin-top: 6px; display: block; line-height: 1.4;}
         .td-meaning { color: var(--text-primary); font-size: 0.95rem; }
-        .td-usage { color: var(--text-secondary); font-size: 0.95rem; font-style: italic; border-left: 3px solid var(--border-color); padding-left: 15px;}
+        .td-usage { color: var(--text-secondary); font-size: 0.95rem; font-style: italic; border-left: 3px solid var(--border-color); padding-left: 16px;}
         
         .delete-row-btn {
-            background: transparent; color: var(--text-secondary); border: none; font-size: 1.2rem; cursor: pointer; opacity: 0; transition: all 0.2s; padding: 4px 8px; border-radius: 4px;
+            background: transparent; color: var(--text-secondary); border: none; font-size: 1.2rem; cursor: pointer; opacity: 0; transition: all 0.2s; padding: 6px 10px; border-radius: 6px;
         }
         tr.word-row:hover .delete-row-btn { opacity: 1; }
-        .delete-row-btn:hover { color: var(--danger-color); }
+        .delete-row-btn:hover { color: #FFF; background: var(--danger-color); }
 
+        /* Modals */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4); backdrop-filter: blur(2px); z-index: 100; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 100; justify-content: center; align-items: center;
         }
         .modal-content {
-            background: var(--container-bg); padding: 2.5rem; border-radius: 12px; width: 90%; max-width: 450px;
+            background: var(--container-bg); padding: 2.5rem; border-radius: 16px; width: 90%; max-width: 480px;
             box-shadow: var(--shadow-lg); border: 1px solid var(--border-color);
         }
-        .modal-content h2 { margin-top: 0; font-weight: 400; font-size: 1.5rem; color: var(--text-primary); font-family: var(--font-serif); margin-bottom: 1.5rem;}
+        .modal-content h2 { margin-top: 0; font-weight: 500; font-size: 1.7rem; color: var(--text-primary); font-family: var(--font-serif); margin-bottom: 1.5rem;}
         .modal-content input { width: 100%; margin-bottom: 16px; }
-        .modal-actions { display: flex; gap: 10px; margin-top: 1rem; justify-content: flex-end;}
+        .modal-actions { display: flex; gap: 12px; margin-top: 1rem; justify-content: flex-end;}
 
-        @media (max-width: 768px) {
+        /* Responsive Breakpoints */
+        @media (max-width: 850px) {
             body { padding: 0.5rem; }
-            .container { padding: 1.5rem; border-radius: 8px;}
-            .nav-bar { flex-direction: column; align-items: flex-start; gap: 15px;}
+            .container { padding: 1.5rem; border-radius: 12px;}
+            .creation-area { flex-direction: column; }
+            .input-group { flex-direction: column; }
+            .drop-zone { padding: 15px; }
             .playlist-header { flex-direction: column; align-items: center; text-align: center; gap: 20px;}
-            .playlist-info h1 { font-size: 2.2rem; }
+            .playlist-info h1 { font-size: 2.5rem; }
             .controls-row { flex-direction: column; }
             input[type="text"], button.action-btn { width: 100%; }
             tr.word-row .delete-row-btn { opacity: 1; } 
             
             .book-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.5rem; }
             .book-cover { height: 200px; }
-            .kebab-btn { top: 15px; right: 15px; }
-            .dropdown-menu { top: 55px; right: 15px; }
         }
     </style>
 </head>
@@ -227,6 +257,7 @@
 
 <div id="storageWarning">⚠️ Warning: Browser storage blocked. Books will disappear when closed. Please disable Private Browsing.</div>
 
+<!-- Modals -->
 <div id="manualAddModal" class="modal-overlay">
     <div class="modal-content">
         <h2>Record New Word</h2>
@@ -237,7 +268,7 @@
         <input type="text" id="manUsage" placeholder="Usage in a sentence">
         <div class="modal-actions">
             <button class="focus-btn" onclick="closeManualModal()">Cancel</button>
-            <button class="action-btn" onclick="saveManualWord()">Save to Notebook</button>
+            <button class="action-btn" onclick="saveManualWord()">Save Word</button>
         </div>
     </div>
 </div>
@@ -246,27 +277,39 @@
     <div class="nav-bar">
         <h2 class="nav-title">Vocab</h2>
         <div class="nav-actions">
-            <button id="installBtn" class="focus-btn install-btn" style="display:none;" onclick="installPWA()">Install App</button>
+            <button id="installBtn" class="focus-btn" style="display:none;" onclick="installPWA()">Install App</button>
             <button class="focus-btn" onclick="exportToExcel()" id="exportBtn" style="display:none;">Export to CSV</button>
             <button class="focus-btn" onclick="toggleTheme()" id="themeBtn">Focus: Night</button>
         </div>
     </div>
 
+    <!-- VIEW 1: Dashboard -->
     <div id="dashboardView" class="view active">
-        <div class="controls-row">
-            <input type="text" id="newBookInput" placeholder="Create a new notebook (e.g. Physics 101, Dostoevsky)...">
-            <button class="action-btn" onclick="createNewBook()">Create Notebook</button>
+        
+        <div class="creation-area">
+            <div class="input-group">
+                <input type="text" id="newBookInput" placeholder="New notebook name (e.g. Physics 101)...">
+                <button class="action-btn" onclick="createNewBook()">Create</button>
+            </div>
+            
+            <!-- Drag and Drop Zone -->
+            <div class="drop-zone" id="dropZone" onclick="document.getElementById('csvFileInput').click()">
+                <span>📁 Drag & Drop CSV here to create Database</span>
+                <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleCSVSelect(event)">
+            </div>
         </div>
+
         <div class="book-grid" id="bookGrid"></div>
     </div>
 
+    <!-- VIEW 2: Dictionary Table -->
     <div id="dictionaryView" class="view">
         <button class="focus-btn" onclick="showDashboard()" style="margin-bottom: 2rem;">← Back to Library</button>
         
         <div class="playlist-header">
             <div id="currentBookCover" class="playlist-cover"></div>
             <div class="playlist-info">
-                <p>Notebook</p>
+                <p>Notebook Database</p>
                 <h1 id="currentBookTitle">Book Name</h1>
                 <p class="stats" id="currentBookStats">0 words recorded</p>
             </div>
@@ -274,7 +317,7 @@
         
         <div class="controls-row">
             <input type="text" id="wordInput" placeholder="Look up a difficult word...">
-            <button class="action-btn" id="searchBtn" onclick="fetchWordDetails()">Search Dictionary</button>
+            <button class="action-btn" id="searchBtn" onclick="fetchWordDetails()">Search APIs</button>
             <button class="action-btn manual-btn" onclick="openManualModal()">+ Add Custom</button>
         </div>
         
@@ -305,14 +348,23 @@
     let currentBook = null;
     let storageAvailable = true; 
 
+    // --- INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', () => {
         setupPWA(); testStorage(); loadTheme(); loadData(); renderDashboard();
+        setupDragAndDrop();
     });
 
-    document.addEventListener('click', () => {
-        document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
+    // Handle clicking outside to close kebab menus (CRITICAL FIX FOR MOBILE)
+    document.addEventListener('click', (e) => {
+        const isClickInsideMenu = e.target.closest('.kebab-container');
+        if (!isClickInsideMenu) {
+            document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
+                menu.classList.remove('active');
+            });
+        }
     });
 
+    // --- STORAGE ---
     function testStorage() {
         try { localStorage.setItem('test', '1'); localStorage.removeItem('test'); storageAvailable = true; } 
         catch (e) { storageAvailable = false; document.getElementById('storageWarning').style.display = 'block'; }
@@ -323,7 +375,6 @@
         try {
             const savedLib = localStorage.getItem('academicDict_Library');
             if (savedLib) { libraryData = JSON.parse(savedLib); } 
-
             const savedCov = localStorage.getItem('academicDict_Covers');
             if (savedCov) { libraryCovers = JSON.parse(savedCov); }
         } catch (e) { console.error("Error loading", e); }
@@ -337,17 +388,16 @@
         } catch (e) { alert("Storage full. Cannot save new data."); }
     }
 
+    // --- THEME ---
     function toggleTheme() {
         const body = document.body; const themeBtn = document.getElementById('themeBtn');
         body.classList.toggle('dark-mode');
         const isDark = body.classList.contains('dark-mode');
         
         themeBtn.innerText = isDark ? 'Focus: Paper' : 'Focus: Night';
-        document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#17181A' : '#F4F1EA');
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#121417' : '#F9F8F6');
         
-        if (storageAvailable) {
-            try { localStorage.setItem('themePref_academic', isDark ? 'dark' : 'light'); } catch(e) { }
-        }
+        if (storageAvailable) { try { localStorage.setItem('themePref_academic', isDark ? 'dark' : 'light'); } catch(e) { } }
     }
 
     function loadTheme() {
@@ -357,76 +407,172 @@
             if (pref === 'dark') { 
                 document.body.classList.add('dark-mode'); 
                 document.getElementById('themeBtn').innerText = 'Focus: Paper'; 
-                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#17181A');
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#121417');
             }
         } catch(e) { }
     }
 
+    // --- PWA ---
     let deferredPrompt;
     function setupPWA() {
-        const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><rect width="512" height="512" fill="#F4F1EA" rx="100"/><text x="50%" y="54%" font-family="'Georgia', serif" font-size="360" font-weight="bold" fill="#2F5C43" text-anchor="middle" dominant-baseline="middle">V</text></svg>`;
+        const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><rect width="512" height="512" fill="#F9F8F6" rx="100"/><text x="50%" y="54%" font-family="'Georgia', serif" font-size="360" font-weight="bold" fill="#2C573F" text-anchor="middle" dominant-baseline="middle">V</text></svg>`;
         const img = new Image(); img.onload = () => {
             const canvas = document.createElement('canvas'); canvas.width = 512; canvas.height = 512;
             const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0);
             const pngUrl = canvas.toDataURL('image/png');
             document.head.insertAdjacentHTML('beforeend', `<link rel="icon" type="image/png" href="${pngUrl}"><link rel="apple-touch-icon" href="${pngUrl}">`);
-            const manifest = { name: "Vocab", short_name: "Vocab", display: "standalone", background_color: "#F4F1EA", theme_color: "#2F5C43", icons: [{ src: pngUrl, sizes: "512x512", type: "image/png" }] };
+            const manifest = { name: "Vocab", short_name: "Vocab", display: "standalone", background_color: "#F9F8F6", theme_color: "#2C573F", icons: [{ src: pngUrl, sizes: "512x512", type: "image/png" }] };
             document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type: 'application/manifest+json'}))}">`);
         }; img.src = URL.createObjectURL(new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' }));
         window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; document.getElementById('installBtn').style.display = 'inline-block'; });
     }
     function installPWA() { if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then((c) => { if (c.outcome === 'accepted') document.getElementById('installBtn').style.display = 'none'; deferredPrompt = null; }); } }
 
+    // --- MENU LOGIC (Strict click separation) ---
     function toggleMenu(event, index) {
+        // Absolutely prevent the click from reaching the book card underneath
+        event.preventDefault();
         event.stopPropagation(); 
         
-        document.querySelectorAll('.dropdown-menu').forEach(menu => {
-            if (menu.id !== `dropdown-${index}`) {
-                menu.classList.remove('active');
-            }
-        });
-        
         const dropdown = document.getElementById(`dropdown-${index}`);
-        dropdown.classList.toggle('active');
+        const isActive = dropdown.classList.contains('active');
+        
+        // Close all
+        document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
+        
+        // Toggle target
+        if (!isActive) dropdown.classList.add('active');
     }
 
+    // Wrap actions to catch event and stop it
+    function handleMenuAction(event, actionFunc) {
+        event.preventDefault();
+        event.stopPropagation();
+        document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
+        actionFunc();
+    }
+
+    // --- DASHBOARD RENDER ---
     function renderDashboard() {
         const grid = document.getElementById('bookGrid'); grid.innerHTML = '';
         const books = Object.keys(libraryData);
-        if (books.length === 0) { grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center; margin-top: 40px; font-size: 1.1rem;">Your library is empty. Create a notebook to begin.</p>'; return; }
+        if (books.length === 0) { grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center; margin-top: 40px; font-size: 1.1rem;">Your library is empty. Create or drop a CSV to begin.</p>'; return; }
 
         books.forEach((bookName, index) => {
             const wordCount = libraryData[bookName].length;
             const coverImage = libraryCovers[bookName] ? `url(${libraryCovers[bookName]})` : 'var(--default-cover)';
             const card = document.createElement('div'); card.className = 'book-card';
             
-            card.onclick = () => openBook(bookName);
+            // Kebab Menu Layer (Isolated)
+            const kebabHTML = `
+                <div class="kebab-container">
+                    <button class="kebab-btn" onclick="toggleMenu(event, ${index})" ontouchstart="toggleMenu(event, ${index})">&#8942;</button>
+                    <div class="dropdown-menu" id="dropdown-${index}">
+                        <button class="dropdown-item" onclick="handleMenuAction(event, () => triggerImageUpload('${bookName}'))">📁 Custom Cover</button>
+                        <button class="dropdown-item" onclick="handleMenuAction(event, () => searchWebCover('${bookName}'))">🌐 Web Cover</button>
+                        <button class="dropdown-item danger" onclick="handleMenuAction(event, () => deleteBook('${bookName}'))">🗑️ Delete Database</button>
+                    </div>
+                </div>
+            `;
             
             card.innerHTML = `
-                <div class="book-cover" style="background-image: ${coverImage};"></div>
-                <button class="kebab-btn" onclick="toggleMenu(event, ${index})">&#8942;</button>
-                <div class="dropdown-menu" id="dropdown-${index}">
-                    <button class="dropdown-item" onclick="triggerImageUpload(event, '${bookName}')">📁 Custom Cover</button>
-                    <button class="dropdown-item" onclick="searchWebCover(event, '${bookName}')">🌐 Web Cover</button>
-                    <button class="dropdown-item danger" onclick="deleteBook(event, '${bookName}')">🗑️ Delete</button>
+                ${kebabHTML}
+                <div class="book-cover" style="background-image: ${coverImage};" onclick="openBook('${bookName}')"></div>
+                <div class="book-info" onclick="openBook('${bookName}')">
+                    <h3>${bookName}</h3><p>${wordCount} word${wordCount !== 1 ? 's' : ''}</p>
                 </div>
-                <div class="book-info"><h3>${bookName}</h3><p>${wordCount} word${wordCount !== 1 ? 's' : ''}</p></div>
             `;
             grid.appendChild(card);
         });
     }
 
-    async function searchWebCover(event, bookName) {
-        event.stopPropagation();
+    // --- CSV DRAG & DROP LOGIC ---
+    function setupDragAndDrop() {
+        const dropZone = document.getElementById('dropZone');
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+        
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                processCSVFile(e.dataTransfer.files[0]);
+            }
+        });
+    }
+
+    function handleCSVSelect(event) {
+        if (event.target.files && event.target.files.length > 0) {
+            processCSVFile(event.target.files[0]);
+            event.target.value = ''; // Reset input
+        }
+    }
+
+    function processCSVFile(file) {
+        if (!file.name.endsWith('.csv')) { alert("Please upload a valid .csv file."); return; }
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const text = e.target.result;
+            const lines = text.split('\n');
+            if (lines.length < 2) return; // Needs at least header and one row
+
+            // Create book name from filename (remove .csv)
+            let bookName = file.name.replace('.csv', '').replace(/_/g, ' ');
+            // Make unique if exists
+            let originalName = bookName; let counter = 1;
+            while(libraryData[bookName]) { bookName = `${originalName} (${counter})`; counter++; }
+
+            libraryData[bookName] = [];
+
+            // Parse lines (skipping header)
+            // Assumes standard export format: Sr No.,Word,Hindi,Similar Words,Definition,Context
+            for (let i = 1; i < lines.length; i++) {
+                if(!lines[i].trim()) continue;
+                
+                // Regex to handle commas inside quotes (standard CSV format)
+                const regex = /(".*?"|[^",\s]+)(?=\s*,|\s*$)/g;
+                let matches = [];
+                let match;
+                while ((match = regex.exec(lines[i])) !== null) {
+                    matches.push(match[1].replace(/(^"|"$)/g, '').replace(/""/g, '"'));
+                }
+                
+                if (matches.length >= 5) {
+                    libraryData[bookName].push({
+                        word: matches[1] || "-",
+                        hindi: matches[2] || "-",
+                        synonyms: matches[3] || "-",
+                        meaning: matches[4] || "-",
+                        usage: matches[5] || "-"
+                    });
+                }
+            }
+            
+            saveData();
+            renderDashboard();
+            alert(`Successfully imported "${bookName}" with ${libraryData[bookName].length} words!`);
+        };
+        reader.readAsText(file);
+    }
+
+    // --- COVERS & BOOKS ---
+    async function searchWebCover(bookName) {
         try {
             const res = await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(bookName)}&limit=15`);
             const data = await res.json();
-            
             const resultsWithCovers = data.docs.filter(d => d.cover_i);
             
-            if(resultsWithCovers.length === 0) {
-                alert(`No cover found online for this book title.`); 
-            } else { 
+            if(resultsWithCovers.length === 0) { alert(`No cover found online for this book title.`); } 
+            else { 
                 const randomIndex = Math.floor(Math.random() * resultsWithCovers.length);
                 const randomCoverId = resultsWithCovers[randomIndex].cover_i;
                 libraryCovers[bookName] = `https://covers.openlibrary.org/b/id/${randomCoverId}-L.jpg`; 
@@ -435,8 +581,8 @@
         } catch(e) { alert("Network error while searching for a cover."); } 
     }
 
-    function triggerImageUpload(event, bookName) {
-        event.stopPropagation(); const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
+    function triggerImageUpload(bookName) {
+        const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
         input.onchange = (e) => {
             if (!e.target.files[0]) return;
             const reader = new FileReader(); reader.onload = (ev) => {
@@ -456,9 +602,10 @@
         libraryData[bookName] = []; saveData(); input.value = ''; renderDashboard();
     }
 
-    function deleteBook(event, bookName) {
-        event.stopPropagation(); 
-        if (confirm(`Delete the notebook "${bookName}" and all its contents?`)) { delete libraryData[bookName]; delete libraryCovers[bookName]; saveData(); renderDashboard(); }
+    function deleteBook(bookName) {
+        if (confirm(`Delete the notebook "${bookName}" and all its contents?`)) { 
+            delete libraryData[bookName]; delete libraryCovers[bookName]; saveData(); renderDashboard(); 
+        }
     }
 
     function showDashboard() { 
@@ -481,6 +628,7 @@
     document.getElementById("wordInput").addEventListener("keypress", (e) => { if (e.key === "Enter") fetchWordDetails(); });
     document.getElementById("newBookInput").addEventListener("keypress", (e) => { if (e.key === "Enter") createNewBook(); });
 
+    // --- API SEARCH ---
     async function fetchWordDetails() {
         const inputElement = document.getElementById('wordInput'); const btn = document.getElementById('searchBtn');
         const word = inputElement.value.trim().toLowerCase(); const err = document.getElementById('errorMsg');
@@ -513,7 +661,7 @@
                     const mlData = await mlRes.json();
                     if (mlData && mlData.length > 0) synString = mlData.map(item => item.word).join(", ");
                 }
-            } catch (synError) { console.log("Datamuse failed."); }
+            } catch (synError) { }
 
             let hindiString = "-";
             try {
@@ -523,12 +671,12 @@
                     const translated = hiData.responseData.translatedText;
                     if (translated.toLowerCase() !== word.toLowerCase()) hindiString = translated;
                 }
-            } catch (hiError) { console.log("Hindi translation failed."); }
+            } catch (hiError) { }
 
             libraryData[currentBook].push({ word, hindi: hindiString, meaning, usage, synonyms: synString }); 
             saveData(); renderTable(); inputElement.value = '';
 
-        } catch (error) { err.style.display = 'block'; } finally { btn.innerText = "Search Dictionary"; btn.disabled = false; }
+        } catch (error) { err.style.display = 'block'; } finally { btn.innerText = "Search APIs"; btn.disabled = false; }
     }
 
     function openManualModal() { document.getElementById('manualAddModal').style.display = 'flex'; }
@@ -595,7 +743,7 @@
             csv += `${i + 1},"${w}","${h}","${s}","${m}","${u}"\n`; 
         });
         const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
-        link.download = `${currentBook.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_glossary.csv`;
+        link.download = `${currentBook.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_database.csv`;
         document.body.appendChild(link); link.click(); document.body.removeChild(link);
     }
 </script>
