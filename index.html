@@ -3,383 +3,345 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#F8FAFC">
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#F4F1EA">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Vocab">
-    <title>Vocab Tracker Pro</title>
+    <title>Academic Vocab Tracker</title>
     
     <style>
-        * { box-sizing: border-box; } /* Ensures padding never breaks mobile width */
-        
+        /* Visual Theory Variables: 3-Tier Theme System */
         :root {
-            /* Light Theme - Professional Palette */
-            --bg-color: #F1F5F9;
-            --container-bg: #FFFFFF;
-            --surface-color: #F8FAFC;
-            --surface-hover: #F1F5F9;
-            
-            --text-primary: #0F172A;
-            --text-secondary: #64748B;
-            --border-color: #E2E8F0;
-            
-            --accent-color: #4F46E5; /* Indigo */
-            --accent-hover: #4338CA;
-            --danger-color: #EF4444;
-            --success-color: #10B981;
-            --warning-color: #F59E0B;
-            
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
-            --shadow-lg: 0 10px 25px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.02);
-            --shadow-modal: 0 25px 50px -12px rgba(0,0,0,0.15);
-            
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --radius-xl: 16px;
-            
-            --font-sans: system-ui, -apple-system, sans-serif;
             --font-serif: 'Georgia', 'Times New Roman', serif;
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+            /* 1. Light Theme (Crisp & Minimal) */
+            --bg-color: #F8FAFC;          
+            --container-bg: #FFFFFF;      
+            --surface-hover: #F1F5F9;     
+            
+            --text-primary: #0F172A;      
+            --text-secondary: #64748B;    
+            --border-color: #E2E8F0;      
+            
+            --accent-color: #7C3AED;      
+            --accent-hover: #6D28D9;      
+            --danger-color: #EF4444;      
+            
+            --card-bg: #FFFFFF;
+            --card-border: #E2E8F0;
+            --default-cover: linear-gradient(135deg, #E2E8F0, #CBD5E1);
+            --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.04);
+            --shadow-lg: 0 16px 32px rgba(15, 23, 42, 0.08);
+            
+            --dropzone-bg: rgba(124, 58, 237, 0.03);
+            --dropzone-border: rgba(124, 58, 237, 0.3);
+            --focus-ring: rgba(124, 58, 237, 0.2);
         }
 
-        .dark-mode {
-            /* Dark Theme - Sleek Slate */
-            --bg-color: #0F172A;
-            --container-bg: #1E293B;
-            --surface-color: #0F172A;
-            --surface-hover: #334155;
+        body.theme-warm {
+            /* 2. Warm Theme (Sepia / E-Ink focus) */
+            --bg-color: #FDF6E3;          
+            --container-bg: #FCF4DF;      
+            --surface-hover: #F2E9D0;     
             
-            --text-primary: #F8FAFC;
+            --text-primary: #383222;      
+            --text-secondary: #7A725D;    
+            --border-color: #E6DBC3;      
+            
+            --accent-color: #D97706;      
+            --accent-hover: #B45309;      
+            --danger-color: #DC2626;      
+            
+            --card-bg: #FCF4DF;
+            --card-border: #E6DBC3;
+            --default-cover: linear-gradient(135deg, #D4CEBE, #E6DBC3);
+            --shadow-sm: 0 4px 12px rgba(56, 50, 34, 0.04);
+            --shadow-lg: 0 16px 32px rgba(56, 50, 34, 0.08);
+            
+            --dropzone-bg: rgba(217, 119, 6, 0.05);
+            --dropzone-border: rgba(217, 119, 6, 0.3);
+            --focus-ring: rgba(217, 119, 6, 0.2);
+        }
+
+        body.theme-dark {
+            /* 3. Dark Theme (Midnight Slate) */
+            --bg-color: #0F1115;          
+            --container-bg: #16181D;
+            --surface-hover: #1E2127;
+            
+            --text-primary: #E2E8F0;      
             --text-secondary: #94A3B8;
-            --border-color: #334155;
+            --border-color: #2A2E35;
             
-            --accent-color: #6366F1;
-            --accent-hover: #818CF8;
+            --accent-color: #8B5CF6;      
+            --accent-hover: #7C3AED;      
             --danger-color: #F87171;
-            --success-color: #34D399;
             
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
-            --shadow-lg: 0 10px 25px -3px rgba(0,0,0,0.4);
-            --shadow-modal: 0 25px 50px -12px rgba(0,0,0,0.5);
+            --card-bg: #16181D;
+            --card-border: #2A2E35;
+            --default-cover: linear-gradient(135deg, #2A2E35, #16181D);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.5);
+            
+            --dropzone-bg: rgba(139, 92, 246, 0.05);
+            --dropzone-border: rgba(139, 92, 246, 0.3);
+            --focus-ring: rgba(139, 92, 246, 0.2);
         }
 
-        body {
-            font-family: var(--font-sans);
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            padding: 1.5rem; margin: 0;
-            display: flex; flex-direction: column; align-items: center;
-            overscroll-behavior-y: none;
-            -webkit-font-smoothing: antialiased;
-            transition: background-color 0.3s ease, color 0.3s ease;
+        html, body {
+            margin: 0; padding: 0; height: 100vh; width: 100vw;
+            overflow: hidden; /* Prevents whole-page scrolling, letting app-modes scroll */
+            font-family: var(--font-sans); background-color: var(--bg-color);
+            color: var(--text-primary); -webkit-font-smoothing: antialiased; line-height: 1.6;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
+
+        * { box-sizing: border-box; scrollbar-width: none; -ms-overflow-style: none; }
+        ::-webkit-scrollbar { display: none; }
+
+        .app-mode {
+            display: none; width: 100%; height: calc(100vh - 65px); 
+            overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch;
+        }
+        .app-mode.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 65px; 
+            background: var(--container-bg); border-top: 1px solid var(--border-color); 
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 1000; padding-bottom: env(safe-area-inset-bottom);
+        }
+        .nav-tab {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: var(--text-secondary); cursor: pointer; transition: color 0.2s; height: 100%; 
+            font-size: 0.75rem; font-weight: 600; gap: 4px;
+        }
+        .nav-tab.active { color: var(--accent-color); }
+        .nav-tab svg { width: 24px; height: 24px; fill: currentColor; }
 
         .container {
-            width: 100%; max-width: 1200px;
-            background: var(--container-bg);
-            padding: 2.5rem 3rem;
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border-color);
-            box-sizing: border-box;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-            min-height: 85vh; display: flex; flex-direction: column;
+            width: 100%; max-width: 1100px; margin: 2rem auto 4rem; background: var(--container-bg); 
+            padding: 2.5rem 3rem; border-radius: 12px; box-shadow: var(--shadow-sm); 
+            border: 1px solid var(--border-color); transition: background-color 0.3s, border-color 0.3s;
         }
-
-        .nav-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 2.5rem; padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            flex-wrap: wrap; gap: 15px;
+        
+        .nav-bar { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 2px solid var(--border-color); flex-wrap: wrap; gap: 15px; 
         }
-        .nav-title {
-            margin: 0; font-size: 1.8rem; font-weight: 500; font-family: var(--font-serif);
-            color: var(--text-primary); letter-spacing: -0.5px;
-        }
+        .nav-title { margin: 0; font-size: 2rem; font-weight: 400; font-family: var(--font-serif); color: var(--text-primary);}
         .nav-actions { display: flex; gap: 10px; }
         
-        button {
-            font-family: var(--font-sans);
-            cursor: pointer;
-            transition: all 0.2s ease;
+        .focus-btn {
+            background: transparent; border: 1px solid var(--border-color); color: var(--text-primary);
+            padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 0.9rem; 
+            transition: all 0.2s ease; font-family: var(--font-sans);
         }
-        
-        .btn-outline {
-            background: transparent; border: 1px solid var(--border-color);
-            color: var(--text-primary); padding: 8px 16px;
-            border-radius: var(--radius-md); font-weight: 500; font-size: 0.9rem;
-        }
-        .btn-outline:hover { border-color: var(--text-secondary); background: var(--surface-hover); }
-        
-        .btn-primary {
-            background: var(--accent-color); color: #FFF;
-            border: 1px solid var(--accent-color); padding: 12px 24px;
-            border-radius: var(--radius-md); font-weight: 600; font-size: 0.95rem;
-            box-shadow: var(--shadow-sm);
-        }
-        .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); transform: translateY(-1px); box-shadow: var(--shadow-md); }
-        .btn-primary:active { transform: translateY(0); box-shadow: var(--shadow-sm); }
-        .btn-primary:disabled { background: var(--surface-hover); border-color: var(--border-color); color: var(--text-secondary); cursor: not-allowed; transform: none; box-shadow: none; }
+        .focus-btn:hover { border-color: var(--text-secondary); background: var(--surface-hover); }
 
-        .view { display: none; flex: 1; }
-        .view.active { display: flex; flex-direction: column; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .view { display: none; }
+        .view.active { display: block; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .creation-area { display: flex; gap: 16px; margin-bottom: 2.5rem; width: 100%; flex-wrap: wrap; }
-        .input-group { flex: 1; display: flex; gap: 10px; min-width: 300px; }
-        
-        input[type="text"] {
-            flex: 1; padding: 12px 16px; font-size: 0.95rem;
-            border: 1px solid var(--border-color); border-radius: var(--radius-md);
-            background: var(--surface-color); color: var(--text-primary);
-            outline: none; transition: all 0.2s;
-        }
-        input[type="text"]:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); background: var(--container-bg); }
-
+        .creation-area { display: flex; gap: 15px; margin-bottom: 2.5rem; width: 100%; flex-wrap: wrap;}
+        .input-group { flex: 1; display: flex; gap: 10px; min-width: 250px;}
         .drop-zone {
-            flex: 1; min-width: 300px; border: 2px dashed var(--border-color);
-            border-radius: var(--radius-md); background: var(--surface-color);
-            display: flex; align-items: center; justify-content: center;
-            color: var(--text-secondary); font-size: 0.95rem; font-weight: 500;
-            transition: all 0.2s; cursor: pointer; padding: 12px; text-align: center;
+            flex: 1; border: 2px dashed var(--dropzone-border); border-radius: 6px; background: var(--dropzone-bg);
+            display: flex; align-items: center; justify-content: center; color: var(--text-secondary);
+            font-size: 0.95rem; font-weight: 500; transition: all 0.2s; cursor: pointer; padding: 15px; text-align: center; min-width: 250px;
         }
-        .drop-zone:hover { border-color: var(--text-secondary); }
-        .drop-zone.drag-over { background: rgba(79, 70, 229, 0.05); border-color: var(--accent-color); color: var(--accent-color); }
+        .drop-zone.drag-over { background: rgba(47, 92, 67, 0.1); border-color: var(--accent-color); color: var(--accent-color); }
 
-        .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 2rem; }
-        
+        .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2rem; }
         .book-card {
-            background: var(--container-bg); border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg); padding: 16px;
-            transition: all 0.2s ease; position: relative; display: flex; flex-direction: column;
-            box-shadow: var(--shadow-sm); cursor: pointer;
+            background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease; position: relative; display: flex; flex-direction: column; 
+            box-shadow: var(--shadow-sm); cursor: grab;
         }
-        .book-card:hover { border-color: var(--accent-color); transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .book-card:active { cursor: grabbing; }
+        .book-card:hover { border-color: var(--accent-color); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .book-card.dragging { opacity: 0.4; transform: scale(0.95); z-index: 100; }
+        .book-card.drag-over-card { border: 2px dashed var(--accent-color); transform: scale(1.02); background: var(--surface-hover);}
         
-        .book-cover {
-            height: 240px; width: 100%; background: #E2E8F0; background-size: cover;
-            background-position: center; border-radius: var(--radius-md); margin-bottom: 16px;
-            border: 1px solid var(--border-color);
+        .book-cover { 
+            height: 220px; width: 100%; background: var(--default-cover); background-size: cover; 
+            background-position: center; border-radius: 4px; margin-bottom: 12px; border: 1px solid rgba(0,0,0,0.05); pointer-events: none;
         }
-        
-        .book-info { text-align: center; padding: 4px; }
-        .book-info h3 { margin: 0 0 6px 0; color: var(--text-primary); font-size: 1.15rem; font-weight: 500; font-family: var(--font-serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .book-info p { margin: 0; font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;}
+        .book-info { text-align: center; padding: 4px; pointer-events: none; }
+        .book-info h3 { margin: 0 0 4px 0; color: var(--text-primary); font-size: 1.1rem; font-weight: 600; font-family: var(--font-serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .book-info p { margin: 0; font-size: 0.85rem; color: var(--text-secondary); }
 
-        .due-badge {
-            position: absolute; top: 24px; left: -8px; background: var(--danger-color); color: #FFF;
-            padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 10; letter-spacing: 0.5px;
-        }
-
-        /* Kebab Menu */
-        .kebab-container { position: absolute; top: 24px; right: 24px; z-index: 20; }
+        .kebab-container { position: absolute; top: 20px; right: 20px; z-index: 50; }
         .kebab-btn {
-            background: rgba(15, 23, 42, 0.6); color: #FFF; border: none;
-            border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
-            font-size: 18px; font-weight: bold; backdrop-filter: blur(4px); padding-bottom: 4px;
+            background: rgba(0, 0, 0, 0.55); color: #FFFFFF; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; 
+            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 18px; font-weight: bold; transition: all 0.2s; backdrop-filter: blur(4px); padding-bottom: 4px; 
         }
-        .kebab-btn:hover { background: rgba(15, 23, 42, 0.9); transform: scale(1.05); }
-
         .dropdown-menu {
-            position: absolute; top: 40px; right: 0; background: var(--container-bg);
-            border: 1px solid var(--border-color); border-radius: var(--radius-md);
-            box-shadow: var(--shadow-lg); display: flex; flex-direction: column; padding: 8px 0;
-            opacity: 0; pointer-events: none; transform: translateY(-10px);
-            transition: all 0.2s ease; width: 180px; overflow: hidden;
+            position: absolute; top: 40px; right: 0; background: var(--container-bg); border: 1px solid var(--border-color);
+            border-radius: 8px; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; padding: 8px 0;
+            opacity: 0; pointer-events: none; transform: translateY(-10px); transition: all 0.2s ease; width: 170px; overflow: hidden;
         }
         .dropdown-menu.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
         .dropdown-item {
-            padding: 10px 16px; background: transparent; border: none; color: var(--text-primary);
-            text-align: left; font-size: 0.85rem; font-weight: 500; transition: background 0.2s;
+            padding: 12px 16px; background: transparent; border: none; color: var(--text-primary); text-align: left; 
+            cursor: pointer; font-size: 0.9rem; font-family: var(--font-sans); transition: background 0.2s; width: 100%; font-weight: 500;
         }
         .dropdown-item:hover { background: var(--surface-hover); color: var(--accent-color); }
-        .dropdown-item.danger { color: var(--danger-color); border-top: 1px solid var(--border-color); margin-top: 4px; padding-top: 12px;}
-        .dropdown-item.danger:hover { color: #FFF; background: var(--danger-color); }
+        .dropdown-item.danger { color: var(--danger-color); border-top: 1px solid var(--border-color); margin-top: 4px; }
 
-        .playlist-header { display: flex; align-items: flex-end; gap: 32px; margin-bottom: 2.5rem; position: relative;}
+        .playlist-header { display: flex; align-items: flex-end; gap: 30px; margin-bottom: 2.5rem; position: relative;}
         .playlist-cover {
-            width: 180px; height: 180px; border-radius: var(--radius-md);
-            background-size: cover; background-position: center;
-            box-shadow: var(--shadow-md); border: 1px solid var(--border-color);
+            width: 160px; height: 160px; border-radius: 6px; background-size: cover; background-position: center;
+            box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);
         }
-        .playlist-info p { margin: 0 0 8px 0; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px;}
-        .playlist-info h1 { margin: 0 0 16px 0; font-size: 2.8rem; font-weight: 400; font-family: var(--font-serif); line-height: 1.1; color: var(--text-primary); letter-spacing: -0.5px;}
+        .playlist-info p { margin: 0 0 8px 0; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1.5px;}
+        .playlist-info h1 { margin: 0 0 12px 0; font-size: 3rem; font-weight: 400; font-family: var(--font-serif); line-height: 1.1; color: var(--text-primary);}
         .playlist-info .stats { color: var(--text-secondary); font-size: 0.95rem; font-weight: 500;}
+        
+        .due-badge {
+            background: var(--danger-color); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem;
+            font-weight: bold; position: absolute; top: -10px; right: -10px; box-shadow: var(--shadow-sm);
+        }
 
-        .controls-row { display: flex; gap: 12px; width: 100%; margin-bottom: 1.5rem; align-items: center; flex-wrap: wrap;}
+        .controls-row { display: flex; gap: 10px; width: 100%; margin-bottom: 2rem; align-items: center; flex-wrap: wrap;}
+        input[type="text"] { 
+            flex: 1; padding: 12px 16px; font-size: 15px; border: 1px solid var(--border-color); border-radius: 6px; 
+            background: var(--container-bg); color: var(--text-primary); outline: none; box-sizing: border-box; transition: border-color 0.2s;
+        }
+        input[type="text"]:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px var(--focus-ring); }
         
-        /* Toggle Switch for Active Recall */
-        .toggle-btn { background: var(--surface-color); color: var(--text-primary); border: 1px solid var(--border-color); }
-        .toggle-btn.active { background: var(--accent-color); color: #FFF; border-color: var(--accent-color); }
-
-        .table-wrapper { overflow-x: auto; margin-top: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--surface-color); }
-        table { width: 100%; border-collapse: collapse; min-width: 900px; text-align: left;}
-        th, td { padding: 16px 20px; vertical-align: middle; border-bottom: 1px solid var(--border-color); line-height: 1.5;}
+        button.action-btn { 
+            padding: 12px 24px; font-size: 0.95rem; font-weight: 500; background-color: var(--accent-color); color: #FFF; 
+            border: 1px solid var(--accent-color); border-radius: 6px; cursor: pointer; transition: all 0.2s; white-space: nowrap; box-sizing: border-box;
+        }
+        button.action-btn:hover { background-color: var(--accent-hover); border-color: var(--accent-hover); }
+        button.action-btn:disabled { background-color: var(--surface-hover); border-color: var(--border-color); color: var(--text-secondary); cursor: not-allowed; }
         
-        th { color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; background: var(--surface-hover);}
-        tr { background: var(--container-bg); transition: background 0.2s;}
-        tr:hover { background: var(--surface-color); }
+        .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 10px; border-radius: 8px; border: 1px solid var(--border-color);}
+        table { width: 100%; border-collapse: collapse; min-width: 900px; background: var(--container-bg);}
+        th, td { padding: 16px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border-color);}
+        th { color: var(--text-secondary); font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--border-color); background: var(--bg-color);}
         
-        .td-word-container { display: flex; align-items: center; gap: 8px; }
-        .td-word { font-weight: 700; color: var(--text-primary); font-size: 1.1rem; font-family: var(--font-serif); }
-        .audio-btn { background: transparent; border: none; color: var(--accent-color); font-size: 1.2rem; padding: 4px; border-radius: 50%; transition: all 0.2s;}
-        .audio-btn:hover { background: rgba(79, 70, 229, 0.1); transform: scale(1.1); }
+        tr.word-row { transition: background-color 0.2s; }
+        tr.word-row:hover { background-color: var(--surface-hover); }
         
-        .td-hindi { font-weight: 500; color: var(--accent-color); font-size: 0.95rem; }
-        .td-synonyms { color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px; display: inline-block; background: var(--surface-hover); padding: 2px 6px; border-radius: 4px;}
+        .td-word { font-weight: 600; color: var(--text-primary); font-size: 1.2rem; font-family: var(--font-serif); display: flex; align-items: center; gap: 8px;}
+        .td-hindi { font-weight: 500; color: var(--text-primary); font-size: 1.05rem; }
+        .td-synonyms { color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px; display: block;}
         .td-meaning { color: var(--text-primary); font-size: 0.95rem; }
-        .td-usage { color: var(--text-secondary); font-size: 0.9rem; font-style: italic; border-left: 2px solid var(--accent-color); padding-left: 12px; margin-top: 4px;}
+        .td-usage { color: var(--text-secondary); font-size: 0.95rem; font-style: italic; border-left: 3px solid var(--border-color); padding-left: 12px;}
         
-        .delete-row-btn { background: transparent; color: var(--text-secondary); border: none; font-size: 1.2rem; opacity: 0; padding: 4px 8px; border-radius: 4px; }
-        tr:hover .delete-row-btn { opacity: 1; }
-        .delete-row-btn:hover { color: var(--danger-color); background: rgba(239, 68, 68, 0.1); }
+        /* Audio Button */
+        .audio-btn { background: transparent; border: none; font-size: 1.2rem; cursor: pointer; padding: 0; opacity: 0.6; transition: opacity 0.2s;}
+        .audio-btn:hover { opacity: 1; transform: scale(1.1);}
 
         /* Active Recall Blurring */
-        .active-recall-on .revealable { filter: blur(5px); cursor: pointer; transition: filter 0.3s ease, opacity 0.3s ease; opacity: 0.6; user-select: none; }
-        .active-recall-on .revealable:hover { opacity: 0.9; }
-        .active-recall-on .revealable.revealed { filter: blur(0); opacity: 1; cursor: default; }
-
-        .study-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; max-width: 650px; margin: 0 auto; padding: 2rem 0; flex: 1;}
-        .progress-text { color: var(--text-secondary); font-weight: 600; margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;}
-        
-        .flashcard {
-            background: var(--container-bg); border: 1px solid var(--border-color); border-radius: var(--radius-xl);
-            width: 100%; padding: 3rem; box-shadow: var(--shadow-lg); margin-bottom: 2rem;
-            display: flex; flex-direction: column; align-items: center; text-align: center; box-sizing: border-box;
+        .active-recall .blur-target { 
+            filter: blur(6px); opacity: 0.7; transition: filter 0.3s, opacity 0.3s; cursor: pointer; user-select: none;
         }
-        .flashcard-word { font-size: 3rem; font-family: var(--font-serif); color: var(--text-primary); font-weight: 700; margin-bottom: 1rem; line-height: 1.2;}
-        
-        .flashcard-back { display: none; margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 2rem; width: 100%; animation: fadeIn 0.3s ease;}
-        .flashcard-back.show { display: block; }
-        
-        .fc-meaning { font-size: 1.25rem; font-weight: 500; margin-bottom: 1rem; color: var(--text-primary); }
-        .fc-hindi { font-size: 1.1rem; color: var(--accent-color); margin-bottom: 1rem; font-weight: 600;}
-        .fc-synonyms { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.5rem; }
-        .fc-usage { font-size: 1.05rem; font-style: italic; color: var(--text-secondary); border-left: 3px solid var(--border-color); padding-left: 16px; margin: 0 auto; display: inline-block; text-align: left;}
+        .active-recall .blur-target.revealed { filter: blur(0); opacity: 1; }
 
-        .study-actions { display: flex; gap: 12px; width: 100%; justify-content: center; flex-wrap: wrap;}
-        .grade-btn {
-            flex: 1; min-width: 120px; padding: 16px 12px; border: none; border-radius: var(--radius-md);
-            color: #FFF; font-weight: 600; font-size: 1rem; box-shadow: var(--shadow-md);
+        .delete-row-btn {
+            background: transparent; color: var(--text-secondary); border: none; font-size: 1.2rem; cursor: pointer; opacity: 0; transition: all 0.2s; padding: 4px;
         }
-        .grade-1 { background-color: var(--danger-color); }
-        .grade-2 { background-color: var(--warning-color); }
-        .grade-3 { background-color: var(--success-color); }
-        .grade-4 { background-color: var(--accent-color); }
-        .grade-time { display: block; font-size: 0.75rem; font-weight: 500; opacity: 0.9; margin-top: 6px;}
+        tr.word-row:hover .delete-row-btn { opacity: 1; }
+        .delete-row-btn:hover { color: var(--danger-color); }
 
         .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 1000;
-            justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s;
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000; justify-content: center; align-items: center;
         }
-        .modal-overlay.show { display: flex; opacity: 1; }
-        
         .modal-content {
-            background: var(--container-bg); padding: 2rem; border-radius: var(--radius-lg); width: 90%; max-width: 450px;
-            box-shadow: var(--shadow-modal); border: 1px solid var(--border-color); transform: scale(0.95); transition: transform 0.2s;
+            background: var(--container-bg); padding: 2.5rem; border-radius: 12px; width: 90%; max-width: 450px;
+            box-shadow: var(--shadow-lg); border: 1px solid var(--border-color);
         }
-        .modal-overlay.show .modal-content { transform: scale(1); }
-        .modal-content h2 { margin-top: 0; font-weight: 400; font-size: 1.6rem; font-family: var(--font-serif); color: var(--text-primary); margin-bottom: 1.5rem; }
-        .modal-content input { width: 100%; margin-bottom: 16px; box-sizing: border-box;}
-        .modal-actions { display: flex; gap: 12px; margin-top: 1rem; justify-content: flex-end;}
+        .modal-content h2 { margin-top: 0; font-weight: 400; font-size: 1.5rem; color: var(--text-primary); font-family: var(--font-serif); margin-bottom: 1.5rem;}
+        .modal-content input { width: 100%; margin-bottom: 16px; }
+        .modal-actions { display: flex; gap: 10px; margin-top: 1rem; justify-content: flex-end;}
 
-        /* Custom Toast Notification */
-        #toast {
-            position: fixed; bottom: 30px; right: 30px; background: var(--text-primary); color: var(--container-bg);
-            padding: 12px 24px; border-radius: var(--radius-md); font-weight: 500; font-size: 0.95rem;
-            box-shadow: var(--shadow-lg); z-index: 2000; transform: translateY(100px); opacity: 0; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        #toast.show { transform: translateY(0); opacity: 1; }
-        #toast.error { background: var(--danger-color); color: #FFF; }
-        #toast.success { background: var(--success-color); color: #FFF; }
+        /* SRS Flashcard specific UI */
+        .flashcard-content { text-align: center; }
+        .fc-word { font-family: var(--font-serif); font-size: 2.5rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary); display: flex; align-items: center; justify-content: center; gap: 10px;}
+        .fc-details { margin-top: 2rem; display: none; text-align: left; background: var(--surface-hover); padding: 1rem; border-radius: 8px;}
+        .fc-grade-grid { display: none; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1.5rem; }
+        .grade-btn { padding: 12px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; color: white; transition: opacity 0.2s;}
+        .grade-again { background-color: var(--danger-color); }
+        .grade-hard { background-color: #D97706; }
+        .grade-good { background-color: var(--accent-color); }
+        .grade-easy { background-color: #7C3AED; }
 
-        /* Changelog Footer */
-        .app-footer {
-            margin-top: auto; padding-top: 2.5rem; padding-bottom: 1rem;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: var(--text-secondary); font-size: 0.85rem;
+        /* Toasts */
+        #toastContainer { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 3000; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: var(--text-primary); color: var(--bg-color); padding: 12px 24px; border-radius: 50px; font-size: 0.9rem; font-weight: 500; box-shadow: var(--shadow-lg); animation: slideUpToast 0.3s ease forwards; }
+        @keyframes slideUpToast { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .feed-container {
+            height: 100%; width: 100%; overflow-y: scroll; scroll-snap-type: y mandatory;
         }
-        .version-badge {
-            background: var(--accent-color); color: #FFF; padding: 4px 10px; border-radius: 6px;
-            font-weight: 600; font-size: 0.75rem; margin-bottom: 8px; letter-spacing: 0.5px;
+        .feed-item {
+            min-height: calc(100vh - 65px); width: 100%; scroll-snap-align: start; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; padding: 2rem; text-align: center; box-sizing: border-box;
+            background-color: var(--bg-color); border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.4s ease;
         }
-        .changelog-text { text-align: center; max-width: 80%; line-height: 1.4; }
+        .feed-item:nth-child(even) { background-color: var(--container-bg); }
+        
+        .feed-text {
+            font-family: var(--font-serif); font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.3; color: var(--text-primary);
+            max-width: 800px; margin-bottom: 1.5rem; font-style: normal; font-weight: 500; letter-spacing: -0.5px;
+        }
+        .feed-author {
+            font-family: var(--font-sans); font-size: 1rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 2px;
+            margin-bottom: 2rem;
+        }
+        
+        .feed-explain-btn {
+            background: var(--surface-hover); color: var(--text-secondary); border: 1px solid var(--border-color);
+            padding: 8px 16px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 6px; transition: all 0.2s; font-family: var(--font-sans);
+        }
+        .feed-explain-btn:hover { background: var(--border-color); color: var(--text-primary); }
+        .feed-explain-btn svg { width: 16px; height: 16px; fill: currentColor; }
+        
+        .feed-explanation {
+            max-width: 600px; background: var(--container-bg); border: 1px solid var(--border-color); border-radius: 8px;
+            padding: 1.5rem; margin-top: 1rem; color: var(--text-primary); font-size: 1rem; font-family: var(--font-sans);
+            box-shadow: var(--shadow-sm); display: none; text-align: left; line-height: 1.6; opacity: 0; transform: translateY(-10px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .feed-explanation.active {
+            display: block; opacity: 1; transform: translateY(0);
+        }
 
         @media (max-width: 850px) {
-            body { padding: 0; }
-            .container { padding: 1.2rem; border-radius: 0; min-height: 100vh; border: none; }
-            
-            /* Nav tweaks */
-            .nav-bar { flex-direction: column; align-items: stretch; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; }
-            .nav-title { text-align: center; }
-            .nav-actions { display: flex; flex-wrap: wrap; width: 100%; gap: 8px; justify-content: center; }
-            .nav-actions button { flex: 1; min-width: 120px; text-align: center; padding: 10px 16px;}
-            
-            /* Dashboard tweaks */
-            .creation-area { flex-direction: column; gap: 12px; margin-bottom: 1.5rem; }
-            .input-group { flex-direction: column; width: 100%; min-width: 100%; gap: 8px; }
-            .input-group input, .input-group button { width: 100%; }
-            .drop-zone { min-width: 100%; padding: 16px; }
-            .book-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
-            .book-cover { height: 180px; }
-            
-            /* Fix Absolute Badges/Menus for smaller cards */
-            .due-badge { top: 12px; left: -4px; padding: 4px 10px; font-size: 0.7rem; }
-            .kebab-container { top: 12px; right: 12px; }
-            
-            /* Dictionary Header tweaks */
-            .playlist-header { flex-direction: column; align-items: center; text-align: center; gap: 15px; margin-bottom: 1.5rem; }
-            .playlist-cover { width: 140px; height: 140px; }
-            .playlist-info h1 { font-size: 2rem; margin-bottom: 8px; }
-            
-            /* Controls and Table */
-            .controls-row { flex-direction: column; gap: 10px; align-items: stretch; margin-bottom: 1rem; }
-            .controls-row input, .controls-row button { width: 100%; margin: 0; }
-            .table-wrapper { margin-top: 5px; padding-bottom: 10px; }
-            table { min-width: 650px; } /* Reduces horizontal scroll length */
-            th, td { padding: 12px 10px; font-size: 0.9rem; }
-            .td-word { font-size: 1rem; }
-            
-            /* Touch UI Fixes */
-            .delete-row-btn { opacity: 1; background: rgba(239, 68, 68, 0.08); color: var(--danger-color); } /* Visible without hover */
-            .active-recall-on .revealable { opacity: 0.85; filter: blur(4px); } /* Slightly less blurry on mobile for touch recognition */
-            
-            /* Study Mode */
-            .study-container { padding: 1rem 0; }
-            .flashcard { padding: 2rem 1.2rem; margin-bottom: 1.5rem;}
-            .flashcard-word { font-size: 2.2rem; }
-            .fc-meaning { font-size: 1.1rem; }
-            .study-actions { flex-direction: row; flex-wrap: wrap; gap: 8px; }
-            .grade-btn { flex: 1; min-width: 45%; padding: 12px; } /* 2x2 grid for grading */
-            
-            /* Modals & Toasts */
-            .modal-content { padding: 1.5rem; width: 92%; }
-            .modal-actions { flex-direction: column-reverse; gap: 8px; }
-            .modal-actions button { width: 100%; margin: 0; }
-            #toast { left: 15px; right: 15px; bottom: 15px; text-align: center; transform: translateY(150px); }
+            .container { margin: 0; padding: 1.5rem; border-radius: 0; border-left: none; border-right: none; min-height: 100%; }
+            .creation-area { flex-direction: column; }
+            .input-group { flex-direction: column; width: 100%; }
+            .playlist-header { flex-direction: column; align-items: center; text-align: center; gap: 20px;}
+            .playlist-info h1 { font-size: 2.2rem; }
+            .controls-row { flex-direction: column; }
+            input[type="text"], button.action-btn { width: 100%; }
+            tr.word-row .delete-row-btn { opacity: 1; } 
+            .book-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.5rem; }
+            .book-cover { height: 200px; }
+            .fc-grade-grid { grid-template-columns: 1fr; } /* Stack grades on narrow phones */
         }
     </style>
 </head>
 <body>
 
-<div id="toast">Message goes here</div>
-
-<!-- Confirm Modal -->
-<div id="confirmModal" class="modal-overlay">
-    <div class="modal-content">
-        <h2 id="confirmTitle">Confirm Action</h2>
-        <p id="confirmMsg" style="color: var(--text-secondary); margin-bottom: 24px; line-height: 1.5;"></p>
-        <div class="modal-actions">
-            <button class="btn-outline" onclick="closeConfirmModal()">Cancel</button>
-            <button class="btn-primary" id="confirmBtn" style="background: var(--danger-color); border-color: var(--danger-color);">Confirm</button>
-        </div>
-    </div>
+<!-- Toasts & Warnings -->
+<div id="toastContainer"></div>
+<div id="storageWarning" style="display:none; width: 100%; background: #B54646; color: white; padding: 10px; text-align: center; z-index: 5000; position: fixed; top: 0;">
+    ⚠️ Warning: Browser storage blocked. Books will disappear when closed.
 </div>
 
-<!-- Manual Add Modal -->
+<!-- Manual Word Add -->
 <div id="manualAddModal" class="modal-overlay">
     <div class="modal-content">
         <h2>Record New Word</h2>
@@ -389,301 +351,640 @@
         <input type="text" id="manMeaning" placeholder="Definition">
         <input type="text" id="manUsage" placeholder="Usage in a sentence">
         <div class="modal-actions">
-            <button class="btn-outline" onclick="closeManualModal()">Cancel</button>
-            <button class="btn-primary" onclick="saveManualWord()">Save Word</button>
+            <button class="focus-btn" onclick="closeManualModal()">Cancel</button>
+            <button class="action-btn" onclick="saveManualWord()">Save to Notebook</button>
         </div>
     </div>
 </div>
 
-<div class="container">
-    <div class="nav-bar">
-        <h2 class="nav-title">Vocab Pro</h2>
-        <div class="nav-actions">
-            <button class="btn-outline" id="installBtn" style="display:none;" onclick="installPWA()">⬇️ Install App</button>
-            <button class="btn-outline" onclick="exportToExcel()" id="exportBtn" style="display:none;">↓ Export CSV</button>
-            <button class="btn-outline" onclick="toggleTheme()" id="themeBtn">🌙 Dark Mode</button>
+<!-- SRS Study Flashcard Modal -->
+<div id="studyModal" class="modal-overlay">
+    <div class="modal-content flashcard-content">
+        <p style="color: var(--text-secondary); margin-top:0;" id="studyProgress">Card 1 / 5</p>
+        <div class="fc-word" id="fcWord">Word <button class="audio-btn" onclick="playAudio(document.getElementById('fcWordText').innerText)">🔊</button></div>
+        <span id="fcWordText" style="display:none;"></span> <!-- Hidden text for audio -->
+        
+        <button class="action-btn" id="fcRevealBtn" onclick="revealCard()" style="width: 100%; margin-top: 1rem;">Show Answer</button>
+        
+        <div class="fc-details" id="fcDetails">
+            <p><strong>Meaning:</strong> <span id="fcMeaning">...</span></p>
+            <p><strong>Hindi:</strong> <span id="fcHindi">...</span></p>
+            <p><strong>Synonyms:</strong> <span id="fcSyn">...</span></p>
+            <p><strong>Context:</strong> <em id="fcUsage">...</em></p>
         </div>
+        
+        <div class="fc-grade-grid" id="fcGradeGrid">
+            <button class="grade-btn grade-again" onclick="gradeCard(0)">Again (1m)</button>
+            <button class="grade-btn grade-hard" onclick="gradeCard(1)">Hard</button>
+            <button class="grade-btn grade-good" onclick="gradeCard(2)">Good</button>
+            <button class="grade-btn grade-easy" onclick="gradeCard(3)">Easy</button>
+        </div>
+        <button class="focus-btn" onclick="closeStudyModal()" style="margin-top: 1.5rem; width: 100%;">Stop Studying</button>
     </div>
+</div>
 
-    <!-- VIEW 1: Dashboard -->
-    <div id="dashboardView" class="view active">
-        <div class="creation-area">
-            <div class="input-group">
-                <input type="text" id="newBookInput" placeholder="New notebook name (e.g. Physics 101)...">
-                <button class="btn-primary" onclick="createNewBook()">Create</button>
-            </div>
-            <div class="drop-zone" id="dropZone" onclick="document.getElementById('csvFileInput').click()">
-                <span>📄 Drag & Drop CSV here to import</span>
-                <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleCSVSelect(event)">
-            </div>
-        </div>
-        <div class="book-grid" id="bookGrid"></div>
-    </div>
 
-    <!-- VIEW 2: Dictionary Table -->
-    <div id="dictionaryView" class="view">
-        <button class="btn-outline" onclick="showDashboard()" style="margin-bottom: 2rem; width: fit-content;">← Back to Library</button>
-        
-        <div class="playlist-header">
-            <div id="currentBookCover" class="playlist-cover"></div>
-            <div class="playlist-info">
-                <p>Notebook</p>
-                <h1 id="currentBookTitle">Book Name</h1>
-                <p class="stats" id="currentBookStats">0 words recorded</p>
-                <button class="btn-primary" id="studyBtn" style="display:none; margin-top: 16px; width: fit-content;" onclick="startStudyMode()">🎓 Study Due Cards</button>
+<div id="vocabMode" class="app-mode active">
+    <div class="container">
+        <!-- Top Nav -->
+        <div class="nav-bar">
+            <h2 class="nav-title">My Reading Glossary</h2>
+            <div class="nav-actions">
+                <button id="installBtn" class="focus-btn install-btn" style="display:none;" onclick="installPWA()">Install App</button>
+                <button class="focus-btn" onclick="exportToExcel()" id="exportBtn" style="display:none;">Export to CSV</button>
+                <button class="focus-btn" onclick="toggleTheme()" id="themeBtn">☕ Warm Tone</button>
             </div>
         </div>
-        
-        <div class="controls-row">
-            <input type="text" id="wordInput" placeholder="Look up a new word...">
-            <button class="btn-primary" id="searchBtn" onclick="fetchWordDetails()">Search API</button>
-            <button class="btn-outline" onclick="openManualModal()">+ Add Custom</button>
-            <button class="btn-outline toggle-btn" id="activeRecallBtn" onclick="toggleActiveRecall()">👁️ Active Recall: OFF</button>
-        </div>
-        
-        <div class="table-wrapper">
-            <table id="wordTable">
-                <thead>
-                    <tr>
-                        <th style="width: 5%;">#</th>
-                        <th style="width: 20%;">Vocabulary</th>
-                        <th style="width: 15%;">Hindi</th>
-                        <th style="width: 15%;">Similar Words</th>
-                        <th style="width: 25%;">Definition</th>
-                        <th style="width: 15%;">Context</th>
-                        <th style="width: 5%;"></th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-            </table>
-        </div>
-    </div>
 
-    <!-- VIEW 3: Study Mode (SRS Flashcards) -->
-    <div id="studyView" class="view">
-        <button class="btn-outline" onclick="exitStudyMode()" style="margin-bottom: 2rem; width: fit-content;">← Exit Study Session</button>
-        
-        <div class="study-container">
-            <div class="progress-text" id="studyProgress">Card 1 of 5</div>
-            
-            <div class="flashcard">
-                <div class="flashcard-word" id="fcWord">Word</div>
-                <button class="audio-btn" onclick="playCurrentStudyAudio()" title="Listen">🔊</button>
-                
-                <button class="btn-outline" id="fcShowAnswerBtn" onclick="showStudyAnswer()" style="margin-top: 2rem;">Show Answer</button>
-                
-                <div class="flashcard-back" id="fcBack">
-                    <div class="fc-hindi" id="fcHindi"></div>
-                    <div class="fc-meaning" id="fcMeaning"></div>
-                    <div class="fc-synonyms" id="fcSynonyms"></div>
-                    <div class="fc-usage" id="fcUsage"></div>
+        <!-- Dashboard (Grid) -->
+        <div id="dashboardView" class="view active">
+            <div class="creation-area">
+                <div class="input-group">
+                    <input type="text" id="newBookInput" placeholder="New notebook (e.g. Physics 101)...">
+                    <button class="action-btn" onclick="createNewBook()">Create</button>
+                </div>
+                <div class="drop-zone" id="dropZone" onclick="document.getElementById('csvFileInput').click()">
+                    <span>📁 Drag & Drop CSV here to import Database</span>
+                    <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleCSVSelect(event)">
                 </div>
             </div>
+            <div class="book-grid" id="bookGrid"></div>
+            <div style="text-align: center; font-size: 0.65rem; color: var(--text-secondary); margin-top: 3rem; opacity: 0.7;">v4.0.1</div>
+        </div>
 
-            <div class="study-actions" id="fcGrading" style="display:none;">
-                <button class="grade-btn grade-1" onclick="processStudyGrade(1)">Again <span class="grade-time">&lt; 1m</span></button>
-                <button class="grade-btn grade-2" onclick="processStudyGrade(2)">Hard <span class="grade-time" id="timeHard"></span></button>
-                <button class="grade-btn grade-3" onclick="processStudyGrade(3)">Good <span class="grade-time" id="timeGood"></span></button>
-                <button class="grade-btn grade-4" onclick="processStudyGrade(4)">Easy <span class="grade-time" id="timeEasy"></span></button>
+        <!-- Dictionary (Table) -->
+        <div id="dictionaryView" class="view">
+            <button class="focus-btn" onclick="showDashboard()" style="margin-bottom: 2rem;">← Back to Library</button>
+            
+            <div class="playlist-header">
+                <div id="currentBookCover" class="playlist-cover"></div>
+                <div class="playlist-info">
+                    <p>Notebook Database</p>
+                    <h1 id="currentBookTitle">Book Name</h1>
+                    <p class="stats" id="currentBookStats">0 words recorded</p>
+                    <button class="action-btn" id="studyBtn" style="margin-top: 10px; display: none;" onclick="startStudySession()">🎓 Study Due Cards</button>
+                </div>
+            </div>
+            
+            <div class="controls-row">
+                <input type="text" id="wordInput" placeholder="Look up a difficult word...">
+                <button class="action-btn" id="searchBtn" onclick="fetchWordDetails()">Search APIs</button>
+                <button class="focus-btn" onclick="openManualModal()">+ Add Custom</button>
+                <button class="focus-btn" id="recallToggleBtn" onclick="toggleActiveRecall()">👁️ Active Recall: OFF</button>
+            </div>
+            
+            <div class="table-wrapper">
+                <table id="wordTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">No.</th>
+                            <th style="width: 15%;">Vocabulary</th>
+                            <th style="width: 15%;">Hindi</th>
+                            <th style="width: 15%;">Similar Words</th>
+                            <th style="width: 25%;">Definition</th>
+                            <th style="width: 20%;">Context</th>
+                            <th style="width: 5%;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Changelog Footer -->
-    <div class="app-footer">
-        <span class="version-badge">v3.0</span>
-        <span class="changelog-text">Update: Added Custom Purple 'V' App Icon, SRS Flashcards, Active Recall, and Audio Pronunciation.</span>
+<div id="feedMode" class="app-mode">
+    <div class="feed-container" id="feedContainer">
+        <!-- Javascript injects poetry here -->
     </div>
 </div>
+
+<nav class="bottom-nav">
+    <div class="nav-tab active" onclick="switchAppMode('vocab')">
+        <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>
+        Library
+    </div>
+    <div class="nav-tab" onclick="switchAppMode('feed')">
+        <svg viewBox="0 0 24 24"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
+        SQuotes
+    </div>
+</nav>
+
 
 <script>
     let libraryData = {}; 
     let libraryCovers = {}; 
     let bookOrder = []; 
     let currentBook = null;
-    let isActiveRecallOn = false;
+    let storageAvailable = true; 
+    let isActiveRecall = false;
+
+    // SRS State
     let studyQueue = [];
     let currentStudyIndex = 0;
+
+    // --- PWA & Icon Generation ---
     let deferredPrompt;
-
-    // Custom UI Components (Replaces alert/confirm)
-    let toastTimeout;
-    function showToast(message, type = 'info') {
-        const toast = document.getElementById('toast');
-        toast.innerText = message;
-        toast.className = 'show ' + (type === 'error' ? 'error' : (type === 'success' ? 'success' : ''));
-        clearTimeout(toastTimeout);
-        toastTimeout = setTimeout(() => toast.className = toast.className.replace('show', '').trim(), 3000);
-    }
-
-    let confirmCallback = null;
-    function showConfirm(title, message, callback) {
-        document.getElementById('confirmTitle').innerText = title;
-        document.getElementById('confirmMsg').innerText = message;
-        confirmCallback = callback;
-        const modal = document.getElementById('confirmModal');
-        modal.style.display = 'flex';
-        // Force reflow
-        void modal.offsetWidth;
-        modal.classList.add('show');
-    }
-    function closeConfirmModal() {
-        const modal = document.getElementById('confirmModal');
-        modal.classList.remove('show');
-        setTimeout(() => modal.style.display = 'none', 200);
-        confirmCallback = null;
-    }
-    document.getElementById('confirmBtn').addEventListener('click', () => {
-        if(confirmCallback) confirmCallback();
-        closeConfirmModal();
-    });
-
     function setupPWA() {
-        // Draw the custom Purple 'V' Icon
         const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><rect width="512" height="512" fill="#7C3AED" rx="100"/><text x="50%" y="54%" font-family="'Times New Roman', Times, serif" font-size="380" font-weight="bold" fill="white" text-anchor="middle" dominant-baseline="middle">V</text></svg>`;
-        const img = new Image(); img.onload = () => {
+        const img = new Image(); 
+        img.onload = () => {
             const canvas = document.createElement('canvas'); canvas.width = 512; canvas.height = 512;
             const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0);
             const pngUrl = canvas.toDataURL('image/png');
-            
             document.head.insertAdjacentHTML('beforeend', `<link rel="icon" type="image/png" href="${pngUrl}"><link rel="apple-touch-icon" href="${pngUrl}">`);
-            
-            const manifest = { name: "Vocab Tracker Pro", short_name: "Vocab", display: "standalone", background_color: "#F8FAFC", theme_color: "#7C3AED", icons: [{ src: pngUrl, sizes: "512x512", type: "image/png" }] };
-            const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/manifest+json'});
-            document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${URL.createObjectURL(manifestBlob)}">`);
-        }; img.src = URL.createObjectURL(new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' }));
-
+            const manifest = { name: "Vocab", short_name: "Vocab", display: "standalone", background_color: "#F4F1EA", theme_color: "#7C3AED", icons: [{ src: pngUrl, sizes: "512x512", type: "image/png" }] };
+            document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type: 'application/manifest+json'}))}">`);
+        }; 
+        img.src = URL.createObjectURL(new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' }));
+        
         window.addEventListener('beforeinstallprompt', (e) => { 
-            e.preventDefault(); deferredPrompt = e; 
+            e.preventDefault(); 
+            deferredPrompt = e; 
             const btn = document.getElementById('installBtn');
             if(btn) btn.style.display = 'inline-block'; 
         });
     }
-
-    function installPWA() {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => { 
-                if (choiceResult.outcome === 'accepted') document.getElementById('installBtn').style.display = 'none'; 
+    
+    function installPWA() { 
+        if (deferredPrompt) { 
+            deferredPrompt.prompt(); 
+            deferredPrompt.userChoice.then((c) => { 
+                if (c.outcome === 'accepted') {
+                    const btn = document.getElementById('installBtn');
+                    if(btn) btn.style.display = 'none'; 
+                }
                 deferredPrompt = null; 
-            });
-        }
+            }); 
+        } 
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        setupPWA(); loadTheme(); loadData(); renderDashboard();
+        setupPWA(); testStorage(); loadTheme(); loadData(); 
+        renderDashboard(); setupDragAndDrop(); renderFeed();
     });
 
+    // Toasts instead of alerts
+    function showToast(message) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerText = message;
+        container.appendChild(toast);
+        setTimeout(() => { toast.remove(); }, 3000);
+    }
+    
+    // Override default alert
+    window.alert = function(msg) { showToast(msg); };
+
+    // Close kebab menus when clicking outside
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.kebab-container')) {
-            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('active'));
+            document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
         }
     });
 
-    function loadData() {
-        try {
-            const savedLib = localStorage.getItem('proDict_Library');
-            if (savedLib) { libraryData = JSON.parse(savedLib); } 
-            else {
-                // Migration
-                const oldLib = localStorage.getItem('academicDict_Library') || localStorage.getItem('premiumDict_Library');
-                if(oldLib) { 
-                    let oldData = JSON.parse(oldLib);
-                    // Ensure SRS fields exist on migration
-                    Object.keys(oldData).forEach(book => {
-                        libraryData[book] = oldData[book].map(entry => initializeSRS(entry));
-                    });
-                }
+    // Tab Switching
+    function switchAppMode(mode) {
+        document.querySelectorAll('.app-mode').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+        if (mode === 'vocab') {
+            document.getElementById('vocabMode').classList.add('active');
+            document.querySelectorAll('.nav-tab')[0].classList.add('active');
+        } else {
+            document.getElementById('feedMode').classList.add('active');
+            document.querySelectorAll('.nav-tab')[1].classList.add('active');
+        }
+    }
+
+    const feedData = [
+        { 
+            text: "Hope is the thing with feathers\nThat perches in the soul\nAnd sings the tune without the words\nAnd never stops at all.", 
+            author: "Emily Dickinson",
+            meaning: "Hope is compared to a bird that lives quietly in your soul. It constantly sings a comforting song, requiring nothing from you, and it never gives up, even in the darkest times."
+        },
+        { 
+            text: "Do not go gentle into that good night,\nOld age should burn and rave at close of day;\nRage, rage against the dying of the light.", 
+            author: "Dylan Thomas",
+            meaning: "Don't accept death or the end of your life peacefully. Even when you are old, you should fight passionately to stay alive and keep burning with energy until the very last moment."
+        },
+        { 
+            text: "I took a deep breath and listened to the old brag of my heart.\nI am, I am, I am.", 
+            author: "Sylvia Plath",
+            meaning: "A powerful realization of one's own existence. In a moment of overwhelming stress or depression, listening to your heartbeat reminds you that you are still alive, resilient, and present."
+        },
+        { 
+            text: "The woods are lovely, dark and deep,\nBut I have promises to keep,\nAnd miles to go before I sleep.", 
+            author: "Robert Frost",
+            meaning: "It is tempting to stop and simply rest in the quiet, peaceful beauty of nature (or avoid your responsibilities), but you must keep moving forward because you have duties to fulfill before you can truly rest."
+        },
+        { 
+            text: "There is some kiss we want with our whole lives,\nthe touch of spirit on the body.", 
+            author: "Rumi",
+            meaning: "We spend our entire lives searching for a profound, spiritual connection that goes beyond the physical world—a deep sense of purpose or true divine love."
+        },
+        { 
+            text: "Words are, in my not-so-humble opinion, our most inexhaustible source of magic.", 
+            author: "J.K. Rowling",
+            meaning: "Language has incredible power. Words can hurt, heal, persuade, and create entire worlds in our minds. They are the closest thing to real magic we possess."
+        },
+        { 
+            text: "All that is gold does not glitter,\nNot all those who wander are lost.", 
+            author: "J.R.R. Tolkien",
+            meaning: "True worth isn't always shiny or obvious on the outside. Furthermore, someone who appears to be roaming without direction might actually be on a profound personal journey."
+        },
+        { 
+            text: "We are all in the gutter,\nbut some of us are looking at the stars.", 
+            author: "Oscar Wilde",
+            meaning: "Everyone experiences hardship, misery, or a lowly physical state. However, it's our choice whether we focus on the dirt around us or look up to find hope, beauty, and optimism."
+        },
+        {
+            text: "It matters not how strait the gate,\nHow charged with punishments the scroll,\nI am the master of my fate,\nI am the captain of my soul.",
+            author: "William Ernest Henley",
+            meaning: "No matter how difficult life becomes or how much suffering one must endure, you remain in complete control of your own choices and your own spirit."
+        },
+        {
+            text: "The world breaks everyone and afterward many are strong at the broken places.",
+            author: "Ernest Hemingway",
+            meaning: "Experiencing trauma or hardship is a universal human experience. But surviving those painful experiences often makes you more resilient and tougher than you were before."
+        },
+        {
+            text: "In the depth of winter, I finally learned that within me there lay an invincible summer.",
+            author: "Albert Camus",
+            meaning: "Even in the darkest, coldest, and most depressing periods of life, the human spirit has an unbreakable warmth and strength capable of overcoming the despair."
+        },
+        {
+            text: "And now that you don't have to be perfect, you can be good.",
+            author: "John Steinbeck",
+            meaning: "The pressure to be flawless is paralyzing. Once you accept your flaws and stop trying to be 'perfect', you are finally free to be a genuinely good, authentic person."
+        },
+        {
+            text: "Beware; for I am fearless, and therefore powerful.",
+            author: "Mary Shelley",
+            meaning: "When a person has absolutely nothing left to lose, they lose their fear. And a person without fear is dangerous because they cannot be controlled or intimidated."
+        },
+        {
+            text: "To live is the rarest thing in the world. Most people exist, that is all.",
+            author: "Oscar Wilde",
+            meaning: "Most people simply go through the daily motions of breathing, eating, and working. Very few people actually experience the deep passions, risks, and profound joys of truly 'living'."
+        },
+        {
+            text: "Even the darkest night will end and the sun will rise.",
+            author: "Victor Hugo",
+            meaning: "No matter how terrible your current situation seems, time continues to move forward. The bad times will eventually pass and give way to hope and new beginnings."
+        },
+        {
+            text: "I am no bird; and no net ensnares me: I am a free human being with an independent will.",
+            author: "Charlotte Brontë",
+            meaning: "A fierce declaration of autonomy. It means refusing to be trapped by society's expectations or the control of others, claiming the right to make one's own choices."
+        },
+        {
+            text: "The mind is its own place, and in itself can make a heaven of hell, a hell of heaven.",
+            author: "John Milton",
+            meaning: "Your reality is shaped entirely by your perspective. A positive mindset can find peace in a terrible situation, while a negative mindset can make even a perfect situation feel miserable."
+        },
+        {
+            text: "Not all those who wander are lost.",
+            author: "J.R.R. Tolkien",
+            meaning: "Just because someone doesn't follow a traditional path or doesn't seem to have a fixed destination right now, it doesn't mean they lack purpose. Exploring is part of the journey."
+        },
+        {
+            text: "What a piece of work is a man! how noble in reason! how infinite in faculty!",
+            author: "William Shakespeare",
+            meaning: "A marveling at the incredible potential of human beings. We have the unique capacity for complex thought, profound intelligence, and endless creativity."
+        },
+        {
+            text: "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
+            author: "Jane Austen",
+            meaning: "A satirical observation that wealthy people (and society as a whole) assume that the ultimate goal of having money is to settle down and marry, often ignoring what the person actually wants."
+        },
+        {
+            text: "There are years that ask questions and years that answer.",
+            author: "Zora Neale Hurston",
+            meaning: "Life has different seasons. Some periods are filled with confusion, struggle, and searching. Other periods bring clarity, resolution, and understanding."
+        },
+        {
+            text: "No man is an island entire of itself; every man is a piece of the continent, a part of the main.",
+            author: "John Donne",
+            meaning: "Human beings are not meant to be completely isolated. We are all interconnected, and the loss or suffering of one person impacts the whole community."
+        },
+        {
+            text: "I celebrate myself, and sing myself.",
+            author: "Walt Whitman",
+            meaning: "An unapologetic embrace of self-love and individuality. It encourages recognizing one's own worth without needing validation from anyone else."
+        },
+        {
+            text: "This above all: to thine own self be true.",
+            author: "William Shakespeare",
+            meaning: "The most important principle in life is authenticity. Do not pretend to be someone you aren't just to please others; act in alignment with your true beliefs."
+        }
+    ];
+
+    function toggleExplanation(index) {
+        const explDiv = document.getElementById(`explain-${index}`);
+        if(explDiv.classList.contains('active')) {
+            explDiv.classList.remove('active');
+            setTimeout(() => { explDiv.style.display = 'none'; }, 300); // Wait for fade out
+        } else {
+            explDiv.style.display = 'block';
+            // Slight delay to allow display:block to apply before animating opacity
+            setTimeout(() => { explDiv.classList.add('active'); }, 10);
+        }
+    }
+
+    let globalFeedCounter = 0;
+    
+    // Array to keep track of the indices of quotes we have already shown
+    let seenQuotes = [];
+
+    function renderFeed() {
+        const container = document.getElementById('feedContainer');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        globalFeedCounter = 0;
+        seenQuotes = []; // Reset seen quotes when the feed reloads
+        
+        loadMoreFeedItems(4);
+
+        container.addEventListener('scroll', () => {
+            if (container.scrollTop + container.clientHeight >= container.scrollHeight - window.innerHeight) {
+                loadMoreFeedItems(3);
             }
-            const savedCov = localStorage.getItem('proDict_Covers') || localStorage.getItem('academicDict_Covers');
+        });
+    }
+
+    function loadMoreFeedItems(count) {
+        const container = document.getElementById('feedContainer');
+        
+        for (let i = 0; i < count; i++) {
+            // If we have shown all available quotes, reset the tracking array
+            // This allows the feed to loop infinitely without breaking, 
+            // while still guaranteeing every single quote is shown before a repeat happens.
+            if (seenQuotes.length >= feedData.length) {
+                seenQuotes = []; 
+            }
+
+            // Find a random index that is NOT in the seenQuotes array
+            let randIndex;
+            do {
+                randIndex = Math.floor(Math.random() * feedData.length);
+            } while (seenQuotes.includes(randIndex));
+            
+            // Mark this quote as seen
+            seenQuotes.push(randIndex);
+            
+            const item = feedData[randIndex];
+            const div = document.createElement('div');
+            div.className = 'feed-item';
+            
+            const formattedText = item.text.replace(/\n/g, '<br>');
+            const currentIndex = globalFeedCounter++;
+            
+            div.innerHTML = `
+                <div class="feed-text">"${formattedText}"</div>
+                <div class="feed-author">— ${item.author}</div>
+                <button class="feed-explain-btn" onclick="toggleExplanation(${currentIndex})">
+                    <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/></svg>
+                    Layman's Meaning
+                </button>
+                <div class="feed-explanation" id="explain-${currentIndex}">
+                    <strong>💡 Simple Meaning:</strong><br>
+                    ${item.meaning}
+                </div>
+            `;
+            container.appendChild(div);
+        }
+    }
+
+    function testStorage() {
+        try { localStorage.setItem('test', '1'); localStorage.removeItem('test'); storageAvailable = true; } 
+        catch (e) { storageAvailable = false; document.getElementById('storageWarning').style.display = 'block'; }
+    }
+
+    function loadData() {
+        if (!storageAvailable) return; 
+        try {
+            const savedLib = localStorage.getItem('academicDict_Library_v4');
+            if (savedLib) { libraryData = JSON.parse(savedLib); } 
+            
+            const savedCov = localStorage.getItem('academicDict_Covers_v4');
             if (savedCov) { libraryCovers = JSON.parse(savedCov); }
-            const savedOrder = localStorage.getItem('proDict_Order') || localStorage.getItem('academicDict_Order');
+            
+            const savedOrder = localStorage.getItem('academicDict_Order_v4');
             if (savedOrder) { bookOrder = JSON.parse(savedOrder); }
 
-            Object.keys(libraryData).forEach(b => { if(!bookOrder.includes(b)) bookOrder.push(b); });
+            // Migration logic ensuring words have SRS fields
+            Object.keys(libraryData).forEach(b => {
+                if(!bookOrder.includes(b)) bookOrder.push(b);
+                libraryData[b].forEach(wordObj => {
+                    if(wordObj.interval === undefined) {
+                        wordObj.interval = 0; wordObj.repetitions = 0; 
+                        wordObj.easeFactor = 2.5; wordObj.nextReview = Date.now();
+                    }
+                });
+            });
             bookOrder = bookOrder.filter(b => libraryData[b]);
-            
-        } catch (e) { showToast("Error loading data", "error"); }
+        } catch (e) { console.error("Error loading data", e); }
     }
 
     function saveData() {
+        if (!storageAvailable) return; 
         try {
-            localStorage.setItem('proDict_Library', JSON.stringify(libraryData));
-            localStorage.setItem('proDict_Covers', JSON.stringify(libraryCovers));
-            localStorage.setItem('proDict_Order', JSON.stringify(bookOrder));
-        } catch (e) { showToast("Storage full. Cannot save data.", "error"); }
+            localStorage.setItem('academicDict_Library_v4', JSON.stringify(libraryData));
+            localStorage.setItem('academicDict_Covers_v4', JSON.stringify(libraryCovers));
+            localStorage.setItem('academicDict_Order_v4', JSON.stringify(bookOrder));
+        } catch (e) { showToast("Storage full. Cannot save new data."); }
     }
 
-    function initializeSRS(entry) {
-        return {
-            ...entry,
-            interval: entry.interval || 0,
-            repetition: entry.repetition || 0,
-            efactor: entry.efactor || 2.5,
-            nextReviewDate: entry.nextReviewDate || Date.now()
-        };
-    }
-
-    function calculateDueCards(bookName) {
-        const now = Date.now();
-        return libraryData[bookName].filter(entry => entry.nextReviewDate <= now).length;
-    }
-
-    function calculateNextInterval(entry, grade) {
-        let q = grade === 1 ? 0 : (grade === 2 ? 3 : (grade === 3 ? 4 : 5));
-        let { interval, repetition, efactor } = entry;
-        
-        if (q < 3) {
-            repetition = 0; interval = 1;
-        } else {
-            if (repetition === 0) interval = 1;
-            else if (repetition === 1) interval = 6;
-            else interval = Math.round(interval * efactor);
-            repetition++;
-        }
-        efactor = efactor + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02));
-        if (efactor < 1.3) efactor = 1.3;
-        
-        return { interval, repetition, efactor };
-    }
-
-    function formatTime(days) {
-        if (days === 1) return "1d";
-        if (days < 30) return `${days}d`;
-        if (days < 365) return `${Math.round(days/30)}mo`;
-        return `${Math.round(days/365)}y`;
-    }
-
-    window.playAudio = function(word) {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(word);
-            utterance.lang = 'en-US'; utterance.rate = 0.9;
-            window.speechSynthesis.speak(utterance);
-        } else {
-            showToast("Text-to-speech not supported in this browser.", "error");
-        }
-    };
+    const themeSequence = ['light', 'warm', 'dark'];
+    let currentTheme = 'warm';
 
     function toggleTheme() {
-        const body = document.body; const themeBtn = document.getElementById('themeBtn');
-        body.classList.toggle('dark-mode');
-        const isDark = body.classList.contains('dark-mode');
-        themeBtn.innerText = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
-        document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#0F172A' : '#F8FAFC');
-        try { localStorage.setItem('themePref_pro', isDark ? 'dark' : 'light'); } catch(e) { }
+        let currentIndex = themeSequence.indexOf(currentTheme);
+        currentIndex = (currentIndex + 1) % themeSequence.length;
+        applyTheme(themeSequence[currentIndex]);
+    }
+
+    function applyTheme(themeName) {
+        currentTheme = themeName;
+        const body = document.body;
+        const themeBtn = document.getElementById('themeBtn');
+        
+        // Remove existing theme classes
+        body.classList.remove('theme-light', 'theme-warm', 'theme-dark');
+        
+        if (themeName !== 'light') {
+            body.classList.add(`theme-${themeName}`);
+        }
+        
+        // Update Button UI
+        if (themeName === 'light') themeBtn.innerText = '☀️ Light Mode';
+        else if (themeName === 'warm') themeBtn.innerText = '☕ Warm Tone';
+        else if (themeName === 'dark') themeBtn.innerText = '🌙 Dark Mode';
+        
+        // Update PWA meta tag color to match
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        if (themeName === 'light') metaThemeColor.setAttribute('content', '#F8FAFC');
+        else if (themeName === 'warm') metaThemeColor.setAttribute('content', '#FDF6E3');
+        else if (themeName === 'dark') metaThemeColor.setAttribute('content', '#0F1115');
+        
+        if (storageAvailable) {
+            try { localStorage.setItem('themePref_v5', themeName); } catch(e) { }
+        }
     }
 
     function loadTheme() {
+        if (!storageAvailable) { applyTheme('warm'); return; }
         try {
-            const pref = localStorage.getItem('themePref_pro');
-            if (pref === 'dark') { 
-                document.body.classList.add('dark-mode'); 
-                document.getElementById('themeBtn').innerText = '☀️ Light Mode'; 
-                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0F172A');
-            }
-        } catch(e) { }
+            const pref = localStorage.getItem('themePref_v5') || 'warm'; 
+            applyTheme(pref);
+        } catch(e) { applyTheme('warm'); }
     }
+
+    function playAudio(text) {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.9; // Slightly slower for clarity
+            window.speechSynthesis.speak(utterance);
+        } else {
+            showToast("Audio not supported in this browser.");
+        }
+    }
+
+    function toggleActiveRecall() {
+        isActiveRecall = !isActiveRecall;
+        const btn = document.getElementById('recallToggleBtn');
+        const table = document.getElementById('wordTable');
+        
+        if(isActiveRecall) {
+            btn.innerText = '👁️ Active Recall: ON';
+            btn.style.background = 'var(--danger-color)';
+            btn.style.borderColor = 'var(--danger-color)';
+            table.classList.add('active-recall');
+        } else {
+            btn.innerText = '👁️ Active Recall: OFF';
+            btn.style.background = 'transparent';
+            btn.style.borderColor = 'var(--border-color)';
+            table.classList.remove('active-recall');
+        }
+        renderTable(); // Re-render to apply classes
+    }
+
+    function revealBlur(element) {
+        if(isActiveRecall) element.classList.add('revealed');
+    }
+
+    function getDueCards(bookName) {
+        const now = Date.now();
+        return libraryData[bookName].filter(card => card.nextReview <= now);
+    }
+
+    function calculateSM2(quality, interval, repetitions, easeFactor) {
+        // quality: 0 (Again), 1 (Hard), 2 (Good), 3 (Easy)
+        // SM-2 Math mapped to 0-3
+        let mappedQuality = quality;
+        if(quality === 0) mappedQuality = 0;
+        if(quality === 1) mappedQuality = 3;
+        if(quality === 2) mappedQuality = 4;
+        if(quality === 3) mappedQuality = 5;
+
+        if (mappedQuality < 3) {
+            repetitions = 0;
+            interval = 1; // 1 day
+        } else {
+            if (repetitions === 0) {
+                interval = 1;
+            } else if (repetitions === 1) {
+                interval = 6;
+            } else {
+                interval = Math.round(interval * easeFactor);
+            }
+            repetitions++;
+        }
+
+        easeFactor = easeFactor + (0.1 - (5 - mappedQuality) * (0.08 + (5 - mappedQuality) * 0.02));
+        if (easeFactor < 1.3) easeFactor = 1.3;
+
+        // Calculate next review in milliseconds
+        // If 'Again' (0), review in 1 minute. Otherwise, use days.
+        let nextReviewDelta;
+        if(quality === 0) {
+            nextReviewDelta = 60 * 1000; // 1 min
+        } else {
+            nextReviewDelta = interval * 24 * 60 * 60 * 1000; // days to ms
+        }
+
+        return {
+            interval: interval,
+            repetitions: repetitions,
+            easeFactor: easeFactor,
+            nextReview: Date.now() + nextReviewDelta
+        };
+    }
+
+    function startStudySession() {
+        studyQueue = getDueCards(currentBook);
+        if(studyQueue.length === 0) {
+            showToast("No cards due right now!");
+            return;
+        }
+        currentStudyIndex = 0;
+        document.getElementById('studyModal').style.display = 'flex';
+        showStudyCard();
+    }
+
+    function showStudyCard() {
+        if(currentStudyIndex >= studyQueue.length) {
+            closeStudyModal();
+            showToast("Session complete!");
+            renderTable(); // Update badges
+            return;
+        }
+        
+        const card = studyQueue[currentStudyIndex];
+        document.getElementById('studyProgress').innerText = `Card ${currentStudyIndex + 1} / ${studyQueue.length}`;
+        document.getElementById('fcWord').innerHTML = `${card.word} <button class="audio-btn" onclick="playAudio('${card.word.replace(/'/g, "\\'")}')">🔊</button>`;
+        document.getElementById('fcWordText').innerText = card.word;
+        
+        document.getElementById('fcMeaning').innerText = card.meaning;
+        document.getElementById('fcHindi').innerText = card.hindi;
+        document.getElementById('fcSyn').innerText = card.synonyms;
+        document.getElementById('fcUsage').innerText = card.usage;
+        
+        document.getElementById('fcDetails').style.display = 'none';
+        document.getElementById('fcGradeGrid').style.display = 'none';
+        document.getElementById('fcRevealBtn').style.display = 'block';
+    }
+
+    function revealCard() {
+        document.getElementById('fcRevealBtn').style.display = 'none';
+        document.getElementById('fcDetails').style.display = 'block';
+        document.getElementById('fcGradeGrid').style.display = 'grid';
+    }
+
+    function gradeCard(quality) {
+        let card = studyQueue[currentStudyIndex];
+        // Find reference in main library array
+        let mainCard = libraryData[currentBook].find(c => c.word === card.word);
+        
+        if(mainCard) {
+            const result = calculateSM2(quality, mainCard.interval, mainCard.repetitions, mainCard.easeFactor);
+            mainCard.interval = result.interval;
+            mainCard.repetitions = result.repetitions;
+            mainCard.easeFactor = result.easeFactor;
+            mainCard.nextReview = result.nextReview;
+            saveData();
+        }
+        currentStudyIndex++;
+        showStudyCard();
+    }
+
+    function closeStudyModal() {
+        document.getElementById('studyModal').style.display = 'none';
+        renderTable(); // Update header stats
+    }
+
 
     window.toggleMenu = function(event, index) {
         event.preventDefault(); event.stopPropagation(); 
@@ -701,24 +1002,50 @@
         if (actionType === 'delete') deleteBook(bookName);
     };
 
+    let draggedBookName = null;
+    function handleDragStart(e) { if(e.target.closest('.kebab-container')) { e.preventDefault(); return; } draggedBookName = this.dataset.bookname; e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', this.dataset.bookname); setTimeout(() => this.classList.add('dragging'), 0); }
+    function handleDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; return false; }
+    function handleDragEnter(e) { e.preventDefault(); if (this.dataset.bookname !== draggedBookName) this.classList.add('drag-over-card'); }
+    function handleDragLeave(e) { this.classList.remove('drag-over-card'); }
+    function handleDrop(e) {
+        e.stopPropagation(); this.classList.remove('drag-over-card');
+        const targetBookName = this.dataset.bookname;
+        if (draggedBookName && draggedBookName !== targetBookName) {
+            const fromIndex = bookOrder.indexOf(draggedBookName);
+            const toIndex = bookOrder.indexOf(targetBookName);
+            bookOrder.splice(fromIndex, 1); bookOrder.splice(toIndex, 0, draggedBookName);
+            saveData(); renderDashboard();
+        }
+        return false;
+    }
+    function handleDragEnd(e) { this.classList.remove('dragging'); document.querySelectorAll('.book-card').forEach(c => c.classList.remove('drag-over-card')); }
+
     function renderDashboard() {
         const grid = document.getElementById('bookGrid'); grid.innerHTML = '';
-        if (bookOrder.length === 0) { grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center; margin-top: 40px; font-weight: 500;">Your library is empty. Create a notebook to begin.</p>'; return; }
+        if (bookOrder.length === 0) { grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center; margin-top: 40px; font-size: 1.1rem;">Your library is empty. Create or drop a CSV to begin.</p>'; return; }
 
         bookOrder.forEach((bookName, index) => {
+            const dueCards = getDueCards(bookName).length;
             const wordCount = libraryData[bookName].length;
-            const dueCount = calculateDueCards(bookName);
             const coverImage = libraryCovers[bookName] ? `url(${libraryCovers[bookName]})` : 'var(--default-cover)';
-            const card = document.createElement('div'); card.className = 'book-card';
+            const card = document.createElement('div'); 
+            card.className = 'book-card';
+            card.dataset.bookname = bookName;
             
+            card.draggable = true;
+            card.addEventListener('dragstart', handleDragStart); card.addEventListener('dragover', handleDragOver);
+            card.addEventListener('dragenter', handleDragEnter); card.addEventListener('dragleave', handleDragLeave);
+            card.addEventListener('drop', handleDrop); card.addEventListener('dragend', handleDragEnd);
+
             card.onclick = (e) => { if(!e.target.closest('.kebab-container')) openBook(bookName); };
             const safeBookName = bookName.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-            let badgeHTML = dueCount > 0 ? `<div class="due-badge">${dueCount} Due</div>` : '';
             
+            let badgeHTML = dueCards > 0 ? `<div class="due-badge">${dueCards} Due</div>` : '';
+
             card.innerHTML = `
                 ${badgeHTML}
                 <div class="kebab-container">
-                    <button class="kebab-btn" onclick="toggleMenu(event, ${index})">&#8942;</button>
+                    <button class="kebab-btn" onclick="toggleMenu(event, ${index})" ontouchstart="toggleMenu(event, ${index})">&#8942;</button>
                     <div class="dropdown-menu" id="dropdown-${index}">
                         <button class="dropdown-item" onclick="menuAction(event, 'upload', '${safeBookName}')">📁 Custom Cover</button>
                         <button class="dropdown-item" onclick="menuAction(event, 'web', '${safeBookName}')">🌐 Web Cover</button>
@@ -726,26 +1053,70 @@
                     </div>
                 </div>
                 <div class="book-cover" style="background-image: ${coverImage};"></div>
-                <div class="book-info"><h3>${bookName}</h3><p>${wordCount} word${wordCount !== 1 ? 's' : ''}</p></div>
+                <div class="book-info">
+                    <h3>${bookName}</h3><p>${wordCount} word${wordCount !== 1 ? 's' : ''}</p>
+                </div>
             `;
             grid.appendChild(card);
         });
     }
 
+    function setupDragAndDrop() {
+        const dropZone = document.getElementById('dropZone');
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+        dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); dropZone.classList.remove('drag-over'); });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault(); dropZone.classList.remove('drag-over');
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) processCSVFile(e.dataTransfer.files[0]);
+        });
+    }
+
+    window.handleCSVSelect = function(event) {
+        if (event.target.files && event.target.files.length > 0) { processCSVFile(event.target.files[0]); event.target.value = ''; }
+    };
+
+    function processCSVFile(file) {
+        if (!file.name.endsWith('.csv')) { showToast("Please upload a .csv file."); return; }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const lines = e.target.result.split('\n');
+            if (lines.length < 2) return; 
+            let bookName = file.name.replace('.csv', '').replace(/_/g, ' ');
+            let originalName = bookName; let counter = 1;
+            while(libraryData[bookName]) { bookName = `${originalName} (${counter})`; counter++; }
+
+            libraryData[bookName] = []; bookOrder.push(bookName);
+
+            for (let i = 1; i < lines.length; i++) {
+                if(!lines[i].trim()) continue;
+                const regex = /(".*?"|[^",\s]+)(?=\s*,|\s*$)/g;
+                let matches = []; let match;
+                while ((match = regex.exec(lines[i])) !== null) matches.push(match[1].replace(/(^"|"$)/g, '').replace(/""/g, '"'));
+                
+                if (matches.length >= 5) {
+                    libraryData[bookName].push({
+                        word: matches[1] || "-", hindi: matches[2] || "-", synonyms: matches[3] || "-",
+                        meaning: matches[4] || "-", usage: matches[5] || "-",
+                        interval: 0, repetitions: 0, easeFactor: 2.5, nextReview: Date.now() // Init SRS
+                    });
+                }
+            }
+            saveData(); renderDashboard(); showToast(`Imported "${bookName}"`);
+        }; reader.readAsText(file);
+    }
+
     async function searchWebCover(bookName) {
         try {
-            showToast("Searching for covers...");
             const res = await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(bookName)}&limit=15`);
             const data = await res.json();
             const resultsWithCovers = data.docs.filter(d => d.cover_i);
-            
-            if(resultsWithCovers.length === 0) { showToast(`No cover found online.`, 'error'); } 
+            if(resultsWithCovers.length === 0) { showToast(`No cover found online.`); } 
             else { 
-                const randomId = resultsWithCovers[Math.floor(Math.random() * resultsWithCovers.length)].cover_i;
-                libraryCovers[bookName] = `https://covers.openlibrary.org/b/id/${randomId}-L.jpg`; 
-                saveData(); renderDashboard(); showToast("Cover updated!", "success");
+                const randomCoverId = resultsWithCovers[Math.floor(Math.random() * resultsWithCovers.length)].cover_i;
+                libraryCovers[bookName] = `https://covers.openlibrary.org/b/id/${randomCoverId}-L.jpg`; 
+                saveData(); renderDashboard(); 
             }
-        } catch(e) { showToast("Network error.", "error"); } 
+        } catch(e) { showToast("Network error."); } 
     }
 
     function triggerImageUpload(bookName) {
@@ -765,15 +1136,15 @@
 
     function createNewBook() {
         const input = document.getElementById('newBookInput'); const bookName = input.value.trim();
-        if (!bookName) return; if (libraryData[bookName]) return showToast("Notebook exists.", "error");
+        if (!bookName) return; if (libraryData[bookName]) return showToast("Exists.");
         libraryData[bookName] = []; bookOrder.push(bookName); saveData(); input.value = ''; renderDashboard();
     }
 
     function deleteBook(bookName) {
-        showConfirm("Delete Notebook", `Are you sure you want to delete "${bookName}" and all its contents?`, () => {
+        if (confirm(`Delete "${bookName}"?`)) { 
             delete libraryData[bookName]; delete libraryCovers[bookName]; 
-            bookOrder = bookOrder.filter(b => b !== bookName); saveData(); renderDashboard(); showToast("Deleted", "success");
-        });
+            bookOrder = bookOrder.filter(b => b !== bookName); saveData(); renderDashboard(); 
+        }
     }
 
     function showDashboard() { 
@@ -788,120 +1159,10 @@
         document.getElementById('currentBookTitle').innerText = bookName; 
         document.getElementById('currentBookCover').style.backgroundImage = libraryCovers[bookName] ? `url(${libraryCovers[bookName]})` : 'var(--default-cover)';
         document.getElementById('exportBtn').style.display = 'inline-block';
-        if (isActiveRecallOn) toggleActiveRecall(); // Reset recall on open
         document.getElementById('dashboardView').classList.remove('active'); 
         document.getElementById('dictionaryView').classList.add('active'); 
         renderTable(); 
     }
-
-    function toggleActiveRecall() {
-        isActiveRecallOn = !isActiveRecallOn;
-        const btn = document.getElementById('activeRecallBtn');
-        const tbody = document.getElementById('tableBody');
-        
-        if (isActiveRecallOn) {
-            btn.classList.add('active'); btn.innerText = "👁️ Active Recall: ON"; tbody.classList.add('active-recall-on');
-        } else {
-            btn.classList.remove('active'); btn.innerText = "👁️ Active Recall: OFF"; tbody.classList.remove('active-recall-on');
-            document.querySelectorAll('.revealable').forEach(el => el.classList.remove('revealed'));
-        }
-    }
-
-    window.revealCell = function(element) { if (isActiveRecallOn) element.classList.toggle('revealed'); };
-
-    function renderTable() {
-        const tBody = document.getElementById('tableBody'); tBody.innerHTML = ''; 
-        const currentData = libraryData[currentBook];
-        document.getElementById('currentBookStats').innerText = `${currentData.length} entries`;
-
-        const dueCount = calculateDueCards(currentBook);
-        const studyBtn = document.getElementById('studyBtn');
-        if (dueCount > 0) { studyBtn.style.display = 'inline-block'; studyBtn.innerText = `🎓 Study ${dueCount} Due Cards`; } 
-        else { studyBtn.style.display = 'none'; }
-
-        if (currentData.length === 0) { 
-            tBody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 60px 20px; color:var(--text-secondary); font-weight: 500;">This notebook is empty.</td></tr>'; return; 
-        }
-        
-        currentData.forEach((entry, i) => { 
-            const row = document.createElement('tr'); row.className = 'word-row';
-            const safeWord = entry.word.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-            row.innerHTML = `
-                <td style="color:var(--text-secondary);">${i + 1}</td>
-                <td>
-                    <div class="td-word-container">
-                        <span class="td-word">${entry.word}</span>
-                        <button class="audio-btn" onclick="playAudio('${safeWord}')" title="Listen">🔊</button>
-                    </div>
-                </td>
-                <td class="revealable" onclick="revealCell(this)"><span class="td-hindi">${entry.hindi || "-"}</span></td>
-                <td class="revealable" onclick="revealCell(this)"><span class="td-synonyms">${entry.synonyms || "-"}</span></td>
-                <td class="revealable" onclick="revealCell(this)"><span class="td-meaning">${entry.meaning}</span></td>
-                <td class="revealable" onclick="revealCell(this)"><span class="td-usage">${entry.usage !== "-" ? `"${entry.usage}"` : "-"}</span></td>
-                <td style="text-align:right;"><button class="delete-row-btn" onclick="deleteRow(${i})">✕</button></td>
-            `; 
-            tBody.appendChild(row); 
-        });
-    }
-
-    window.deleteRow = function(index) {
-        showConfirm("Delete Word", "Remove this word from your notebook?", () => {
-            libraryData[currentBook].splice(index, 1); saveData(); renderTable(); showToast("Word removed.");
-        });
-    };
-
-    function startStudyMode() {
-        const now = Date.now();
-        studyQueue = libraryData[currentBook].map((entry, index) => ({ entry, index })).filter(item => item.entry.nextReviewDate <= now);
-        if (studyQueue.length === 0) return;
-        
-        currentStudyIndex = 0;
-        document.getElementById('dictionaryView').classList.remove('active');
-        document.getElementById('studyView').classList.add('active');
-        renderStudyCard();
-    }
-
-    function exitStudyMode() {
-        document.getElementById('studyView').classList.remove('active');
-        document.getElementById('dictionaryView').classList.add('active');
-        saveData(); renderTable();
-    }
-
-    function renderStudyCard() {
-        if (currentStudyIndex >= studyQueue.length) { showToast("Study session complete! Great job.", "success"); exitStudyMode(); return; }
-        const item = studyQueue[currentStudyIndex].entry;
-        document.getElementById('studyProgress').innerText = `Card ${currentStudyIndex + 1} of ${studyQueue.length}`;
-        document.getElementById('fcWord').innerText = item.word;
-        document.getElementById('fcBack').classList.remove('show');
-        document.getElementById('fcGrading').style.display = 'none';
-        document.getElementById('fcShowAnswerBtn').style.display = 'inline-block';
-        
-        document.getElementById('fcHindi').innerText = item.hindi !== "-" ? item.hindi : "";
-        document.getElementById('fcMeaning').innerText = item.meaning;
-        document.getElementById('fcSynonyms').innerText = item.synonyms !== "-" ? `Similar: ${item.synonyms}` : "";
-        document.getElementById('fcUsage').innerText = item.usage !== "-" ? `"${item.usage}"` : "";
-
-        const hardStats = calculateNextInterval(item, 2); const goodStats = calculateNextInterval(item, 3); const easyStats = calculateNextInterval(item, 4);
-        document.getElementById('timeHard').innerText = formatTime(hardStats.interval);
-        document.getElementById('timeGood').innerText = formatTime(goodStats.interval);
-        document.getElementById('timeEasy').innerText = formatTime(easyStats.interval);
-    }
-
-    window.playCurrentStudyAudio = function() { if (studyQueue[currentStudyIndex]) playAudio(studyQueue[currentStudyIndex].entry.word); };
-    window.showStudyAnswer = function() { document.getElementById('fcShowAnswerBtn').style.display = 'none'; document.getElementById('fcBack').classList.add('show'); document.getElementById('fcGrading').style.display = 'flex'; };
-
-    window.processStudyGrade = function(grade) {
-        const item = studyQueue[currentStudyIndex];
-        const newStats = calculateNextInterval(item.entry, grade);
-        const originalEntry = libraryData[currentBook][item.index];
-        originalEntry.interval = newStats.interval; originalEntry.repetition = newStats.repetition; originalEntry.efactor = newStats.efactor;
-        
-        const ONE_DAY = 24 * 60 * 60 * 1000;
-        if (grade === 1) originalEntry.nextReviewDate = Date.now() + (5 * 60 * 1000); 
-        else originalEntry.nextReviewDate = Date.now() + (newStats.interval * ONE_DAY);
-
-        saveData(); currentStudyIndex++; renderStudyCard();
-    };
 
     document.getElementById("wordInput").addEventListener("keypress", (e) => { if (e.key === "Enter") fetchWordDetails(); });
     document.getElementById("newBookInput").addEventListener("keypress", (e) => { if (e.key === "Enter") createNewBook(); });
@@ -910,70 +1171,126 @@
         const inputElement = document.getElementById('wordInput'); const btn = document.getElementById('searchBtn');
         const word = inputElement.value.trim().toLowerCase(); const err = document.getElementById('errorMsg');
         if (!word || !currentBook) return; err.style.display = 'none';
-        if (libraryData[currentBook].some(e => e.word.toLowerCase() === word)) { inputElement.value = ''; showToast(`"${word}" is already saved.`, "error"); return; }
+        if (libraryData[currentBook].some(e => e.word.toLowerCase() === word)) { inputElement.value = ''; showToast(`Already saved.`); return; }
 
         btn.innerText = "Searching..."; btn.disabled = true;
         try {
             const dictRes = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-            if (!dictRes.ok) throw new Error();
+            if (!dictRes.ok) throw new Error("Not found");
             const dictData = await dictRes.json();
             
-            let meaning = "-", usage = "-", synonyms = [];
+            let meaning = "-", usage = "-";
             if (dictData && dictData[0] && dictData[0].meanings) {
                 const first = dictData[0].meanings[0];
                 if (first.definitions[0]) meaning = first.definitions[0].definition;
                 for (let m of dictData[0].meanings) {
-                    if (m.synonyms) synonyms.push(...m.synonyms);
-                    for (let d of m.definitions) { 
-                        if (d.example && usage === "-") usage = d.example; 
-                        if (d.synonyms) synonyms.push(...d.synonyms);
-                    }
+                    for (let d of m.definitions) { if (d.example && usage === "-") { usage = d.example; break; } }
+                    if (usage !== "-") break;
                 }
             }
             
-            let synString = [...new Set(synonyms)].slice(0, 4).join(", "); if (!synString) synString = "-";
+            let synString = "-";
+            try {
+                const synRes = await fetch(`https://api.datamuse.com/words?rel_syn=${word}&max=4`);
+                const synData = await synRes.json();
+                if (synData && synData.length > 0) { synString = synData.map(item => item.word).join(", "); } 
+                else {
+                    const mlRes = await fetch(`https://api.datamuse.com/words?ml=${word}&max=4`);
+                    const mlData = await mlRes.json();
+                    if (mlData && mlData.length > 0) synString = mlData.map(item => item.word).join(", ");
+                }
+            } catch (synError) { }
+
             let hindiString = "-";
             try {
                 const hiRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|hi`);
                 const hiData = await hiRes.json();
-                if (hiData?.responseData?.translatedText && hiData.responseData.translatedText.toLowerCase() !== word.toLowerCase()) {
-                    hindiString = hiData.responseData.translatedText;
+                if (hiData && hiData.responseData && hiData.responseData.translatedText) {
+                    const translated = hiData.responseData.translatedText;
+                    if (translated.toLowerCase() !== word.toLowerCase()) hindiString = translated;
                 }
-            } catch (hiError) {}
+            } catch (hiError) { }
 
-            const newEntry = initializeSRS({ word, hindi: hindiString, meaning, usage, synonyms: synString });
-            libraryData[currentBook].push(newEntry); saveData(); renderTable(); inputElement.value = ''; showToast("Word saved!", "success");
-        } catch (error) { err.style.display = 'block'; } finally { btn.innerText = "Search API"; btn.disabled = false; }
+            libraryData[currentBook].push({ 
+                word, hindi: hindiString, meaning, usage, synonyms: synString,
+                interval: 0, repetitions: 0, easeFactor: 2.5, nextReview: Date.now()
+            }); 
+            saveData(); renderTable(); inputElement.value = '';
+
+        } catch (error) { err.style.display = 'block'; } finally { btn.innerText = "Search APIs"; btn.disabled = false; }
     }
 
-    window.openManualModal = function() { 
-        const modal = document.getElementById('manualAddModal');
-        modal.style.display = 'flex'; void modal.offsetWidth; modal.classList.add('show');
-    };
-    window.closeManualModal = function() { 
-        const modal = document.getElementById('manualAddModal');
-        modal.classList.remove('show');
-        setTimeout(() => { modal.style.display = 'none'; }, 200);
+    function openManualModal() { document.getElementById('manualAddModal').style.display = 'flex'; }
+    function closeManualModal() { 
+        document.getElementById('manualAddModal').style.display = 'none'; 
         document.getElementById('manWord').value = ''; document.getElementById('manHindi').value = ''; document.getElementById('manSyn').value = '';
         document.getElementById('manMeaning').value = ''; document.getElementById('manUsage').value = '';
-    };
+    }
     
-    window.saveManualWord = function() {
+    function saveManualWord() {
         const word = document.getElementById('manWord').value.trim();
-        if(!word) return showToast("Word is required.", "error");
-        if (libraryData[currentBook].some(e => e.word.toLowerCase() === word.toLowerCase())) return showToast("Already saved.", "error");
+        if(!word) return showToast("Word is required.");
+        if (libraryData[currentBook].some(e => e.word.toLowerCase() === word.toLowerCase())) return showToast("Already saved.");
         
-        let hindi = document.getElementById('manHindi').value.trim() || "-";
-        let syn = document.getElementById('manSyn').value.trim() || "-";
-        let mean = document.getElementById('manMeaning').value.trim() || "-";
-        let use = document.getElementById('manUsage').value.trim() || "-";
-        
-        libraryData[currentBook].push(initializeSRS({ word, hindi, meaning: mean, usage: use, synonyms: syn }));
-        saveData(); renderTable(); closeManualModal(); showToast("Word added manually.", "success");
+        libraryData[currentBook].push({ 
+            word, 
+            hindi: document.getElementById('manHindi').value.trim() || "-", 
+            meaning: document.getElementById('manMeaning').value.trim() || "-", 
+            usage: document.getElementById('manUsage').value.trim() || "-", 
+            synonyms: document.getElementById('manSyn').value.trim() || "-",
+            interval: 0, repetitions: 0, easeFactor: 2.5, nextReview: Date.now()
+        });
+        saveData(); renderTable(); closeManualModal();
+    }
+
+    window.deleteRow = function(index) {
+        if(confirm("Remove this word?")) { libraryData[currentBook].splice(index, 1); saveData(); renderTable(); }
     };
 
-    window.exportToExcel = function() {
-        const cData = libraryData[currentBook]; if (!cData || cData.length === 0) return showToast("Notebook is empty.", "error");
+    function renderTable() {
+        const tBody = document.getElementById('tableBody'); tBody.innerHTML = ''; 
+        const currentData = libraryData[currentBook];
+        
+        // SRS Badge logic
+        const dueCount = getDueCards(currentBook).length;
+        const studyBtn = document.getElementById('studyBtn');
+        if(dueCount > 0) {
+            studyBtn.style.display = 'inline-block';
+            studyBtn.innerText = `🎓 Study ${dueCount} Due Cards`;
+        } else {
+            studyBtn.style.display = 'none';
+        }
+
+        document.getElementById('currentBookStats').innerText = `${currentData.length} entries`;
+
+        if (currentData.length === 0) { 
+            tBody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 60px 20px; color:var(--text-secondary);">This notebook is empty.</td></tr>'; 
+            return; 
+        }
+        
+        // Classes for active recall blurring
+        const blurClass = isActiveRecall ? 'blur-target' : '';
+
+        currentData.forEach((entry, i) => { 
+            const row = document.createElement('tr'); row.className = 'word-row';
+            
+            row.innerHTML = `
+                <td style="color:var(--text-secondary);">${i + 1}</td>
+                <td>
+                    <div class="td-word">${entry.word} <button class="audio-btn" onclick="playAudio('${entry.word.replace(/'/g, "\\'")}')">🔊</button></div>
+                </td>
+                <td><span class="td-hindi ${blurClass}" onclick="revealBlur(this)">${entry.hindi}</span></td>
+                <td><span class="td-synonyms ${blurClass}" onclick="revealBlur(this)">${entry.synonyms}</span></td>
+                <td><div class="td-meaning ${blurClass}" onclick="revealBlur(this)">${entry.meaning}</div></td>
+                <td><div class="td-usage ${blurClass}" onclick="revealBlur(this)">${entry.usage !== "-" ? `"${entry.usage}"` : "-"}</div></td>
+                <td style="text-align:right;"><button class="delete-row-btn" onclick="deleteRow(${i})">✕</button></td>
+            `; 
+            tBody.appendChild(row); 
+        });
+    }
+
+    function exportToExcel() {
+        const cData = libraryData[currentBook]; if (!cData || cData.length === 0) return showToast("Notebook is empty.");
         let csv = "Sr No.,Word,Hindi,Similar Words,Definition,Context\n";
         cData.forEach((e, i) => { 
             let w = e.word.replace(/"/g, '""'); let h = (e.hindi||"-").replace(/"/g, '""'); let s = (e.synonyms||"-").replace(/"/g, '""');
@@ -983,38 +1300,6 @@
         const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
         link.download = `${currentBook.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_database.csv`;
         document.body.appendChild(link); link.click(); document.body.removeChild(link);
-    };
-
-    window.handleCSVSelect = function(event) {
-        if (event.target.files && event.target.files.length > 0) { processCSVFile(event.target.files[0]); event.target.value = ''; }
-    };
-
-    function processCSVFile(file) {
-        if (!file.name.endsWith('.csv')) { showToast("Invalid .csv file.", "error"); return; }
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const lines = e.target.result.split('\n');
-            if (lines.length < 2) return; 
-
-            let bookName = file.name.replace('.csv', '').replace(/_/g, ' ');
-            let originalName = bookName; let counter = 1;
-            while(libraryData[bookName]) { bookName = `${originalName} (${counter})`; counter++; }
-
-            libraryData[bookName] = []; bookOrder.push(bookName);
-            for (let i = 1; i < lines.length; i++) {
-                if(!lines[i].trim()) continue;
-                const regex = /(".*?"|[^",\s]+)(?=\s*,|\s*$)/g;
-                let matches = []; let match;
-                while ((match = regex.exec(lines[i])) !== null) matches.push(match[1].replace(/(^"|"$)/g, '').replace(/""/g, '"'));
-                if (matches.length >= 5) {
-                    libraryData[bookName].push(initializeSRS({
-                        word: matches[1] || "-", hindi: matches[2] || "-", synonyms: matches[3] || "-",
-                        meaning: matches[4] || "-", usage: matches[5] || "-"
-                    }));
-                }
-            }
-            saveData(); renderDashboard(); showToast(`Imported "${bookName}"`, "success");
-        }; reader.readAsText(file);
     }
 </script>
 
