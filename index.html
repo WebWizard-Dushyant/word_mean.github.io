@@ -10,6 +10,8 @@
     <title>Vocab Tracker Pro</title>
     
     <style>
+        * { box-sizing: border-box; } /* Ensures padding never breaks mobile width */
+        
         :root {
             /* Light Theme - Professional Palette */
             --bg-color: #F1F5F9;
@@ -308,19 +310,56 @@
 
         @media (max-width: 850px) {
             body { padding: 0; }
-            .container { padding: 1.5rem; border-radius: 0; min-height: 100vh; border: none;}
-            .creation-area { flex-direction: column; }
-            .input-group, .drop-zone { min-width: 100%; }
-            .playlist-header { flex-direction: column; align-items: center; text-align: center; gap: 20px;}
-            .controls-row { flex-direction: column; align-items: stretch;}
-            .controls-row input, .controls-row button { width: 100%; }
-            tr:hover .delete-row-btn { opacity: 1; } 
-            .book-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.5rem; }
-            .book-cover { height: 200px; }
-            .due-badge { top: -10px; left: -10px; }
-            #toast { left: 20px; right: 20px; bottom: 20px; text-align: center;}
-            .flashcard { padding: 2rem 1.5rem; }
-            .study-actions { flex-direction: column; }
+            .container { padding: 1.2rem; border-radius: 0; min-height: 100vh; border: none; }
+            
+            /* Nav tweaks */
+            .nav-bar { flex-direction: column; align-items: stretch; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; }
+            .nav-title { text-align: center; }
+            .nav-actions { display: flex; flex-wrap: wrap; width: 100%; gap: 8px; justify-content: center; }
+            .nav-actions button { flex: 1; min-width: 120px; text-align: center; padding: 10px 16px;}
+            
+            /* Dashboard tweaks */
+            .creation-area { flex-direction: column; gap: 12px; margin-bottom: 1.5rem; }
+            .input-group { flex-direction: column; width: 100%; min-width: 100%; gap: 8px; }
+            .input-group input, .input-group button { width: 100%; }
+            .drop-zone { min-width: 100%; padding: 16px; }
+            .book-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+            .book-cover { height: 180px; }
+            
+            /* Fix Absolute Badges/Menus for smaller cards */
+            .due-badge { top: 12px; left: -4px; padding: 4px 10px; font-size: 0.7rem; }
+            .kebab-container { top: 12px; right: 12px; }
+            
+            /* Dictionary Header tweaks */
+            .playlist-header { flex-direction: column; align-items: center; text-align: center; gap: 15px; margin-bottom: 1.5rem; }
+            .playlist-cover { width: 140px; height: 140px; }
+            .playlist-info h1 { font-size: 2rem; margin-bottom: 8px; }
+            
+            /* Controls and Table */
+            .controls-row { flex-direction: column; gap: 10px; align-items: stretch; margin-bottom: 1rem; }
+            .controls-row input, .controls-row button { width: 100%; margin: 0; }
+            .table-wrapper { margin-top: 5px; padding-bottom: 10px; }
+            table { min-width: 650px; } /* Reduces horizontal scroll length */
+            th, td { padding: 12px 10px; font-size: 0.9rem; }
+            .td-word { font-size: 1rem; }
+            
+            /* Touch UI Fixes */
+            .delete-row-btn { opacity: 1; background: rgba(239, 68, 68, 0.08); color: var(--danger-color); } /* Visible without hover */
+            .active-recall-on .revealable { opacity: 0.85; filter: blur(4px); } /* Slightly less blurry on mobile for touch recognition */
+            
+            /* Study Mode */
+            .study-container { padding: 1rem 0; }
+            .flashcard { padding: 2rem 1.2rem; margin-bottom: 1.5rem;}
+            .flashcard-word { font-size: 2.2rem; }
+            .fc-meaning { font-size: 1.1rem; }
+            .study-actions { flex-direction: row; flex-wrap: wrap; gap: 8px; }
+            .grade-btn { flex: 1; min-width: 45%; padding: 12px; } /* 2x2 grid for grading */
+            
+            /* Modals & Toasts */
+            .modal-content { padding: 1.5rem; width: 92%; }
+            .modal-actions { flex-direction: column-reverse; gap: 8px; }
+            .modal-actions button { width: 100%; margin: 0; }
+            #toast { left: 15px; right: 15px; bottom: 15px; text-align: center; transform: translateY(150px); }
         }
     </style>
 </head>
