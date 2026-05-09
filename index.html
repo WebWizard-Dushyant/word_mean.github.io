@@ -201,6 +201,20 @@
         }
         .modal-content { background: var(--container-bg); padding: 2rem; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: var(--shadow-sm); }
         .modal-content input { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-color); color: var(--text-primary);}
+
+        /* Mobile Responsiveness for Tiles */
+        @media (max-width: 600px) {
+            .app-view { padding: 1rem; }
+            .book-grid { grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 1rem; }
+            .book-cover { height: 150px; margin-bottom: 8px; }
+            .book-info h3 { font-size: 1rem; }
+            .nav-title { font-size: 1.5rem; }
+            .creation-area { flex-direction: column; }
+            .drop-zone { min-width: 100%; }
+        }
+        
+        /* Flashcard Styles */
+        .flashcard-body { cursor: pointer; padding: 20px 0; min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
@@ -217,6 +231,30 @@
             <button class="pill-btn" onclick="document.getElementById('manualAddModal').style.display='none'">Cancel</button>
             <button class="action-btn" onclick="saveManualWord()">Save</button>
         </div>
+    </div>
+</div>
+
+<!-- Practice / Flashcard Modal -->
+<div id="practiceModal" class="modal-overlay">
+    <div class="modal-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
+            <span style="color:var(--text-secondary); font-size: 0.85rem; font-weight: 600;" id="fcProgress">Card 1 / 10</span>
+            <button class="pill-btn" onclick="closePractice()">✕ Quit</button>
+        </div>
+        
+        <div class="flashcard-body" onclick="flipCard()">
+            <h2 id="fcWord" style="margin: 0; font-size: 2.2rem; font-family:var(--font-serif); color:var(--text-primary); text-align: center;">Word</h2>
+            <p id="fcHint" style="color:var(--text-secondary); font-size: 0.85rem; margin-top: 15px;">(Tap card to flip)</p>
+            
+            <div id="flashcardBack" style="display:none; margin-top: 20px; width: 100%; border-top: 1px solid var(--border-color); padding-top: 15px; text-align: left;">
+                <p style="margin: 5px 0; font-size: 0.95rem;"><strong>Hindi:</strong> <span id="fcHindi" style="color:var(--text-secondary);"></span></p>
+                <p style="margin: 5px 0; font-size: 0.95rem;"><strong>Similar:</strong> <span id="fcSyn" style="color:var(--text-secondary);"></span></p>
+                <p style="margin: 5px 0; font-size: 0.95rem;"><strong>Definition:</strong> <span id="fcMeaning" style="color:var(--text-primary);"></span></p>
+                <p style="margin: 5px 0; font-size: 0.95rem;"><strong>Context:</strong> <em id="fcUsage" style="color:var(--text-secondary);"></em></p>
+            </div>
+        </div>
+        
+        <button class="action-btn" id="fcNextBtn" onclick="nextCard(event)" style="display:none; width: 100%; margin-top: 15px;">Next Card ➔</button>
     </div>
 </div>
 
@@ -247,7 +285,8 @@
         <div id="dictionarySection" style="display:none;">
             <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
                 <button class="pill-btn" onclick="closeBook()">← Back</button>
-                <div style="display:flex; gap:10px;">
+                <div style="display:flex; gap:10px; flex-wrap: wrap; justify-content: flex-end;">
+                    <button class="pill-btn" onclick="startPractice()" id="practiceBtn">🧠 Practice</button>
                     <button class="pill-btn" onclick="toggleActiveRecall()" id="recallBtn">👁️ Focus Mode</button>
                     <button class="pill-btn" onclick="exportToExcel()">📥 Export</button>
                 </div>
@@ -457,6 +496,59 @@
     function revealCell(element) {
         if(isActiveRecall) { element.classList.toggle('revealed'); }
     }
+
+    // --- PRACTICE / FLASHCARD MODE ---
+    let practiceCards = [];
+    let practiceIndex = 0;
+
+    function startPractice() {
+        const data = libraryData[currentBook];
+        if (!data || data.length === 0) return alert("This notebook is empty! Add some words first.");
+        
+        // Shuffle cards to randomize the test
+        practiceCards = [...data].sort(() => Math.random() - 0.5);
+        practiceIndex = 0;
+        
+        document.getElementById('practiceModal').style.display = 'flex';
+        showCard();
+    }
+
+    function showCard() {
+        if (practiceIndex >= practiceCards.length) {
+            alert("Great job! You've reviewed all the cards in this notebook.");
+            closePractice();
+            return;
+        }
+        const card = practiceCards[practiceIndex];
+        document.getElementById('fcWord').innerText = card.word;
+        document.getElementById('fcHindi').innerText = card.hindi || "-";
+        document.getElementById('fcSyn').innerText = card.synonyms || "-";
+        document.getElementById('fcMeaning').innerText = card.meaning;
+        document.getElementById('fcUsage').innerText = card.usage !== "-" ? `"${card.usage}"` : "-";
+        
+        document.getElementById('fcProgress').innerText = `Card ${practiceIndex + 1} / ${practiceCards.length}`;
+        document.getElementById('flashcardBack').style.display = 'none';
+        document.getElementById('fcHint').style.display = 'block';
+        document.getElementById('fcNextBtn').style.display = 'none';
+    }
+
+    function flipCard() {
+        if (document.getElementById('flashcardBack').style.display === 'none') {
+            document.getElementById('flashcardBack').style.display = 'block';
+            document.getElementById('fcHint').style.display = 'none';
+            document.getElementById('fcNextBtn').style.display = 'block';
+        }
+    }
+
+    window.nextCard = function(e) {
+        if(e) e.stopPropagation(); // Prevent card flip when clicking 'next'
+        practiceIndex++;
+        showCard();
+    };
+
+    window.closePractice = function() {
+        document.getElementById('practiceModal').style.display = 'none';
+    };
 
     // --- STREAMING_CHUNK: Library Dashboard & Reordering Logic ---
     let draggedBook = null;
@@ -702,9 +794,50 @@
                 const start = Math.floor(Math.random() * Math.max(1, lines.length-4));
                 const snippet = lines.slice(start, start+4).join('\n');
                 
-                // STRICT FILTER: Only use verses where we have a layman meaning
-                const laymanMeaning = analyzeLaymanMeaning(snippet);
-                if (!laymanMeaning) {
+                // WEB SCRAPER PIPELINE: Try to pull real context from the web first
+                let finalMeaning = null;
+                try {
+                    // Scrape Wikipedia API using Poem Title + Author
+                    let searchQuery = encodeURIComponent(`${poem.title} ${poem.author}`);
+                    let wikiRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts&exintro=1&explaintext=1&generator=search&gsrsearch=${searchQuery}&gsrlimit=1`);
+                    let wikiData = await wikiRes.json();
+                    
+                    // Double-Scrape Fallback: If poem isn't famous enough for its own page, scrape the Author's biography!
+                    if (!wikiData.query || !wikiData.query.pages) {
+                        searchQuery = encodeURIComponent(`${poem.author} poet`);
+                        wikiRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts&exintro=1&explaintext=1&generator=search&gsrsearch=${searchQuery}&gsrlimit=1`);
+                        wikiData = await wikiRes.json();
+                    }
+                    
+                    if (wikiData.query && wikiData.query.pages) {
+                        const pages = wikiData.query.pages;
+                        const pageId = Object.keys(pages)[0];
+                        
+                        if (pageId !== "-1" && pages[pageId].extract) {
+                            const extract = pages[pageId].extract.trim();
+                            // Format and truncate to keep it readable on mobile
+                            const cleanText = extract.length > 350 ? extract.substring(0, 350) + "..." : extract;
+                            
+                            // Prevent empty or completely irrelevant tiny pages
+                            if(cleanText.length > 50) {
+                                finalMeaning = `<b>🌐 Web Context:</b><br/><br/>${cleanText}`;
+                            }
+                        }
+                    }
+                } catch(e) {
+                    console.log("Web scrape skipped or timed out.");
+                }
+
+                // FALLBACK: Use our thematic dictionary if it's an obscure poem and Wikipedia failed completely
+                if (!finalMeaning) {
+                    const thematicMeaning = analyzeLaymanMeaning(snippet);
+                    if (thematicMeaning) {
+                        finalMeaning = `<b>💡 Layman's Meaning:</b><br/><br/>${thematicMeaning}`;
+                    }
+                }
+
+                // STRICT FILTER: Only use verses where we successfully found a meaning
+                if (!finalMeaning) {
                     continue; // Skip this poem entirely and fetch a new one
                 }
 
@@ -716,7 +849,7 @@
                     <div style="margin-top: 8px; font-size: 0.9rem; color: var(--text-secondary); font-style: italic; text-align: center; max-width: 80%;">from "${poem.title}"</div>
                     <button class="meaning-btn" onclick="toggleMeaning(event, ${globalIndex})">💡</button>
                     <div class="quote-meaning" id="mean-${globalIndex}">
-                        <b>Layman's Meaning:</b><br/><br/><i>${laymanMeaning}</i>
+                        <i>${finalMeaning}</i>
                     </div>
                 `;
                 view.appendChild(slide);
