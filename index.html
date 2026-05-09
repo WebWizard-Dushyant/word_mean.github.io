@@ -3,279 +3,344 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#F9F8F6">
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#F8FAFC">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Vocab">
-    <title>Vocab</title>
+    <title>Vocab Tracker Pro</title>
     
     <style>
-        /* Visual Theory: Cognitive Ergonomics Theme */
         :root {
-            --font-serif: 'Georgia', 'Times New Roman', serif;
+            /* Light Theme - Professional Palette */
+            --bg-color: #F1F5F9;
+            --container-bg: #FFFFFF;
+            --surface-color: #F8FAFC;
+            --surface-hover: #F1F5F9;
+            
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --border-color: #E2E8F0;
+            
+            --accent-color: #4F46E5; /* Indigo */
+            --accent-hover: #4338CA;
+            --danger-color: #EF4444;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            --shadow-lg: 0 10px 25px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.02);
+            --shadow-modal: 0 25px 50px -12px rgba(0,0,0,0.15);
+            
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            
             --font-sans: system-ui, -apple-system, sans-serif;
-
-            /* Light/Paper Theme */
-            --bg-color: #F9F8F6;          
-            --container-bg: #FFFFFF;      
-            --surface-hover: #F0EFEB;     
-            
-            --text-primary: #222222;      
-            --text-secondary: #5A5A5A;    
-            --border-color: #E6E4DD;      
-            
-            --accent-color: #2C573F;      
-            --accent-hover: #1E3F2D;      
-            --danger-color: #C24A4A;      
-            
-            --card-bg: #FFFFFF;
-            --card-border: #E6E4DD;
-            --default-cover: linear-gradient(135deg, #DEDCD5, #E6E4DD);
-            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
-            --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.08);
-            
-            --dropzone-bg: rgba(44, 87, 63, 0.03);
-            --dropzone-border: rgba(44, 87, 63, 0.3);
+            --font-serif: 'Georgia', 'Times New Roman', serif;
         }
 
         .dark-mode {
-            /* Dark/Slate Theme */
-            --bg-color: #121417;          
-            --container-bg: #1A1D21;
-            --surface-hover: #22262B;
+            /* Dark Theme - Sleek Slate */
+            --bg-color: #0F172A;
+            --container-bg: #1E293B;
+            --surface-color: #0F172A;
+            --surface-hover: #334155;
             
-            --text-primary: #EAECEE;      
-            --text-secondary: #90959A;
-            --border-color: #2D3136;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
             
-            --accent-color: #71A0D4;      
-            --accent-hover: #96BFF0;      
-            --danger-color: #E06C6C;
+            --accent-color: #6366F1;
+            --accent-hover: #818CF8;
+            --danger-color: #F87171;
+            --success-color: #34D399;
             
-            --card-bg: #1A1D21;
-            --card-border: #2D3136;
-            --default-cover: linear-gradient(135deg, #2D3136, #1A1D21);
-            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.4);
-            
-            --dropzone-bg: rgba(113, 160, 212, 0.05);
-            --dropzone-border: rgba(113, 160, 212, 0.3);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 25px -3px rgba(0,0,0,0.4);
+            --shadow-modal: 0 25px 50px -12px rgba(0,0,0,0.5);
         }
 
         body {
-            font-family: var(--font-sans); background-color: var(--bg-color);
-            color: var(--text-primary); padding: 1.5rem; margin: 0; 
+            font-family: var(--font-sans);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 1.5rem; margin: 0;
             display: flex; flex-direction: column; align-items: center;
-            overscroll-behavior-y: none; -webkit-font-smoothing: antialiased; line-height: 1.6;
+            overscroll-behavior-y: none;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .container {
-            width: 100%; max-width: 1200px; background: var(--container-bg); padding: 2.5rem 3rem;
-            border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);
-            box-sizing: border-box; transition: background-color 0.3s, border-color 0.3s;
-            position: relative; /* For footer positioning */
+            width: 100%; max-width: 1200px;
+            background: var(--container-bg);
+            padding: 2.5rem 3rem;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
             min-height: 85vh; display: flex; flex-direction: column;
         }
-        
-        .nav-bar { 
-            display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 15px; 
+
+        .nav-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 2.5rem; padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap; gap: 15px;
         }
-        .nav-title { margin: 0; font-size: 2rem; font-weight: 500; font-family: var(--font-serif); color: var(--text-primary); letter-spacing: -0.5px;}
+        .nav-title {
+            margin: 0; font-size: 1.8rem; font-weight: 500; font-family: var(--font-serif);
+            color: var(--text-primary); letter-spacing: -0.5px;
+        }
         .nav-actions { display: flex; gap: 10px; }
         
-        .focus-btn {
-            background: transparent; border: 1px solid var(--border-color); color: var(--text-primary);
-            padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 0.9rem; 
-            transition: all 0.2s ease; font-family: var(--font-sans);
+        button {
+            font-family: var(--font-sans);
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
-        .focus-btn:hover { border-color: var(--text-secondary); background: var(--surface-hover); }
+        
+        .btn-outline {
+            background: transparent; border: 1px solid var(--border-color);
+            color: var(--text-primary); padding: 8px 16px;
+            border-radius: var(--radius-md); font-weight: 500; font-size: 0.9rem;
+        }
+        .btn-outline:hover { border-color: var(--text-secondary); background: var(--surface-hover); }
+        
+        .btn-primary {
+            background: var(--accent-color); color: #FFF;
+            border: 1px solid var(--accent-color); padding: 12px 24px;
+            border-radius: var(--radius-md); font-weight: 600; font-size: 0.95rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        .btn-primary:active { transform: translateY(0); box-shadow: var(--shadow-sm); }
+        .btn-primary:disabled { background: var(--surface-hover); border-color: var(--border-color); color: var(--text-secondary); cursor: not-allowed; transform: none; box-shadow: none; }
 
-        .view { display: none; flex: 1;}
-        .view.active { display: block; animation: fadeIn 0.3s ease; }
+        .view { display: none; flex: 1; }
+        .view.active { display: flex; flex-direction: column; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Dashboard & Drag/Drop Elements */
-        .creation-area {
-            display: flex; gap: 15px; margin-bottom: 2.5rem; width: 100%;
+        .creation-area { display: flex; gap: 16px; margin-bottom: 2.5rem; width: 100%; flex-wrap: wrap; }
+        .input-group { flex: 1; display: flex; gap: 10px; min-width: 300px; }
+        
+        input[type="text"] {
+            flex: 1; padding: 12px 16px; font-size: 0.95rem;
+            border: 1px solid var(--border-color); border-radius: var(--radius-md);
+            background: var(--surface-color); color: var(--text-primary);
+            outline: none; transition: all 0.2s;
         }
-        .input-group {
-            flex: 1; display: flex; gap: 10px;
-        }
-        .drop-zone {
-            flex: 1; border: 2px dashed var(--dropzone-border); border-radius: 8px; background: var(--dropzone-bg);
-            display: flex; align-items: center; justify-content: center; color: var(--text-secondary);
-            font-size: 0.95rem; font-weight: 500; transition: all 0.2s; cursor: pointer; padding: 0 15px; text-align: center;
-        }
-        .drop-zone.drag-over {
-            background: rgba(44, 87, 63, 0.1); border-color: var(--accent-color); color: var(--accent-color);
-        }
-        .dark-mode .drop-zone.drag-over {
-            background: rgba(113, 160, 212, 0.15); border-color: var(--accent-color); color: var(--accent-color);
-        }
+        input[type="text"]:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); background: var(--container-bg); }
 
-        .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 2.5rem 2rem; }
+        .drop-zone {
+            flex: 1; min-width: 300px; border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md); background: var(--surface-color);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-secondary); font-size: 0.95rem; font-weight: 500;
+            transition: all 0.2s; cursor: pointer; padding: 12px; text-align: center;
+        }
+        .drop-zone:hover { border-color: var(--text-secondary); }
+        .drop-zone.drag-over { background: rgba(79, 70, 229, 0.05); border-color: var(--accent-color); color: var(--accent-color); }
+
+        .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 2rem; }
         
         .book-card {
-            background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.2s ease; 
-            position: relative; display: flex; flex-direction: column; box-shadow: var(--shadow-sm);
-            cursor: grab; 
+            background: var(--container-bg); border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg); padding: 16px;
+            transition: all 0.2s ease; position: relative; display: flex; flex-direction: column;
+            box-shadow: var(--shadow-sm); cursor: pointer;
         }
-        .book-card:active { cursor: grabbing; }
-        .book-card:hover { border-color: var(--text-secondary); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .book-card:hover { border-color: var(--accent-color); transform: translateY(-4px); box-shadow: var(--shadow-lg); }
         
-        .book-card.dragging { opacity: 0.4; transform: scale(0.95); box-shadow: none; z-index: 100; }
-        .book-card.drag-over-card { border: 2px dashed var(--accent-color); background: var(--surface-hover); transform: scale(1.02); }
-        
-        .book-cover { 
-            height: 250px; width: 100%; background: var(--default-cover); background-size: cover; 
-            background-position: center; border-radius: 6px; margin-bottom: 16px; border: 1px solid rgba(0,0,0,0.05);
-            pointer-events: none; 
+        .book-cover {
+            height: 240px; width: 100%; background: #E2E8F0; background-size: cover;
+            background-position: center; border-radius: var(--radius-md); margin-bottom: 16px;
+            border: 1px solid var(--border-color);
         }
         
-        .book-info { text-align: center; padding: 4px; pointer-events: none; }
-        .book-info h3 { margin: 0 0 6px 0; color: var(--text-primary); font-size: 1.15rem; font-weight: 600; font-family: var(--font-serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-        .book-info p { margin: 0; font-size: 0.85rem; color: var(--text-secondary); }
+        .book-info { text-align: center; padding: 4px; }
+        .book-info h3 { margin: 0 0 6px 0; color: var(--text-primary); font-size: 1.15rem; font-weight: 500; font-family: var(--font-serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .book-info p { margin: 0; font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;}
 
-        /* Kebab Menu - Isolated Layering */
-        .kebab-container {
-            position: absolute; top: 20px; right: 20px; z-index: 50; 
+        .due-badge {
+            position: absolute; top: 24px; left: -8px; background: var(--danger-color); color: #FFF;
+            padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); z-index: 10; letter-spacing: 0.5px;
         }
-        
+
+        /* Kebab Menu */
+        .kebab-container { position: absolute; top: 24px; right: 24px; z-index: 20; }
         .kebab-btn {
-            background: rgba(0, 0, 0, 0.55); color: #FFFFFF;
-            border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; 
-            width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 20px; font-weight: bold; transition: all 0.2s ease;
-            backdrop-filter: blur(4px); padding-bottom: 4px; 
+            background: rgba(15, 23, 42, 0.6); color: #FFF; border: none;
+            border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: bold; backdrop-filter: blur(4px); padding-bottom: 4px;
         }
-        .kebab-btn:hover { background: rgba(0, 0, 0, 0.9); transform: scale(1.05); }
+        .kebab-btn:hover { background: rgba(15, 23, 42, 0.9); transform: scale(1.05); }
 
         .dropdown-menu {
-            position: absolute; top: 40px; right: 0;
-            background: var(--container-bg); border: 1px solid var(--border-color);
-            border-radius: 10px; box-shadow: var(--shadow-lg);
-            display: flex; flex-direction: column; padding: 8px 0;
+            position: absolute; top: 40px; right: 0; background: var(--container-bg);
+            border: 1px solid var(--border-color); border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg); display: flex; flex-direction: column; padding: 8px 0;
             opacity: 0; pointer-events: none; transform: translateY(-10px);
             transition: all 0.2s ease; width: 180px; overflow: hidden;
         }
-        .dropdown-menu.active {
-            opacity: 1; pointer-events: auto; transform: translateY(0);
-        }
+        .dropdown-menu.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
         .dropdown-item {
-            padding: 12px 16px; background: transparent; border: none; color: var(--text-primary);
-            text-align: left; cursor: pointer; font-size: 0.9rem; font-family: var(--font-sans);
-            transition: background 0.2s; width: 100%; font-weight: 500;
+            padding: 10px 16px; background: transparent; border: none; color: var(--text-primary);
+            text-align: left; font-size: 0.85rem; font-weight: 500; transition: background 0.2s;
         }
         .dropdown-item:hover { background: var(--surface-hover); color: var(--accent-color); }
-        .dropdown-item.danger { color: var(--danger-color); border-top: 1px solid var(--border-color); margin-top: 4px; }
-        .dropdown-item.danger:hover { color: #FFFFFF; background: var(--danger-color); }
+        .dropdown-item.danger { color: var(--danger-color); border-top: 1px solid var(--border-color); margin-top: 4px; padding-top: 12px;}
+        .dropdown-item.danger:hover { color: #FFF; background: var(--danger-color); }
 
-        /* Dictionary View Header */
-        .playlist-header { display: flex; align-items: flex-end; gap: 30px; margin-bottom: 3rem; }
+        .playlist-header { display: flex; align-items: flex-end; gap: 32px; margin-bottom: 2.5rem; position: relative;}
         .playlist-cover {
-            width: 180px; height: 180px; border-radius: 6px; background-size: cover; background-position: center;
-            box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);
+            width: 180px; height: 180px; border-radius: var(--radius-md);
+            background-size: cover; background-position: center;
+            box-shadow: var(--shadow-md); border: 1px solid var(--border-color);
         }
-        .playlist-info p { margin: 0 0 8px 0; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1.5px;}
-        .playlist-info h1 { margin: 0 0 12px 0; font-size: 3.2rem; font-weight: 400; font-family: var(--font-serif); line-height: 1.1; color: var(--text-primary); letter-spacing: -1px;}
-        .playlist-info .stats { color: var(--accent-color); font-size: 0.95rem; font-weight: 600;}
+        .playlist-info p { margin: 0 0 8px 0; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px;}
+        .playlist-info h1 { margin: 0 0 16px 0; font-size: 2.8rem; font-weight: 400; font-family: var(--font-serif); line-height: 1.1; color: var(--text-primary); letter-spacing: -0.5px;}
+        .playlist-info .stats { color: var(--text-secondary); font-size: 0.95rem; font-weight: 500;}
 
-        /* Controls */
-        .controls-row { display: flex; gap: 12px; width: 100%; margin-bottom: 2rem; align-items: center; flex-wrap: wrap;}
+        .controls-row { display: flex; gap: 12px; width: 100%; margin-bottom: 1.5rem; align-items: center; flex-wrap: wrap;}
         
-        input[type="text"] { 
-            flex: 1; padding: 14px 18px; font-size: 15px; border: 1px solid var(--border-color); border-radius: 8px; 
-            background: var(--bg-color); color: var(--text-primary); outline: none; box-sizing: border-box; transition: all 0.2s; font-family: var(--font-sans);
-        }
-        input[type="text"]:focus { border-color: var(--accent-color); background: var(--container-bg); box-shadow: 0 0 0 3px rgba(44, 87, 63, 0.1); }
-        .dark-mode input[type="text"]:focus { box-shadow: 0 0 0 3px rgba(113, 160, 212, 0.15); }
-        
-        button.action-btn { 
-            padding: 14px 28px; font-size: 0.95rem; font-weight: 600; background-color: var(--accent-color); color: #FFF; 
-            border: 1px solid var(--accent-color); border-radius: 8px; cursor: pointer; transition: all 0.2s; white-space: nowrap; box-sizing: border-box; font-family: var(--font-sans);
-        }
-        button.action-btn:hover { background-color: var(--accent-hover); border-color: var(--accent-hover); transform: translateY(-1px);}
-        button.action-btn:active { transform: translateY(1px); }
-        button.action-btn:disabled { background-color: var(--surface-hover); border-color: var(--border-color); color: var(--text-secondary); cursor: not-allowed; transform: none;}
-        
-        .manual-btn { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-primary); }
-        .manual-btn:hover { border-color: var(--text-secondary); background-color: var(--surface-hover); color: var(--text-primary);}
+        /* Toggle Switch for Active Recall */
+        .toggle-btn { background: var(--surface-color); color: var(--text-primary); border: 1px solid var(--border-color); }
+        .toggle-btn.active { background: var(--accent-color); color: #FFF; border-color: var(--accent-color); }
 
-        .error-message { color: var(--danger-color); font-size: 0.9rem; margin-bottom: 15px; display: none; font-weight: 500; background: rgba(194, 74, 74, 0.1); padding: 12px; border-radius: 8px;}
+        .table-wrapper { overflow-x: auto; margin-top: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--surface-color); }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; text-align: left;}
+        th, td { padding: 16px 20px; vertical-align: middle; border-bottom: 1px solid var(--border-color); line-height: 1.5;}
         
-        /* Table Layout */
-        .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 10px; border-radius: 8px; border: 1px solid var(--border-color);}
-        table { width: 100%; border-collapse: collapse; min-width: 900px; background: var(--container-bg);}
-        th, td { padding: 20px 18px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border-color);}
+        th { color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; background: var(--surface-hover);}
+        tr { background: var(--container-bg); transition: background 0.2s;}
+        tr:hover { background: var(--surface-color); }
         
-        th { color: var(--text-secondary); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--border-color); background: var(--bg-color);}
+        .td-word-container { display: flex; align-items: center; gap: 8px; }
+        .td-word { font-weight: 700; color: var(--text-primary); font-size: 1.1rem; font-family: var(--font-serif); }
+        .audio-btn { background: transparent; border: none; color: var(--accent-color); font-size: 1.2rem; padding: 4px; border-radius: 50%; transition: all 0.2s;}
+        .audio-btn:hover { background: rgba(79, 70, 229, 0.1); transform: scale(1.1); }
         
-        tr.word-row { transition: background-color 0.2s; }
-        tr.word-row:hover { background-color: var(--surface-hover); }
-        
-        .td-word { font-weight: 600; color: var(--text-primary); font-size: 1.25rem; font-family: var(--font-serif); }
-        .td-hindi { font-weight: 500; color: var(--text-primary); font-size: 1.05rem; }
-        .td-synonyms { color: var(--text-secondary); font-size: 0.9rem; margin-top: 6px; display: block; line-height: 1.4;}
+        .td-hindi { font-weight: 500; color: var(--accent-color); font-size: 0.95rem; }
+        .td-synonyms { color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px; display: inline-block; background: var(--surface-hover); padding: 2px 6px; border-radius: 4px;}
         .td-meaning { color: var(--text-primary); font-size: 0.95rem; }
-        .td-usage { color: var(--text-secondary); font-size: 0.95rem; font-style: italic; border-left: 3px solid var(--border-color); padding-left: 16px;}
+        .td-usage { color: var(--text-secondary); font-size: 0.9rem; font-style: italic; border-left: 2px solid var(--accent-color); padding-left: 12px; margin-top: 4px;}
         
-        .delete-row-btn {
-            background: transparent; color: var(--text-secondary); border: none; font-size: 1.2rem; cursor: pointer; opacity: 0; transition: all 0.2s; padding: 6px 10px; border-radius: 6px;
-        }
-        tr.word-row:hover .delete-row-btn { opacity: 1; }
-        .delete-row-btn:hover { color: #FFF; background: var(--danger-color); }
+        .delete-row-btn { background: transparent; color: var(--text-secondary); border: none; font-size: 1.2rem; opacity: 0; padding: 4px 8px; border-radius: 4px; }
+        tr:hover .delete-row-btn { opacity: 1; }
+        .delete-row-btn:hover { color: var(--danger-color); background: rgba(239, 68, 68, 0.1); }
 
-        /* Modals */
+        /* Active Recall Blurring */
+        .active-recall-on .revealable { filter: blur(5px); cursor: pointer; transition: filter 0.3s ease, opacity 0.3s ease; opacity: 0.6; user-select: none; }
+        .active-recall-on .revealable:hover { opacity: 0.9; }
+        .active-recall-on .revealable.revealed { filter: blur(0); opacity: 1; cursor: default; }
+
+        .study-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; max-width: 650px; margin: 0 auto; padding: 2rem 0; flex: 1;}
+        .progress-text { color: var(--text-secondary); font-weight: 600; margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;}
+        
+        .flashcard {
+            background: var(--container-bg); border: 1px solid var(--border-color); border-radius: var(--radius-xl);
+            width: 100%; padding: 3rem; box-shadow: var(--shadow-lg); margin-bottom: 2rem;
+            display: flex; flex-direction: column; align-items: center; text-align: center; box-sizing: border-box;
+        }
+        .flashcard-word { font-size: 3rem; font-family: var(--font-serif); color: var(--text-primary); font-weight: 700; margin-bottom: 1rem; line-height: 1.2;}
+        
+        .flashcard-back { display: none; margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 2rem; width: 100%; animation: fadeIn 0.3s ease;}
+        .flashcard-back.show { display: block; }
+        
+        .fc-meaning { font-size: 1.25rem; font-weight: 500; margin-bottom: 1rem; color: var(--text-primary); }
+        .fc-hindi { font-size: 1.1rem; color: var(--accent-color); margin-bottom: 1rem; font-weight: 600;}
+        .fc-synonyms { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.5rem; }
+        .fc-usage { font-size: 1.05rem; font-style: italic; color: var(--text-secondary); border-left: 3px solid var(--border-color); padding-left: 16px; margin: 0 auto; display: inline-block; text-align: left;}
+
+        .study-actions { display: flex; gap: 12px; width: 100%; justify-content: center; flex-wrap: wrap;}
+        .grade-btn {
+            flex: 1; min-width: 120px; padding: 16px 12px; border: none; border-radius: var(--radius-md);
+            color: #FFF; font-weight: 600; font-size: 1rem; box-shadow: var(--shadow-md);
+        }
+        .grade-1 { background-color: var(--danger-color); }
+        .grade-2 { background-color: var(--warning-color); }
+        .grade-3 { background-color: var(--success-color); }
+        .grade-4 { background-color: var(--accent-color); }
+        .grade-time { display: block; font-size: 0.75rem; font-weight: 500; opacity: 0.9; margin-top: 6px;}
+
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 100; justify-content: center; align-items: center;
+            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 1000;
+            justify-content: center; align-items: center; opacity: 0; transition: opacity 0.2s;
         }
+        .modal-overlay.show { display: flex; opacity: 1; }
+        
         .modal-content {
-            background: var(--container-bg); padding: 2.5rem; border-radius: 16px; width: 90%; max-width: 480px;
-            box-shadow: var(--shadow-lg); border: 1px solid var(--border-color);
+            background: var(--container-bg); padding: 2rem; border-radius: var(--radius-lg); width: 90%; max-width: 450px;
+            box-shadow: var(--shadow-modal); border: 1px solid var(--border-color); transform: scale(0.95); transition: transform 0.2s;
         }
-        .modal-content h2 { margin-top: 0; font-weight: 500; font-size: 1.7rem; color: var(--text-primary); font-family: var(--font-serif); margin-bottom: 1.5rem;}
-        .modal-content input { width: 100%; margin-bottom: 16px; }
+        .modal-overlay.show .modal-content { transform: scale(1); }
+        .modal-content h2 { margin-top: 0; font-weight: 400; font-size: 1.6rem; font-family: var(--font-serif); color: var(--text-primary); margin-bottom: 1.5rem; }
+        .modal-content input { width: 100%; margin-bottom: 16px; box-sizing: border-box;}
         .modal-actions { display: flex; gap: 12px; margin-top: 1rem; justify-content: flex-end;}
+
+        /* Custom Toast Notification */
+        #toast {
+            position: fixed; bottom: 30px; right: 30px; background: var(--text-primary); color: var(--container-bg);
+            padding: 12px 24px; border-radius: var(--radius-md); font-weight: 500; font-size: 0.95rem;
+            box-shadow: var(--shadow-lg); z-index: 2000; transform: translateY(100px); opacity: 0; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        #toast.show { transform: translateY(0); opacity: 1; }
+        #toast.error { background: var(--danger-color); color: #FFF; }
+        #toast.success { background: var(--success-color); color: #FFF; }
 
         /* Changelog Footer */
         .app-footer {
-            margin-top: 3rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border-color);
+            margin-top: auto; padding-top: 2.5rem; padding-bottom: 1rem;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             color: var(--text-secondary); font-size: 0.85rem;
         }
         .version-badge {
-            background: var(--accent-color); color: #FFF; padding: 2px 8px; border-radius: 4px;
-            font-weight: 600; font-size: 0.75rem; margin-bottom: 8px;
+            background: var(--accent-color); color: #FFF; padding: 4px 10px; border-radius: 6px;
+            font-weight: 600; font-size: 0.75rem; margin-bottom: 8px; letter-spacing: 0.5px;
         }
-        .changelog-text { text-align: center; }
+        .changelog-text { text-align: center; max-width: 80%; line-height: 1.4; }
 
-        /* Responsive Breakpoints */
         @media (max-width: 850px) {
-            body { padding: 0.5rem; }
-            .container { padding: 1.5rem; border-radius: 12px;}
+            body { padding: 0; }
+            .container { padding: 1.5rem; border-radius: 0; min-height: 100vh; border: none;}
             .creation-area { flex-direction: column; }
-            .input-group { flex-direction: column; }
-            .drop-zone { padding: 15px; }
+            .input-group, .drop-zone { min-width: 100%; }
             .playlist-header { flex-direction: column; align-items: center; text-align: center; gap: 20px;}
-            .playlist-info h1 { font-size: 2.5rem; }
-            .controls-row { flex-direction: column; }
-            input[type="text"], button.action-btn { width: 100%; }
-            tr.word-row .delete-row-btn { opacity: 1; } 
-            
+            .controls-row { flex-direction: column; align-items: stretch;}
+            .controls-row input, .controls-row button { width: 100%; }
+            tr:hover .delete-row-btn { opacity: 1; } 
             .book-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.5rem; }
             .book-cover { height: 200px; }
+            .due-badge { top: -10px; left: -10px; }
+            #toast { left: 20px; right: 20px; bottom: 20px; text-align: center;}
+            .flashcard { padding: 2rem 1.5rem; }
+            .study-actions { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
+<div id="toast">Message goes here</div>
+
+<!-- Confirm Modal -->
+<div id="confirmModal" class="modal-overlay">
+    <div class="modal-content">
+        <h2 id="confirmTitle">Confirm Action</h2>
+        <p id="confirmMsg" style="color: var(--text-secondary); margin-bottom: 24px; line-height: 1.5;"></p>
+        <div class="modal-actions">
+            <button class="btn-outline" onclick="closeConfirmModal()">Cancel</button>
+            <button class="btn-primary" id="confirmBtn" style="background: var(--danger-color); border-color: var(--danger-color);">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<!-- Manual Add Modal -->
 <div id="manualAddModal" class="modal-overlay">
     <div class="modal-content">
         <h2>Record New Word</h2>
@@ -285,19 +350,19 @@
         <input type="text" id="manMeaning" placeholder="Definition">
         <input type="text" id="manUsage" placeholder="Usage in a sentence">
         <div class="modal-actions">
-            <button class="focus-btn" onclick="closeManualModal()">Cancel</button>
-            <button class="action-btn" onclick="saveManualWord()">Save Word</button>
+            <button class="btn-outline" onclick="closeManualModal()">Cancel</button>
+            <button class="btn-primary" onclick="saveManualWord()">Save Word</button>
         </div>
     </div>
 </div>
 
 <div class="container">
     <div class="nav-bar">
-        <h2 class="nav-title">Vocab</h2>
+        <h2 class="nav-title">Vocab Pro</h2>
         <div class="nav-actions">
-            <button id="installBtn" class="focus-btn" style="display:none;" onclick="installPWA()">Install App</button>
-            <button class="focus-btn" onclick="exportToExcel()" id="exportBtn" style="display:none;">Export to CSV</button>
-            <button class="focus-btn" onclick="toggleTheme()" id="themeBtn">Focus: Night</button>
+            <button class="btn-outline" id="installBtn" style="display:none;" onclick="installPWA()">⬇️ Install App</button>
+            <button class="btn-outline" onclick="exportToExcel()" id="exportBtn" style="display:none;">↓ Export CSV</button>
+            <button class="btn-outline" onclick="toggleTheme()" id="themeBtn">🌙 Dark Mode</button>
         </div>
     </div>
 
@@ -306,50 +371,47 @@
         <div class="creation-area">
             <div class="input-group">
                 <input type="text" id="newBookInput" placeholder="New notebook name (e.g. Physics 101)...">
-                <button class="action-btn" onclick="createNewBook()">Create</button>
+                <button class="btn-primary" onclick="createNewBook()">Create</button>
             </div>
-            
-            <!-- Drag and Drop Zone -->
             <div class="drop-zone" id="dropZone" onclick="document.getElementById('csvFileInput').click()">
-                <span>📁 Drag & Drop CSV here to create Database</span>
+                <span>📄 Drag & Drop CSV here to import</span>
                 <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleCSVSelect(event)">
             </div>
         </div>
-
         <div class="book-grid" id="bookGrid"></div>
     </div>
 
     <!-- VIEW 2: Dictionary Table -->
     <div id="dictionaryView" class="view">
-        <button class="focus-btn" onclick="showDashboard()" style="margin-bottom: 2rem;">← Back to Library</button>
+        <button class="btn-outline" onclick="showDashboard()" style="margin-bottom: 2rem; width: fit-content;">← Back to Library</button>
         
         <div class="playlist-header">
             <div id="currentBookCover" class="playlist-cover"></div>
             <div class="playlist-info">
-                <p>Notebook Database</p>
+                <p>Notebook</p>
                 <h1 id="currentBookTitle">Book Name</h1>
                 <p class="stats" id="currentBookStats">0 words recorded</p>
+                <button class="btn-primary" id="studyBtn" style="display:none; margin-top: 16px; width: fit-content;" onclick="startStudyMode()">🎓 Study Due Cards</button>
             </div>
         </div>
         
         <div class="controls-row">
-            <input type="text" id="wordInput" placeholder="Look up a difficult word...">
-            <button class="action-btn" id="searchBtn" onclick="fetchWordDetails()">Search APIs</button>
-            <button class="action-btn manual-btn" onclick="openManualModal()">+ Add Custom</button>
+            <input type="text" id="wordInput" placeholder="Look up a new word...">
+            <button class="btn-primary" id="searchBtn" onclick="fetchWordDetails()">Search API</button>
+            <button class="btn-outline" onclick="openManualModal()">+ Add Custom</button>
+            <button class="btn-outline toggle-btn" id="activeRecallBtn" onclick="toggleActiveRecall()">👁️ Active Recall: OFF</button>
         </div>
-        
-        <div id="errorMsg" class="error-message">Word not found in the database. Please try adding it manually.</div>
         
         <div class="table-wrapper">
             <table id="wordTable">
                 <thead>
                     <tr>
-                        <th style="width: 5%;">No.</th>
-                        <th style="width: 15%;">Vocabulary</th>
-                        <th style="width: 15%;">Hindi (हिन्दी)</th>
+                        <th style="width: 5%;">#</th>
+                        <th style="width: 20%;">Vocabulary</th>
+                        <th style="width: 15%;">Hindi</th>
                         <th style="width: 15%;">Similar Words</th>
                         <th style="width: 25%;">Definition</th>
-                        <th style="width: 20%;">Context</th>
+                        <th style="width: 15%;">Context</th>
                         <th style="width: 5%;"></th>
                     </tr>
                 </thead>
@@ -358,10 +420,40 @@
         </div>
     </div>
 
+    <!-- VIEW 3: Study Mode (SRS Flashcards) -->
+    <div id="studyView" class="view">
+        <button class="btn-outline" onclick="exitStudyMode()" style="margin-bottom: 2rem; width: fit-content;">← Exit Study Session</button>
+        
+        <div class="study-container">
+            <div class="progress-text" id="studyProgress">Card 1 of 5</div>
+            
+            <div class="flashcard">
+                <div class="flashcard-word" id="fcWord">Word</div>
+                <button class="audio-btn" onclick="playCurrentStudyAudio()" title="Listen">🔊</button>
+                
+                <button class="btn-outline" id="fcShowAnswerBtn" onclick="showStudyAnswer()" style="margin-top: 2rem;">Show Answer</button>
+                
+                <div class="flashcard-back" id="fcBack">
+                    <div class="fc-hindi" id="fcHindi"></div>
+                    <div class="fc-meaning" id="fcMeaning"></div>
+                    <div class="fc-synonyms" id="fcSynonyms"></div>
+                    <div class="fc-usage" id="fcUsage"></div>
+                </div>
+            </div>
+
+            <div class="study-actions" id="fcGrading" style="display:none;">
+                <button class="grade-btn grade-1" onclick="processStudyGrade(1)">Again <span class="grade-time">&lt; 1m</span></button>
+                <button class="grade-btn grade-2" onclick="processStudyGrade(2)">Hard <span class="grade-time" id="timeHard"></span></button>
+                <button class="grade-btn grade-3" onclick="processStudyGrade(3)">Good <span class="grade-time" id="timeGood"></span></button>
+                <button class="grade-btn grade-4" onclick="processStudyGrade(4)">Easy <span class="grade-time" id="timeEasy"></span></button>
+            </div>
+        </div>
+    </div>
+
     <!-- Changelog Footer -->
     <div class="app-footer">
-        <span class="version-badge">v2.5</span>
-        <span class="changelog-text">Update: Fixed mobile touch menus, introduced Drag & Drop CSV imports, and removed storage warnings.</span>
+        <span class="version-badge">v3.0</span>
+        <span class="changelog-text">Update: Added Custom Purple 'V' App Icon, SRS Flashcards, Active Recall, and Audio Pronunciation.</span>
     </div>
 </div>
 
@@ -370,198 +462,222 @@
     let libraryCovers = {}; 
     let bookOrder = []; 
     let currentBook = null;
+    let isActiveRecallOn = false;
+    let studyQueue = [];
+    let currentStudyIndex = 0;
+    let deferredPrompt;
 
-    // --- INITIALIZATION ---
-    document.addEventListener('DOMContentLoaded', () => {
-        setupPWA(); loadTheme(); loadData(); renderDashboard();
-        setupDragAndDrop();
+    // Custom UI Components (Replaces alert/confirm)
+    let toastTimeout;
+    function showToast(message, type = 'info') {
+        const toast = document.getElementById('toast');
+        toast.innerText = message;
+        toast.className = 'show ' + (type === 'error' ? 'error' : (type === 'success' ? 'success' : ''));
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => toast.className = toast.className.replace('show', '').trim(), 3000);
+    }
+
+    let confirmCallback = null;
+    function showConfirm(title, message, callback) {
+        document.getElementById('confirmTitle').innerText = title;
+        document.getElementById('confirmMsg').innerText = message;
+        confirmCallback = callback;
+        const modal = document.getElementById('confirmModal');
+        modal.style.display = 'flex';
+        // Force reflow
+        void modal.offsetWidth;
+        modal.classList.add('show');
+    }
+    function closeConfirmModal() {
+        const modal = document.getElementById('confirmModal');
+        modal.classList.remove('show');
+        setTimeout(() => modal.style.display = 'none', 200);
+        confirmCallback = null;
+    }
+    document.getElementById('confirmBtn').addEventListener('click', () => {
+        if(confirmCallback) confirmCallback();
+        closeConfirmModal();
     });
 
-    // --- STRICT MENU EVENT HANDLING (Mobile Fix) ---
-    function closeAllMenus() {
-        document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
+    function setupPWA() {
+        // Draw the custom Purple 'V' Icon
+        const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><rect width="512" height="512" fill="#7C3AED" rx="100"/><text x="50%" y="54%" font-family="'Times New Roman', Times, serif" font-size="380" font-weight="bold" fill="white" text-anchor="middle" dominant-baseline="middle">V</text></svg>`;
+        const img = new Image(); img.onload = () => {
+            const canvas = document.createElement('canvas'); canvas.width = 512; canvas.height = 512;
+            const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0);
+            const pngUrl = canvas.toDataURL('image/png');
+            
+            document.head.insertAdjacentHTML('beforeend', `<link rel="icon" type="image/png" href="${pngUrl}"><link rel="apple-touch-icon" href="${pngUrl}">`);
+            
+            const manifest = { name: "Vocab Tracker Pro", short_name: "Vocab", display: "standalone", background_color: "#F8FAFC", theme_color: "#7C3AED", icons: [{ src: pngUrl, sizes: "512x512", type: "image/png" }] };
+            const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/manifest+json'});
+            document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${URL.createObjectURL(manifestBlob)}">`);
+        }; img.src = URL.createObjectURL(new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' }));
+
+        window.addEventListener('beforeinstallprompt', (e) => { 
+            e.preventDefault(); deferredPrompt = e; 
+            const btn = document.getElementById('installBtn');
+            if(btn) btn.style.display = 'inline-block'; 
+        });
     }
+
+    function installPWA() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => { 
+                if (choiceResult.outcome === 'accepted') document.getElementById('installBtn').style.display = 'none'; 
+                deferredPrompt = null; 
+            });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setupPWA(); loadTheme(); loadData(); renderDashboard();
+    });
 
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.kebab-container')) {
-            closeAllMenus();
+            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('active'));
         }
     });
 
-    // Global function attached directly to the window for inline HTML calls
-    window.toggleMenu = function(event, index) {
-        event.preventDefault();
-        event.stopPropagation(); 
+    function loadData() {
+        try {
+            const savedLib = localStorage.getItem('proDict_Library');
+            if (savedLib) { libraryData = JSON.parse(savedLib); } 
+            else {
+                // Migration
+                const oldLib = localStorage.getItem('academicDict_Library') || localStorage.getItem('premiumDict_Library');
+                if(oldLib) { 
+                    let oldData = JSON.parse(oldLib);
+                    // Ensure SRS fields exist on migration
+                    Object.keys(oldData).forEach(book => {
+                        libraryData[book] = oldData[book].map(entry => initializeSRS(entry));
+                    });
+                }
+            }
+            const savedCov = localStorage.getItem('proDict_Covers') || localStorage.getItem('academicDict_Covers');
+            if (savedCov) { libraryCovers = JSON.parse(savedCov); }
+            const savedOrder = localStorage.getItem('proDict_Order') || localStorage.getItem('academicDict_Order');
+            if (savedOrder) { bookOrder = JSON.parse(savedOrder); }
+
+            Object.keys(libraryData).forEach(b => { if(!bookOrder.includes(b)) bookOrder.push(b); });
+            bookOrder = bookOrder.filter(b => libraryData[b]);
+            
+        } catch (e) { showToast("Error loading data", "error"); }
+    }
+
+    function saveData() {
+        try {
+            localStorage.setItem('proDict_Library', JSON.stringify(libraryData));
+            localStorage.setItem('proDict_Covers', JSON.stringify(libraryCovers));
+            localStorage.setItem('proDict_Order', JSON.stringify(bookOrder));
+        } catch (e) { showToast("Storage full. Cannot save data.", "error"); }
+    }
+
+    function initializeSRS(entry) {
+        return {
+            ...entry,
+            interval: entry.interval || 0,
+            repetition: entry.repetition || 0,
+            efactor: entry.efactor || 2.5,
+            nextReviewDate: entry.nextReviewDate || Date.now()
+        };
+    }
+
+    function calculateDueCards(bookName) {
+        const now = Date.now();
+        return libraryData[bookName].filter(entry => entry.nextReviewDate <= now).length;
+    }
+
+    function calculateNextInterval(entry, grade) {
+        let q = grade === 1 ? 0 : (grade === 2 ? 3 : (grade === 3 ? 4 : 5));
+        let { interval, repetition, efactor } = entry;
         
+        if (q < 3) {
+            repetition = 0; interval = 1;
+        } else {
+            if (repetition === 0) interval = 1;
+            else if (repetition === 1) interval = 6;
+            else interval = Math.round(interval * efactor);
+            repetition++;
+        }
+        efactor = efactor + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02));
+        if (efactor < 1.3) efactor = 1.3;
+        
+        return { interval, repetition, efactor };
+    }
+
+    function formatTime(days) {
+        if (days === 1) return "1d";
+        if (days < 30) return `${days}d`;
+        if (days < 365) return `${Math.round(days/30)}mo`;
+        return `${Math.round(days/365)}y`;
+    }
+
+    window.playAudio = function(word) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(word);
+            utterance.lang = 'en-US'; utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        } else {
+            showToast("Text-to-speech not supported in this browser.", "error");
+        }
+    };
+
+    function toggleTheme() {
+        const body = document.body; const themeBtn = document.getElementById('themeBtn');
+        body.classList.toggle('dark-mode');
+        const isDark = body.classList.contains('dark-mode');
+        themeBtn.innerText = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#0F172A' : '#F8FAFC');
+        try { localStorage.setItem('themePref_pro', isDark ? 'dark' : 'light'); } catch(e) { }
+    }
+
+    function loadTheme() {
+        try {
+            const pref = localStorage.getItem('themePref_pro');
+            if (pref === 'dark') { 
+                document.body.classList.add('dark-mode'); 
+                document.getElementById('themeBtn').innerText = '☀️ Light Mode'; 
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0F172A');
+            }
+        } catch(e) { }
+    }
+
+    window.toggleMenu = function(event, index) {
+        event.preventDefault(); event.stopPropagation(); 
         const dropdown = document.getElementById(`dropdown-${index}`);
         const isActive = dropdown.classList.contains('active');
-        
-        closeAllMenus();
+        document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
         if (!isActive) dropdown.classList.add('active');
     };
 
     window.menuAction = function(event, actionType, bookName) {
-        event.preventDefault();
-        event.stopPropagation();
-        closeAllMenus();
-        
+        event.preventDefault(); event.stopPropagation();
+        document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
         if (actionType === 'upload') triggerImageUpload(bookName);
         if (actionType === 'web') searchWebCover(bookName);
         if (actionType === 'delete') deleteBook(bookName);
     };
 
-    // --- STORAGE ---
-    function loadData() {
-        try {
-            const savedLib = localStorage.getItem('academicDict_Library');
-            if (savedLib) { libraryData = JSON.parse(savedLib); } 
-            
-            const savedCov = localStorage.getItem('academicDict_Covers');
-            if (savedCov) { libraryCovers = JSON.parse(savedCov); }
-            
-            const savedOrder = localStorage.getItem('academicDict_Order');
-            if (savedOrder) { bookOrder = JSON.parse(savedOrder); }
-
-            Object.keys(libraryData).forEach(b => {
-                if(!bookOrder.includes(b)) bookOrder.push(b);
-            });
-            bookOrder = bookOrder.filter(b => libraryData[b]);
-            
-        } catch (e) { console.error("Error loading data", e); }
-    }
-
-    function saveData() {
-        try {
-            localStorage.setItem('academicDict_Library', JSON.stringify(libraryData));
-            localStorage.setItem('academicDict_Covers', JSON.stringify(libraryCovers));
-            localStorage.setItem('academicDict_Order', JSON.stringify(bookOrder));
-        } catch (e) { alert("Storage full. Cannot save new data."); }
-    }
-
-    // --- THEME ---
-    function toggleTheme() {
-        const body = document.body; const themeBtn = document.getElementById('themeBtn');
-        body.classList.toggle('dark-mode');
-        const isDark = body.classList.contains('dark-mode');
-        
-        themeBtn.innerText = isDark ? 'Focus: Paper' : 'Focus: Night';
-        document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#121417' : '#F9F8F6');
-        
-        try { localStorage.setItem('themePref_academic', isDark ? 'dark' : 'light'); } catch(e) { }
-    }
-
-    function loadTheme() {
-        try {
-            const pref = localStorage.getItem('themePref_academic');
-            if (pref === 'dark') { 
-                document.body.classList.add('dark-mode'); 
-                document.getElementById('themeBtn').innerText = 'Focus: Paper'; 
-                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#121417');
-            }
-        } catch(e) { }
-    }
-
-    // --- PWA ---
-    let deferredPrompt;
-    function setupPWA() {
-        const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><rect width="512" height="512" fill="#F9F8F6" rx="100"/><text x="50%" y="54%" font-family="'Georgia', serif" font-size="360" font-weight="bold" fill="#2C573F" text-anchor="middle" dominant-baseline="middle">V</text></svg>`;
-        const img = new Image(); img.onload = () => {
-            const canvas = document.createElement('canvas'); canvas.width = 512; canvas.height = 512;
-            const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0);
-            const pngUrl = canvas.toDataURL('image/png');
-            document.head.insertAdjacentHTML('beforeend', `<link rel="icon" type="image/png" href="${pngUrl}"><link rel="apple-touch-icon" href="${pngUrl}">`);
-        }; img.src = URL.createObjectURL(new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' }));
-        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; document.getElementById('installBtn').style.display = 'inline-block'; });
-    }
-    function installPWA() { if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then((c) => { if (c.outcome === 'accepted') document.getElementById('installBtn').style.display = 'none'; deferredPrompt = null; }); } }
-
-    // --- DRAG AND DROP REORDERING ---
-    let draggedBookName = null;
-
-    function handleDragStart(e) {
-        if(e.target.closest('.kebab-container')) {
-            e.preventDefault();
-            return;
-        }
-        draggedBookName = this.dataset.bookname;
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', this.dataset.bookname);
-        setTimeout(() => this.classList.add('dragging'), 0);
-    }
-
-    function handleDragOver(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        return false;
-    }
-
-    function handleDragEnter(e) {
-        e.preventDefault();
-        if (this.dataset.bookname !== draggedBookName) {
-            this.classList.add('drag-over-card');
-        }
-    }
-
-    function handleDragLeave(e) {
-        this.classList.remove('drag-over-card');
-    }
-
-    function handleDrop(e) {
-        e.stopPropagation();
-        this.classList.remove('drag-over-card');
-        
-        const targetBookName = this.dataset.bookname;
-        
-        if (draggedBookName && draggedBookName !== targetBookName) {
-            const fromIndex = bookOrder.indexOf(draggedBookName);
-            const toIndex = bookOrder.indexOf(targetBookName);
-            
-            bookOrder.splice(fromIndex, 1);
-            bookOrder.splice(toIndex, 0, draggedBookName);
-            
-            saveData();
-            renderDashboard();
-        }
-        return false;
-    }
-
-    function handleDragEnd(e) {
-        this.classList.remove('dragging');
-        document.querySelectorAll('.book-card').forEach(c => c.classList.remove('drag-over-card'));
-    }
-
-    // --- DASHBOARD RENDER ---
     function renderDashboard() {
         const grid = document.getElementById('bookGrid'); grid.innerHTML = '';
-        if (bookOrder.length === 0) { grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center; margin-top: 40px; font-size: 1.1rem;">Your library is empty. Create or drop a CSV to begin.</p>'; return; }
+        if (bookOrder.length === 0) { grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center; margin-top: 40px; font-weight: 500;">Your library is empty. Create a notebook to begin.</p>'; return; }
 
         bookOrder.forEach((bookName, index) => {
             const wordCount = libraryData[bookName].length;
+            const dueCount = calculateDueCards(bookName);
             const coverImage = libraryCovers[bookName] ? `url(${libraryCovers[bookName]})` : 'var(--default-cover)';
-            const card = document.createElement('div'); 
-            card.className = 'book-card';
-            card.dataset.bookname = bookName;
+            const card = document.createElement('div'); card.className = 'book-card';
             
-            // Allow dragging
-            card.draggable = true;
-            card.addEventListener('dragstart', handleDragStart);
-            card.addEventListener('dragover', handleDragOver);
-            card.addEventListener('dragenter', handleDragEnter);
-            card.addEventListener('dragleave', handleDragLeave);
-            card.addEventListener('drop', handleDrop);
-            card.addEventListener('dragend', handleDragEnd);
-
-            // Open book click area (isolated from the menu)
-            card.onclick = (e) => {
-                if(!e.target.closest('.kebab-container')) {
-                    openBook(bookName);
-                }
-            };
-            
-            // We use simple replacing for strings passed in HTML attributes to avoid breakage
+            card.onclick = (e) => { if(!e.target.closest('.kebab-container')) openBook(bookName); };
             const safeBookName = bookName.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            let badgeHTML = dueCount > 0 ? `<div class="due-badge">${dueCount} Due</div>` : '';
             
-            const kebabHTML = `
+            card.innerHTML = `
+                ${badgeHTML}
                 <div class="kebab-container">
                     <button class="kebab-btn" onclick="toggleMenu(event, ${index})">&#8942;</button>
                     <div class="dropdown-menu" id="dropdown-${index}">
@@ -570,109 +686,27 @@
                         <button class="dropdown-item danger" onclick="menuAction(event, 'delete', '${safeBookName}')">🗑️ Delete Notebook</button>
                     </div>
                 </div>
-            `;
-            
-            card.innerHTML = `
-                ${kebabHTML}
                 <div class="book-cover" style="background-image: ${coverImage};"></div>
-                <div class="book-info">
-                    <h3>${bookName}</h3><p>${wordCount} word${wordCount !== 1 ? 's' : ''}</p>
-                </div>
+                <div class="book-info"><h3>${bookName}</h3><p>${wordCount} word${wordCount !== 1 ? 's' : ''}</p></div>
             `;
             grid.appendChild(card);
         });
     }
 
-    // --- CSV DRAG & DROP LOGIC ---
-    function setupDragAndDrop() {
-        const dropZone = document.getElementById('dropZone');
-        
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('drag-over');
-        });
-        
-        dropZone.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('drag-over');
-        });
-        
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('drag-over');
-            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                processCSVFile(e.dataTransfer.files[0]);
-            }
-        });
-    }
-
-    // Added to the window to handle the invisible input triggering
-    window.handleCSVSelect = function(event) {
-        if (event.target.files && event.target.files.length > 0) {
-            processCSVFile(event.target.files[0]);
-            event.target.value = ''; 
-        }
-    };
-
-    function processCSVFile(file) {
-        if (!file.name.endsWith('.csv')) { alert("Please upload a valid .csv file."); return; }
-        
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const text = e.target.result;
-            const lines = text.split('\n');
-            if (lines.length < 2) return; 
-
-            let bookName = file.name.replace('.csv', '').replace(/_/g, ' ');
-            let originalName = bookName; let counter = 1;
-            while(libraryData[bookName]) { bookName = `${originalName} (${counter})`; counter++; }
-
-            libraryData[bookName] = [];
-            bookOrder.push(bookName);
-
-            for (let i = 1; i < lines.length; i++) {
-                if(!lines[i].trim()) continue;
-                
-                const regex = /(".*?"|[^",\s]+)(?=\s*,|\s*$)/g;
-                let matches = [];
-                let match;
-                while ((match = regex.exec(lines[i])) !== null) {
-                    matches.push(match[1].replace(/(^"|"$)/g, '').replace(/""/g, '"'));
-                }
-                
-                if (matches.length >= 5) {
-                    libraryData[bookName].push({
-                        word: matches[1] || "-",
-                        hindi: matches[2] || "-",
-                        synonyms: matches[3] || "-",
-                        meaning: matches[4] || "-",
-                        usage: matches[5] || "-"
-                    });
-                }
-            }
-            
-            saveData();
-            renderDashboard();
-            alert(`Successfully imported "${bookName}" with ${libraryData[bookName].length} words!`);
-        };
-        reader.readAsText(file);
-    }
-
-    // --- COVERS & BOOKS ---
     async function searchWebCover(bookName) {
         try {
+            showToast("Searching for covers...");
             const res = await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(bookName)}&limit=15`);
             const data = await res.json();
             const resultsWithCovers = data.docs.filter(d => d.cover_i);
             
-            if(resultsWithCovers.length === 0) { alert(`No cover found online for this book title.`); } 
+            if(resultsWithCovers.length === 0) { showToast(`No cover found online.`, 'error'); } 
             else { 
-                const randomIndex = Math.floor(Math.random() * resultsWithCovers.length);
-                const randomCoverId = resultsWithCovers[randomIndex].cover_i;
-                libraryCovers[bookName] = `https://covers.openlibrary.org/b/id/${randomCoverId}-L.jpg`; 
-                saveData(); renderDashboard(); 
+                const randomId = resultsWithCovers[Math.floor(Math.random() * resultsWithCovers.length)].cover_i;
+                libraryCovers[bookName] = `https://covers.openlibrary.org/b/id/${randomId}-L.jpg`; 
+                saveData(); renderDashboard(); showToast("Cover updated!", "success");
             }
-        } catch(e) { alert("Network error while searching for a cover."); } 
+        } catch(e) { showToast("Network error.", "error"); } 
     }
 
     function triggerImageUpload(bookName) {
@@ -692,20 +726,15 @@
 
     function createNewBook() {
         const input = document.getElementById('newBookInput'); const bookName = input.value.trim();
-        if (!bookName) return; if (libraryData[bookName]) return alert("A notebook with this name already exists.");
-        
-        libraryData[bookName] = []; 
-        bookOrder.push(bookName); 
-        saveData(); input.value = ''; renderDashboard();
+        if (!bookName) return; if (libraryData[bookName]) return showToast("Notebook exists.", "error");
+        libraryData[bookName] = []; bookOrder.push(bookName); saveData(); input.value = ''; renderDashboard();
     }
 
     function deleteBook(bookName) {
-        if (confirm(`Delete the notebook "${bookName}" and all its contents?`)) { 
-            delete libraryData[bookName]; 
-            delete libraryCovers[bookName]; 
-            bookOrder = bookOrder.filter(b => b !== bookName); 
-            saveData(); renderDashboard(); 
-        }
+        showConfirm("Delete Notebook", `Are you sure you want to delete "${bookName}" and all its contents?`, () => {
+            delete libraryData[bookName]; delete libraryCovers[bookName]; 
+            bookOrder = bookOrder.filter(b => b !== bookName); saveData(); renderDashboard(); showToast("Deleted", "success");
+        });
     }
 
     function showDashboard() { 
@@ -720,122 +749,192 @@
         document.getElementById('currentBookTitle').innerText = bookName; 
         document.getElementById('currentBookCover').style.backgroundImage = libraryCovers[bookName] ? `url(${libraryCovers[bookName]})` : 'var(--default-cover)';
         document.getElementById('exportBtn').style.display = 'inline-block';
+        if (isActiveRecallOn) toggleActiveRecall(); // Reset recall on open
         document.getElementById('dashboardView').classList.remove('active'); 
         document.getElementById('dictionaryView').classList.add('active'); 
         renderTable(); 
     }
 
-    document.getElementById("wordInput").addEventListener("keypress", (e) => { if (e.key === "Enter") fetchWordDetails(); });
-    document.getElementById("newBookInput").addEventListener("keypress", (e) => { if (e.key === "Enter") createNewBook(); });
-
-    // --- API SEARCH ---
-    async function fetchWordDetails() {
-        const inputElement = document.getElementById('wordInput'); const btn = document.getElementById('searchBtn');
-        const word = inputElement.value.trim().toLowerCase(); const err = document.getElementById('errorMsg');
-        if (!word || !currentBook) return; err.style.display = 'none';
-        if (libraryData[currentBook].some(e => e.word.toLowerCase() === word)) { inputElement.value = ''; alert(`"${word}" is already in this notebook.`); return; }
-
-        btn.innerText = "Searching..."; btn.disabled = true;
-        try {
-            const dictRes = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-            if (!dictRes.ok) throw new Error("Word not found");
-            const dictData = await dictRes.json();
-            
-            let meaning = "-", usage = "-";
-            if (dictData && dictData[0] && dictData[0].meanings) {
-                const first = dictData[0].meanings[0];
-                if (first.definitions[0]) meaning = first.definitions[0].definition;
-                for (let m of dictData[0].meanings) {
-                    for (let d of m.definitions) { if (d.example && usage === "-") { usage = d.example; break; } }
-                    if (usage !== "-") break;
-                }
-            }
-            
-            let synString = "-";
-            try {
-                const synRes = await fetch(`https://api.datamuse.com/words?rel_syn=${word}&max=4`);
-                const synData = await synRes.json();
-                if (synData && synData.length > 0) { synString = synData.map(item => item.word).join(", "); } 
-                else {
-                    const mlRes = await fetch(`https://api.datamuse.com/words?ml=${word}&max=4`);
-                    const mlData = await mlRes.json();
-                    if (mlData && mlData.length > 0) synString = mlData.map(item => item.word).join(", ");
-                }
-            } catch (synError) { }
-
-            let hindiString = "-";
-            try {
-                const hiRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|hi`);
-                const hiData = await hiRes.json();
-                if (hiData && hiData.responseData && hiData.responseData.translatedText) {
-                    const translated = hiData.responseData.translatedText;
-                    if (translated.toLowerCase() !== word.toLowerCase()) hindiString = translated;
-                }
-            } catch (hiError) { }
-
-            libraryData[currentBook].push({ word, hindi: hindiString, meaning, usage, synonyms: synString }); 
-            saveData(); renderTable(); inputElement.value = '';
-
-        } catch (error) { err.style.display = 'block'; } finally { btn.innerText = "Search APIs"; btn.disabled = false; }
-    }
-
-    function openManualModal() { document.getElementById('manualAddModal').style.display = 'flex'; }
-    function closeManualModal() { 
-        document.getElementById('manualAddModal').style.display = 'none'; 
-        document.getElementById('manWord').value = ''; document.getElementById('manHindi').value = ''; document.getElementById('manSyn').value = '';
-        document.getElementById('manMeaning').value = ''; document.getElementById('manUsage').value = '';
-    }
-    
-    function saveManualWord() {
-        const word = document.getElementById('manWord').value.trim();
-        if(!word) return alert("Word is required.");
-        if (libraryData[currentBook].some(e => e.word.toLowerCase() === word.toLowerCase())) return alert("Already saved.");
+    function toggleActiveRecall() {
+        isActiveRecallOn = !isActiveRecallOn;
+        const btn = document.getElementById('activeRecallBtn');
+        const tbody = document.getElementById('tableBody');
         
-        let hindi = document.getElementById('manHindi').value.trim() || "-";
-        let syn = document.getElementById('manSyn').value.trim() || "-";
-        let mean = document.getElementById('manMeaning').value.trim() || "-";
-        let use = document.getElementById('manUsage').value.trim() || "-";
-        
-        libraryData[currentBook].push({ word, hindi: hindi, meaning: mean, usage: use, synonyms: syn });
-        saveData(); renderTable(); closeManualModal();
-    }
-
-    window.deleteRow = function(index) {
-        if(confirm("Remove this word from your notebook?")) {
-            libraryData[currentBook].splice(index, 1); saveData(); renderTable();
+        if (isActiveRecallOn) {
+            btn.classList.add('active'); btn.innerText = "👁️ Active Recall: ON"; tbody.classList.add('active-recall-on');
+        } else {
+            btn.classList.remove('active'); btn.innerText = "👁️ Active Recall: OFF"; tbody.classList.remove('active-recall-on');
+            document.querySelectorAll('.revealable').forEach(el => el.classList.remove('revealed'));
         }
-    };
+    }
+
+    window.revealCell = function(element) { if (isActiveRecallOn) element.classList.toggle('revealed'); };
 
     function renderTable() {
         const tBody = document.getElementById('tableBody'); tBody.innerHTML = ''; 
         const currentData = libraryData[currentBook];
         document.getElementById('currentBookStats').innerText = `${currentData.length} entries`;
 
+        const dueCount = calculateDueCards(currentBook);
+        const studyBtn = document.getElementById('studyBtn');
+        if (dueCount > 0) { studyBtn.style.display = 'inline-block'; studyBtn.innerText = `🎓 Study ${dueCount} Due Cards`; } 
+        else { studyBtn.style.display = 'none'; }
+
         if (currentData.length === 0) { 
-            tBody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 60px 20px; color:var(--text-secondary); font-size: 1.1rem;">This notebook is empty.</td></tr>'; 
-            return; 
+            tBody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 60px 20px; color:var(--text-secondary); font-weight: 500;">This notebook is empty.</td></tr>'; return; 
         }
         
         currentData.forEach((entry, i) => { 
-            const synText = entry.synonyms || "-"; 
-            const hindiText = entry.hindi || "-";
             const row = document.createElement('tr'); row.className = 'word-row';
-            
+            const safeWord = entry.word.replace(/'/g, "\\'").replace(/"/g, "&quot;");
             row.innerHTML = `
                 <td style="color:var(--text-secondary);">${i + 1}</td>
-                <td><span class="td-word">${entry.word}</span></td>
-                <td><span class="td-hindi">${hindiText}</span></td>
-                <td><span class="td-synonyms">${synText}</span></td>
-                <td class="td-meaning">${entry.meaning}</td>
-                <td class="td-usage">${entry.usage !== "-" ? `"${entry.usage}"` : "-"}</td>
+                <td>
+                    <div class="td-word-container">
+                        <span class="td-word">${entry.word}</span>
+                        <button class="audio-btn" onclick="playAudio('${safeWord}')" title="Listen">🔊</button>
+                    </div>
+                </td>
+                <td class="revealable" onclick="revealCell(this)"><span class="td-hindi">${entry.hindi || "-"}</span></td>
+                <td class="revealable" onclick="revealCell(this)"><span class="td-synonyms">${entry.synonyms || "-"}</span></td>
+                <td class="revealable" onclick="revealCell(this)"><span class="td-meaning">${entry.meaning}</span></td>
+                <td class="revealable" onclick="revealCell(this)"><span class="td-usage">${entry.usage !== "-" ? `"${entry.usage}"` : "-"}</span></td>
                 <td style="text-align:right;"><button class="delete-row-btn" onclick="deleteRow(${i})">✕</button></td>
             `; 
             tBody.appendChild(row); 
         });
     }
 
-    function exportToExcel() {
-        const cData = libraryData[currentBook]; if (!cData || cData.length === 0) return alert("Notebook is empty.");
+    window.deleteRow = function(index) {
+        showConfirm("Delete Word", "Remove this word from your notebook?", () => {
+            libraryData[currentBook].splice(index, 1); saveData(); renderTable(); showToast("Word removed.");
+        });
+    };
+
+    function startStudyMode() {
+        const now = Date.now();
+        studyQueue = libraryData[currentBook].map((entry, index) => ({ entry, index })).filter(item => item.entry.nextReviewDate <= now);
+        if (studyQueue.length === 0) return;
+        
+        currentStudyIndex = 0;
+        document.getElementById('dictionaryView').classList.remove('active');
+        document.getElementById('studyView').classList.add('active');
+        renderStudyCard();
+    }
+
+    function exitStudyMode() {
+        document.getElementById('studyView').classList.remove('active');
+        document.getElementById('dictionaryView').classList.add('active');
+        saveData(); renderTable();
+    }
+
+    function renderStudyCard() {
+        if (currentStudyIndex >= studyQueue.length) { showToast("Study session complete! Great job.", "success"); exitStudyMode(); return; }
+        const item = studyQueue[currentStudyIndex].entry;
+        document.getElementById('studyProgress').innerText = `Card ${currentStudyIndex + 1} of ${studyQueue.length}`;
+        document.getElementById('fcWord').innerText = item.word;
+        document.getElementById('fcBack').classList.remove('show');
+        document.getElementById('fcGrading').style.display = 'none';
+        document.getElementById('fcShowAnswerBtn').style.display = 'inline-block';
+        
+        document.getElementById('fcHindi').innerText = item.hindi !== "-" ? item.hindi : "";
+        document.getElementById('fcMeaning').innerText = item.meaning;
+        document.getElementById('fcSynonyms').innerText = item.synonyms !== "-" ? `Similar: ${item.synonyms}` : "";
+        document.getElementById('fcUsage').innerText = item.usage !== "-" ? `"${item.usage}"` : "";
+
+        const hardStats = calculateNextInterval(item, 2); const goodStats = calculateNextInterval(item, 3); const easyStats = calculateNextInterval(item, 4);
+        document.getElementById('timeHard').innerText = formatTime(hardStats.interval);
+        document.getElementById('timeGood').innerText = formatTime(goodStats.interval);
+        document.getElementById('timeEasy').innerText = formatTime(easyStats.interval);
+    }
+
+    window.playCurrentStudyAudio = function() { if (studyQueue[currentStudyIndex]) playAudio(studyQueue[currentStudyIndex].entry.word); };
+    window.showStudyAnswer = function() { document.getElementById('fcShowAnswerBtn').style.display = 'none'; document.getElementById('fcBack').classList.add('show'); document.getElementById('fcGrading').style.display = 'flex'; };
+
+    window.processStudyGrade = function(grade) {
+        const item = studyQueue[currentStudyIndex];
+        const newStats = calculateNextInterval(item.entry, grade);
+        const originalEntry = libraryData[currentBook][item.index];
+        originalEntry.interval = newStats.interval; originalEntry.repetition = newStats.repetition; originalEntry.efactor = newStats.efactor;
+        
+        const ONE_DAY = 24 * 60 * 60 * 1000;
+        if (grade === 1) originalEntry.nextReviewDate = Date.now() + (5 * 60 * 1000); 
+        else originalEntry.nextReviewDate = Date.now() + (newStats.interval * ONE_DAY);
+
+        saveData(); currentStudyIndex++; renderStudyCard();
+    };
+
+    document.getElementById("wordInput").addEventListener("keypress", (e) => { if (e.key === "Enter") fetchWordDetails(); });
+    document.getElementById("newBookInput").addEventListener("keypress", (e) => { if (e.key === "Enter") createNewBook(); });
+
+    async function fetchWordDetails() {
+        const inputElement = document.getElementById('wordInput'); const btn = document.getElementById('searchBtn');
+        const word = inputElement.value.trim().toLowerCase(); const err = document.getElementById('errorMsg');
+        if (!word || !currentBook) return; err.style.display = 'none';
+        if (libraryData[currentBook].some(e => e.word.toLowerCase() === word)) { inputElement.value = ''; showToast(`"${word}" is already saved.`, "error"); return; }
+
+        btn.innerText = "Searching..."; btn.disabled = true;
+        try {
+            const dictRes = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+            if (!dictRes.ok) throw new Error();
+            const dictData = await dictRes.json();
+            
+            let meaning = "-", usage = "-", synonyms = [];
+            if (dictData && dictData[0] && dictData[0].meanings) {
+                const first = dictData[0].meanings[0];
+                if (first.definitions[0]) meaning = first.definitions[0].definition;
+                for (let m of dictData[0].meanings) {
+                    if (m.synonyms) synonyms.push(...m.synonyms);
+                    for (let d of m.definitions) { 
+                        if (d.example && usage === "-") usage = d.example; 
+                        if (d.synonyms) synonyms.push(...d.synonyms);
+                    }
+                }
+            }
+            
+            let synString = [...new Set(synonyms)].slice(0, 4).join(", "); if (!synString) synString = "-";
+            let hindiString = "-";
+            try {
+                const hiRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|hi`);
+                const hiData = await hiRes.json();
+                if (hiData?.responseData?.translatedText && hiData.responseData.translatedText.toLowerCase() !== word.toLowerCase()) {
+                    hindiString = hiData.responseData.translatedText;
+                }
+            } catch (hiError) {}
+
+            const newEntry = initializeSRS({ word, hindi: hindiString, meaning, usage, synonyms: synString });
+            libraryData[currentBook].push(newEntry); saveData(); renderTable(); inputElement.value = ''; showToast("Word saved!", "success");
+        } catch (error) { err.style.display = 'block'; } finally { btn.innerText = "Search API"; btn.disabled = false; }
+    }
+
+    window.openManualModal = function() { 
+        const modal = document.getElementById('manualAddModal');
+        modal.style.display = 'flex'; void modal.offsetWidth; modal.classList.add('show');
+    };
+    window.closeManualModal = function() { 
+        const modal = document.getElementById('manualAddModal');
+        modal.classList.remove('show');
+        setTimeout(() => { modal.style.display = 'none'; }, 200);
+        document.getElementById('manWord').value = ''; document.getElementById('manHindi').value = ''; document.getElementById('manSyn').value = '';
+        document.getElementById('manMeaning').value = ''; document.getElementById('manUsage').value = '';
+    };
+    
+    window.saveManualWord = function() {
+        const word = document.getElementById('manWord').value.trim();
+        if(!word) return showToast("Word is required.", "error");
+        if (libraryData[currentBook].some(e => e.word.toLowerCase() === word.toLowerCase())) return showToast("Already saved.", "error");
+        
+        let hindi = document.getElementById('manHindi').value.trim() || "-";
+        let syn = document.getElementById('manSyn').value.trim() || "-";
+        let mean = document.getElementById('manMeaning').value.trim() || "-";
+        let use = document.getElementById('manUsage').value.trim() || "-";
+        
+        libraryData[currentBook].push(initializeSRS({ word, hindi, meaning: mean, usage: use, synonyms: syn }));
+        saveData(); renderTable(); closeManualModal(); showToast("Word added manually.", "success");
+    };
+
+    window.exportToExcel = function() {
+        const cData = libraryData[currentBook]; if (!cData || cData.length === 0) return showToast("Notebook is empty.", "error");
         let csv = "Sr No.,Word,Hindi,Similar Words,Definition,Context\n";
         cData.forEach((e, i) => { 
             let w = e.word.replace(/"/g, '""'); let h = (e.hindi||"-").replace(/"/g, '""'); let s = (e.synonyms||"-").replace(/"/g, '""');
@@ -845,6 +944,38 @@
         const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
         link.download = `${currentBook.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_database.csv`;
         document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    };
+
+    window.handleCSVSelect = function(event) {
+        if (event.target.files && event.target.files.length > 0) { processCSVFile(event.target.files[0]); event.target.value = ''; }
+    };
+
+    function processCSVFile(file) {
+        if (!file.name.endsWith('.csv')) { showToast("Invalid .csv file.", "error"); return; }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const lines = e.target.result.split('\n');
+            if (lines.length < 2) return; 
+
+            let bookName = file.name.replace('.csv', '').replace(/_/g, ' ');
+            let originalName = bookName; let counter = 1;
+            while(libraryData[bookName]) { bookName = `${originalName} (${counter})`; counter++; }
+
+            libraryData[bookName] = []; bookOrder.push(bookName);
+            for (let i = 1; i < lines.length; i++) {
+                if(!lines[i].trim()) continue;
+                const regex = /(".*?"|[^",\s]+)(?=\s*,|\s*$)/g;
+                let matches = []; let match;
+                while ((match = regex.exec(lines[i])) !== null) matches.push(match[1].replace(/(^"|"$)/g, '').replace(/""/g, '"'));
+                if (matches.length >= 5) {
+                    libraryData[bookName].push(initializeSRS({
+                        word: matches[1] || "-", hindi: matches[2] || "-", synonyms: matches[3] || "-",
+                        meaning: matches[4] || "-", usage: matches[5] || "-"
+                    }));
+                }
+            }
+            saveData(); renderDashboard(); showToast(`Imported "${bookName}"`, "success");
+        }; reader.readAsText(file);
     }
 </script>
 
