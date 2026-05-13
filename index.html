@@ -29,6 +29,7 @@
             --card-bg: #FFFFFF;
             --default-cover: linear-gradient(135deg, #E9ECEF, #CED4DA);
             --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
         }
 
         body.warm-mode {
@@ -156,29 +157,34 @@
         .recall-active .blur-target { filter: blur(6px); transition: filter 0.3s; cursor: pointer; user-select: none; }
         .recall-active .blur-target.revealed { filter: blur(0px); }
 
-        #squotesView { padding: 0; scroll-snap-type: y mandatory; }
-        .quote-slide {
+        #unotesView { padding: 0; scroll-snap-type: y mandatory; position: relative; }
+        .unote-slide {
             height: 100%; width: 100%; scroll-snap-align: start; display: flex; flex-direction: column;
             justify-content: center; align-items: center; padding: 2rem; position: relative;
         }
-        .quote-text {
+        .unote-text {
             font-family: var(--font-serif); font-size: 1.8rem; color: var(--text-primary); text-align: center;
-            max-width: 800px; line-height: 1.6; font-style: italic; white-space: pre-wrap;
+            max-width: 800px; line-height: 1.7; white-space: pre-wrap; font-style: italic; letter-spacing: 0.5px;
+            z-index: 10; /* Keep text below delete button */
         }
-        .quote-author {
+        .unote-meta {
             margin-top: 1.5rem; font-size: 1rem; color: var(--accent-color); font-weight: 600; text-transform: uppercase; letter-spacing: 2px;
+            z-index: 10;
         }
-        .meaning-btn {
-            margin-top: 2rem; background: var(--surface-hover); border: 1px solid var(--border-color); color: var(--text-primary);
-            border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 1.2rem; transition: all 0.2s;
+        .fab-btn {
+            position: fixed; bottom: 80px; right: 20px; width: 60px; height: 60px; border-radius: 50%;
+            background: var(--accent-color); color: #FFF; font-size: 32px; display: flex; align-items: center; justify-content: center;
+            border: none; box-shadow: var(--shadow-sm); cursor: pointer; z-index: 1000; transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
         }
-        .meaning-btn:hover { background: var(--accent-color); color: #FFF; border-color: var(--accent-color); }
-        .quote-meaning {
-            margin-top: 1rem; font-size: 0.95rem; color: var(--text-primary); text-align: center; max-width: 600px;
-            display: none; padding: 15px; background: var(--surface-hover); border-radius: 8px; border: 1px solid var(--border-color);
+        .fab-btn:hover { background: var(--accent-hover); transform: scale(1.05); box-shadow: var(--shadow-lg); }
+        .fab-btn:active { transform: scale(0.95); }
+        textarea.modal-input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-color); color: var(--text-primary); outline: none; resize: vertical; font-family: var(--font-sans); }
+        
+        .delete-unote-btn {
+            position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.05); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; backdrop-filter: blur(4px); transition: all 0.2s; z-index: 9999; pointer-events: auto; /* Fixed: High Z-index and larger touch target */
         }
-        .quote-meaning.show { display: block; animation: fadeIn 0.3s ease; }
+        .dark-mode .delete-unote-btn { background: rgba(255,255,255,0.05); }
+        .delete-unote-btn:hover { background: var(--danger-color); color: white; border-color: var(--danger-color); transform: scale(1.1); }
 
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%; height: 60px;
@@ -258,6 +264,19 @@
     </div>
 </div>
 
+<div id="addUNoteModal" class="modal-overlay">
+    <div class="modal-content">
+        <h2 style="margin-top:0; font-family:var(--font-serif);">New Note</h2>
+        <textarea id="unoteText" rows="5" class="modal-input" placeholder="Write your poem, phrase or key takeaway here (Required)"></textarea>
+        <input type="text" id="unoteBook" placeholder="Book / Source (Optional)">
+        <input type="text" id="unoteAuthor" placeholder="Author / Poet (Optional)">
+        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;">
+            <button class="pill-btn" onclick="closeUNoteModal()">Cancel</button>
+            <button class="action-btn" onclick="saveUNote()">Save to Canvas</button>
+        </div>
+    </div>
+</div>
+
 <div class="app-container">
     
     <!-- View 1: Main Library / Dashboard -->
@@ -319,24 +338,26 @@
         </div>
     </div>
 
-    <!-- View 2: SQuotes (Infinity Reels) -->
-    <div id="squotesView" class="app-view" onscroll="handleSQuotesScroll()">
-        <!-- Dynamic Quote Slides will be appended here -->
+    <!-- View 2: UNotes (Reels-style Notes) -->
+    <div id="unotesView" class="app-view">
+        <button class="fab-btn" onclick="openUNoteModal()">+</button>
+        <!-- Dynamic UNote Slides will be appended here -->
     </div>
 
 </div>
 
 <!-- Small Version Tag -->
-<div class="version-tag">v4.0.1</div>
+<div class="version-tag">v4.0.2</div>
 
 <div class="bottom-nav">
     <button class="nav-tab active" onclick="switchTab('library')" id="tab-library">
         <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>
         Library
     </button>
-    <button class="nav-tab" onclick="switchTab('squotes')" id="tab-squotes">
+    <button class="nav-tab" onclick="switchTab('unotes')" id="tab-unotes">
+        <!-- Reverted to the Quotation Icon -->
         <svg viewBox="0 0 24 24"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
-        SQuotes
+        UNotes
     </button>
 </div>
 
@@ -392,7 +413,7 @@
 
     // --- INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', () => {
-        setupPWA(); loadTheme(); loadData(); renderDashboard();
+        setupPWA(); loadTheme(); loadData(); loadUNotes(); renderDashboard(); renderUNotes();
         setupDragAndDrop();
     });
 
@@ -403,6 +424,7 @@
         }
     });
 
+    // --- STREAMING_CHUNK: Adding tab switching and theme management logic... ---
     // --- TAB SWITCHING LOGIC ---
     function switchTab(tabName) {
         document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
@@ -410,10 +432,6 @@
         
         document.getElementById(`${tabName}View`).classList.add('active');
         document.getElementById(`tab-${tabName}`).classList.add('active');
-
-        if(tabName === 'squotes' && squotesFeed.length === 0) {
-            loadInitialQuotes();
-        }
     }
 
     // --- THEME MANAGEMENT (3-State) ---
@@ -476,6 +494,7 @@
         }
     }
 
+    // --- STREAMING_CHUNK: Implementing Active Recall and Flashcard features... ---
     // --- ACTIVE RECALL ---
     function toggleActiveRecall() {
         isActiveRecall = !isActiveRecall;
@@ -550,7 +569,7 @@
         document.getElementById('practiceModal').style.display = 'none';
     };
 
-    // --- STREAMING_CHUNK: Library Dashboard & Reordering Logic ---
+    // --- STREAMING_CHUNK: Library Dashboard & Reordering Logic... ---
     let draggedBook = null;
     
     function renderDashboard() {
@@ -630,6 +649,7 @@
         if(confirm(`Delete "${name}"?`)){ delete libraryData[name]; delete libraryCovers[name]; bookOrder=bookOrder.filter(b=>b!==name); saveData(); renderDashboard(); }
     }
 
+    // --- STREAMING_CHUNK: Implementing Drag and Drop for CSV files... ---
     // --- DRAG & DROP CSV ---
     function setupDragAndDrop() {
         const dz = document.getElementById('dropZone');
@@ -655,6 +675,7 @@
         }; reader.readAsText(file);
     }
 
+    // --- STREAMING_CHUNK: Managing Dictionary API and rendering tables... ---
     // --- BOOK VIEW & DOUBLE API SEARCH ---
     function openBook(name) {
         currentBook = name; document.getElementById('currentBookTitle').innerText = name;
@@ -738,142 +759,86 @@
         document.body.appendChild(link); link.click(); document.body.removeChild(link);
     }
 
-    // --- SQUOTES LOGIC ---
-    let squotesFeed = [];
-    let isFetchingQuotes = false;
+    // --- STREAMING_CHUNK: Managing UNotes data and rendering... ---
+    // --- UNOTES LOGIC ---
+    let unotesData = [];
 
-    // Thematic dictionary to guarantee accurate layman meanings
-    const literaryThemes = [
-        { keys: ['time', 'years', 'age', 'old', 'clock', 'hour', 'fade'], meaning: "This verse reflects on the relentless passage of time and how all things eventually change or fade." },
-        { keys: ['love', 'heart', 'kiss', 'sweet', 'beauty', 'passion', 'dear'], meaning: "A classic exploration of love, capturing the deep emotional connection and affection between people." },
-        { keys: ['death', 'die', 'grave', 'tomb', 'soul', 'end', 'dust'], meaning: "A somber meditation on mortality, the end of life, and what lies beyond." },
-        { keys: ['nature', 'tree', 'flower', 'sky', 'sea', 'bird', 'wind', 'sun', 'star', 'green'], meaning: "An appreciation of the natural world, drawing parallels between human emotion and nature's vast beauty." },
-        { keys: ['war', 'blood', 'sword', 'battle', 'soldier', 'fight', 'glory'], meaning: "A reflection on the harsh realities, sacrifices, and tragedies of war and human conflict." },
-        { keys: ['god', 'lord', 'pray', 'heaven', 'divine', 'spirit', 'grace'], meaning: "A spiritual meditation focusing on faith, the divine presence, and the human soul." },
-        { keys: ['sad', 'tear', 'weep', 'sorrow', 'grief', 'cry', 'pain', 'lonely'], meaning: "An expression of deep sorrow, emotional pain, and the process of grieving or isolation." },
-        { keys: ['dream', 'sleep', 'night', 'dark', 'vision', 'shadow'], meaning: "A journey into the subconscious, exploring the mysterious realm of dreams, sleep, and the night." },
-        { keys: ['joy', 'happy', 'smile', 'laugh', 'glad', 'merry'], meaning: "A lighthearted verse celebrating joy, happiness, and the brighter moments of life." }
-    ];
+    function loadUNotes() {
+        try {
+            const saved = localStorage.getItem('unotesData_v1');
+            if (saved) unotesData = JSON.parse(saved);
+        } catch(e) {}
+    }
 
-    function analyzeLaymanMeaning(text) {
-        let lower = text.toLowerCase();
-        for (let theme of literaryThemes) {
-            if (theme.keys.some(k => lower.includes(k))) {
-                return theme.meaning;
-            }
+    function saveUNotes() {
+        try { localStorage.setItem('unotesData_v1', JSON.stringify(unotesData)); } catch(e) {}
+    }
+
+    window.renderUNotes = function() {
+        const view = document.getElementById('unotesView');
+        // Clear view but retain the FAB button
+        view.innerHTML = '<button class="fab-btn" onclick="openUNoteModal()">+</button>';
+        
+        if (unotesData.length === 0) {
+            view.innerHTML += `
+                <div style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-secondary); text-align: center; padding: 2rem;">
+                    <svg viewBox="0 0 24 24" style="width:72px;height:72px;fill:currentColor;margin-bottom:1rem;opacity:0.4;"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
+                    <h3 style="margin-bottom:0.5rem; font-family: var(--font-serif); font-size: 1.5rem; color:var(--text-primary);">Your Canvas is Empty</h3>
+                    <p>Tap the + button to save your first key takeaway, quote, or note.</p>
+                </div>
+            `;
+            return;
         }
-        return null; // Return null if we don't have a reliable layman meaning
-    }
 
-    async function loadInitialQuotes() {
-        document.getElementById('squotesView').innerHTML = '<div id="loadingQuotes" style="text-align:center; padding-top:40vh; color:var(--text-secondary);">Analyzing and loading timeless poetry...</div>';
-        await fetchMoreQuotes(3);
-        const loader = document.getElementById('loadingQuotes');
-        if(loader) loader.remove();
-    }
-
-    async function fetchMoreQuotes(count = 1) {
-        if(isFetchingQuotes) return; isFetchingQuotes = true;
-        const view = document.getElementById('squotesView');
-        const startIndex = squotesFeed.length;
-
-        let added = 0;
-        let attempts = 0;
-
-        // Loop until we find the exact number of quotes that match our meaning criteria
-        while (added < count && attempts < 20) {
-            attempts++;
-            try {
-                const pRes = await fetch('https://poetrydb.org/random/1'); 
-                const pData = await pRes.json();
-                const poem = pData[0]; 
-                const lines = poem.lines.filter(l=>l.trim().length>0);
-                
-                if(lines.length < 4) continue;
-
-                const start = Math.floor(Math.random() * Math.max(1, lines.length-4));
-                const snippet = lines.slice(start, start+4).join('\n');
-                
-                // WEB SCRAPER PIPELINE: Try to pull real context from the web first
-                let finalMeaning = null;
-                try {
-                    // Scrape Wikipedia API using Poem Title + Author
-                    let searchQuery = encodeURIComponent(`${poem.title} ${poem.author}`);
-                    let wikiRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts&exintro=1&explaintext=1&generator=search&gsrsearch=${searchQuery}&gsrlimit=1`);
-                    let wikiData = await wikiRes.json();
-                    
-                    // Double-Scrape Fallback: If poem isn't famous enough for its own page, scrape the Author's biography!
-                    if (!wikiData.query || !wikiData.query.pages) {
-                        searchQuery = encodeURIComponent(`${poem.author} poet`);
-                        wikiRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts&exintro=1&explaintext=1&generator=search&gsrsearch=${searchQuery}&gsrlimit=1`);
-                        wikiData = await wikiRes.json();
-                    }
-                    
-                    if (wikiData.query && wikiData.query.pages) {
-                        const pages = wikiData.query.pages;
-                        const pageId = Object.keys(pages)[0];
-                        
-                        if (pageId !== "-1" && pages[pageId].extract) {
-                            const extract = pages[pageId].extract.trim();
-                            // Format and truncate to keep it readable on mobile
-                            const cleanText = extract.length > 350 ? extract.substring(0, 350) + "..." : extract;
-                            
-                            // Prevent empty or completely irrelevant tiny pages
-                            if(cleanText.length > 50) {
-                                finalMeaning = `<b>🌐 Web Context:</b><br/><br/>${cleanText}`;
-                            }
-                        }
-                    }
-                } catch(e) {
-                    console.log("Web scrape skipped or timed out.");
-                }
-
-                // FALLBACK: Use our thematic dictionary if it's an obscure poem and Wikipedia failed completely
-                if (!finalMeaning) {
-                    const thematicMeaning = analyzeLaymanMeaning(snippet);
-                    if (thematicMeaning) {
-                        finalMeaning = `<b>💡 Layman's Meaning:</b><br/><br/>${thematicMeaning}`;
-                    }
-                }
-
-                // STRICT FILTER: Only use verses where we successfully found a meaning
-                if (!finalMeaning) {
-                    continue; // Skip this poem entirely and fetch a new one
-                }
-
-                const globalIndex = startIndex + added;
-                const slide = document.createElement('div'); slide.className = 'quote-slide';
-                slide.innerHTML = `
-                    <div class="quote-text">${snippet}</div>
-                    <div class="quote-author">— ${poem.author}</div>
-                    <div style="margin-top: 8px; font-size: 0.9rem; color: var(--text-secondary); font-style: italic; text-align: center; max-width: 80%;">from "${poem.title}"</div>
-                    <button class="meaning-btn" onclick="toggleMeaning(event, ${globalIndex})">💡</button>
-                    <div class="quote-meaning" id="mean-${globalIndex}">
-                        <i>${finalMeaning}</i>
+        unotesData.forEach((note, index) => {
+            const slide = document.createElement('div');
+            slide.className = 'unote-slide';
+            // Sanitize text for rendering
+            const safeText = note.text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            
+            slide.innerHTML = `
+                <button class="delete-unote-btn" onclick="event.stopPropagation(); deleteUNote(${index})" title="Delete Note">✕</button>
+                <div class="unote-text">"${safeText}"</div>
+                ${note.author || note.book ? `
+                    <div class="unote-meta">
+                        ${note.author ? `— ${note.author}` : ''}
                     </div>
-                `;
-                view.appendChild(slide);
-                squotesFeed.push({ text: snippet });
-                added++;
-            } catch(e) {
-                console.log("Network glitch, retrying API...");
-            }
-        }
-        isFetchingQuotes = false;
+                    <div style="margin-top: 8px; font-size: 0.9rem; color: var(--text-secondary); font-style: italic; text-align: center; max-width: 80%;">
+                        ${note.book ? `from "${note.book}"` : ''}
+                    </div>
+                ` : ''}
+            `;
+            view.appendChild(slide);
+        });
     }
 
-    window.toggleMeaning = function(e, i) { 
-        if(e) e.stopPropagation();
-        const meanDiv = document.getElementById(`mean-${i}`);
-        if(meanDiv) meanDiv.classList.toggle('show'); 
-    };
+    window.openUNoteModal = function() { document.getElementById('addUNoteModal').style.display = 'flex'; }
+    window.closeUNoteModal = function() { 
+        document.getElementById('addUNoteModal').style.display = 'none'; 
+        document.getElementById('unoteText').value = '';
+        document.getElementById('unoteBook').value = '';
+        document.getElementById('unoteAuthor').value = '';
+    }
+    
+    window.saveUNote = function() {
+        const text = document.getElementById('unoteText').value.trim();
+        if(!text) return alert("Note text is required!");
+        
+        const book = document.getElementById('unoteBook').value.trim();
+        const author = document.getElementById('unoteAuthor').value.trim();
+        
+        // Unshift pushes the newest note to the top of the reel
+        unotesData.unshift({ text, book, author, date: Date.now() });
+        saveUNotes();
+        renderUNotes();
+        closeUNoteModal();
+    }
 
-    async function handleSQuotesScroll() {
-        const view = document.getElementById('squotesView');
-        if (view.scrollTop + view.clientHeight >= view.scrollHeight - 150) {
-            if(!isFetchingQuotes) {
-                await fetchMoreQuotes(2);
-            }
+    window.deleteUNote = function(index) {
+        if(confirm("Are you sure you want to permanently delete this note?")) {
+            unotesData.splice(index, 1);
+            saveUNotes();
+            renderUNotes();
         }
     }
 </script>
